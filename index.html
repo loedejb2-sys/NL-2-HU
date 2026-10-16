@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NL2HU — Start Your Life in Hungary | Dutch Youth Guide</title>
+  <style>
+    :root {
+      --primary: #1a3a5c;
+      --accent: #e63946;
+      --light: #f8f9fa;
+      --text: #1d1d1f;
+      --muted: #6c757d;
+      --border: #dee2e6;
+      --success: #2a9d8f;
+      --warning: #e9c46a;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text);
+      background: var(--light);
+      line-height: 1.65;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 0 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.15);
+    }
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -.5px;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      color: #fff;
+      text-decoration: none;
+      border: none;
+    }
+    .logo span { color: var(--accent); }
+    .nav-tabs {
+      display: flex;
+      gap: 0;
+      list-style: none;
+      height: 100%;
+      overflow-x: auto;
+    }
+    .nav-tabs li { height: 100%; }
+    .nav-tabs a {
+      display: flex;
+      align-items: center;
+      color: rgba(255,255,255,.7);
+      font-size: .85rem;
+      font-weight: 600;
+      padding: 0 1rem;
+      height: 100%;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: all .2s;
+      text-decoration: none;
+    }
+    .nav-tabs a:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .nav-tabs a.active {
+      color: #fff;
+      border-bottom-color: var(--accent);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #0f2338 100%);
+      color: #fff;
+      padding: 4rem 2rem 3.5rem;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 2.6rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: .75rem;
+      line-height: 1.15;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: var(--accent);
+    }
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+      opacity: .85;
+    }
+    .hero-badges {
+      display: flex;
+      justify-content: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: .4rem 1rem;
+      border-radius: 100px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .3px;
+      color: #fff;
+      text-decoration: none;
+      transition: all .2s;
+    }
+    .badge:hover {
+      background: rgba(255,255,255,.22);
+      border-color: rgba(255,255,255,.5);
+      transform: translateY(-1px);
+    }
+
+    /* ── LAYOUT ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+    .tab-content { display: none; padding: 3rem 0 4rem; }
+    .tab-content.active { display: block; }
+
+    /* ── CARDS ── */
+    .card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin-bottom: 1.5rem;
+    }
+    .card h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      color: var(--primary);
+    }
+    .card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 1.25rem 0 .5rem;
+      color: var(--primary);
+    }
+    .card p { margin-bottom: .75rem; color: #333; }
+    .card ul, .card ol { margin: .5rem 0 1rem 1.25rem; }
+    .card li { margin-bottom: .4rem; }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── CALLOUTS ── */
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: #fff5f5;
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1rem 0;
+      font-size: .92rem;
+    }
+    .callout.green { border-color: var(--success); background: #f0faf8; }
+    .callout.amber { border-color: var(--warning); background: #fffbf0; }
+    .callout strong { display: block; margin-bottom: .25rem; }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; margin: 1rem 0; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .9rem;
+    }
+    th, td {
+      text-align: left;
+      padding: .65rem .85rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: #f1f3f5;
+      font-weight: 700;
+      font-size: .8rem;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: var(--muted);
+    }
+
+    /* ── STEPS ── */
+    .steps { list-style: none; margin: 1rem 0; }
+    .steps li {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .steps li:last-child { border-bottom: none; }
+    .step-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .85rem;
+    }
+    .step-body { flex: 1; }
+    .step-body strong { display: block; margin-bottom: .2rem; }
+
+    /* ── LINKS ── */
+    .card a, .callout a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: rgba(26,58,92,.3);
+      text-underline-offset: 3px;
+      transition: all .2s;
+    }
+    .card a:hover, .callout a:hover {
+      text-decoration-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--primary);
+      color: rgba(255,255,255,.7);
+      padding: 2.5rem 2rem;
+      font-size: .85rem;
+      text-align: center;
+    }
+    footer a {
+      color: #fff;
+      text-decoration: underline;
+      text-decoration-color: rgba(255,255,255,.4);
+      text-underline-offset: 3px;
+      cursor: pointer;
+    }
+    footer a:hover { text-decoration-color: #fff; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .header-inner { flex-direction: column; height: auto; padding: .75rem 0; gap: .5rem; }
+      .nav-tabs { width: 100%; justify-content: flex-start; }
+      .hero h1 { font-size: 1.8rem; }
+      .container { padding: 0 1.25rem; }
+      .card { padding: 1.25rem; }
+    }
+
+    /* ── QUICK STATS ── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .stat {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem;
+      text-align: center;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: all .2s;
+    }
+    .stat:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(0,0,0,.08);
+    }
+    .stat .num {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+    .stat .label {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--muted);
+      font-weight: 600;
+      margin-top: .25rem;
+    }
+
+    .section-label {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      font-weight: 700;
+      margin-bottom: .35rem;
+    }
+
+    /* Emergency stat links — no hover lift needed but keep clickable */
+    a.stat { cursor: pointer; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ HEADER ═══════════════════════════════════════════ -->
+<header>
+  <div class="header-inner">
+    <a href="#tab-home" class="logo" data-tab-link="home">NL<span>2</span>HU</a>
+    <ul class="nav-tabs" id="navTabs">
+      <li><a href="#tab-home" class="active" data-tab-link="home">Home</a></li>
+      <li><a href="#tab-registration" data-tab-link="registration">Registration</a></li>
+      <li><a href="#tab-housing" data-tab-link="housing">Housing</a></li>
+      <li><a href="#tab-work" data-tab-link="work">Work &amp; Money</a></li>
+      <li><a href="#tab-education" data-tab-link="education">Education</a></li>
+      <li><a href="#tab-healthcare" data-tab-link="healthcare">Healthcare</a></li>
+      <li><a href="#tab-daily" data-tab-link="daily">Daily Life</a></li>
+      <li><a href="#tab-emergency" data-tab-link="emergency">Emergency</a></li>
+      <li><a href="#tab-resources" data-tab-link="resources">Resources</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════ HERO ═══════════════════════════════════════════ -->
+<section class="hero">
+  <h1>From the Netherlands to Hungary —<br><em>With Almost Nothing.</em></h1>
+  <p>A practical, no-nonsense guide for Dutch citizens aged 18–21 who want to build a life in Hungary on a tight budget.</p>
+  <div class="hero-badges">
+    <a href="https://europa.eu/youreurope/citizens/residence/residence-rights/index_en.htm" target="_blank" rel="noopener" class="badge">🇳🇱 EU Citizen Rights</a>
+    <a href="https://oif.gov.hu" target="_blank" rel="noopener" class="badge">🇭🇺 OIF Immigration</a>
+    <a href="#tab-work" data-tab-link="work" class="badge">💰 Low Cost of Living</a>
+    <a href="#tab-registration" data-tab-link="registration" class="badge">📅 Updated 2026</a>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ CONTENT ═══════════════════════════════════════════ -->
+<div class="container">
+
+<!-- ─────────────────── HOME ─────────────────── -->
+<div class="tab-content active" id="tab-home">
+  <div class="card">
+    <div class="section-label">Why Hungary?</div>
+    <h2>Hungary is one of the most affordable EU countries for young Dutch people.</h2>
+    <p>As a Dutch citizen, you have the <strong>right to live, work, and study in Hungary</strong> without a visa. The cost of living is roughly <strong>40–50% lower than in the Netherlands</strong>, and Budapest offers a vibrant international community, cheap public transport, and a growing job market for English speakers.</p>
+    <p>This guide is built for people in your exact situation: <strong>18–21, Dutch, and with very little money.</strong> Every section is practical, linked, and updated for 2026.</p>
+  </div>
+
+  <div class="stats">
+    <a href="#tab-housing" data-tab-link="housing" class="stat">
+      <div class="num">€600</div>
+      <div class="label">Min. monthly budget (Pécs)</div>
+    </a>
+    <a href="#tab-housing" data-tab-link="housing" class="stat">
+      <div class="num">€300–550</div>
+      <div class="label">Cheap room in Budapest</div>
+    </a>
+    <a href="#tab-work" data-tab-link="work" class="stat">
+      <div class="num">322,800 Ft</div>
+      <div class="label">Monthly minimum wage (2026)</div>
+    </a>
+    <a href="#tab-work" data-tab-link="work" class="stat">
+      <div class="num">15%</div>
+      <div class="label">Flat income tax</div>
+    </a>
+  </div>
+
+  <div class="card-grid">
+    <div class="card">
+      <h3>🚀 First 3 Steps (Do These Now)</h3>
+      <ol>
+        <li><strong>Arrive with your Dutch ID card or passport.</strong> You can stay up to 90 days without any registration.</li>
+        <li><strong>Find a cheap bed.</strong> <a href="https://www.hostelworld.com/hostels/Budapest" target="_blank" rel="noopener">Hostels start at $4–10/night</a>; use them while you look for a room.</li>
+        <li><strong>Register your address within 93 days</strong> of arrival at the <a href="https://oif.gov.hu" target="_blank" rel="noopener">immigration office (OIF)</a>. This gives you a Registration Certificate and an Address Card (Lakcímkártya).</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>⚠️ The One Thing You MUST Prove</h3>
+      <p>To stay longer than 90 days, Hungarian law requires you to show <strong>“sufficient resources”</strong> — meaning you have a job, are a student, or have enough money to support yourself. If you have no money <em>and</em> no job/student status, your registration can be refused.</p>
+      <div class="callout amber">
+        <strong>Bottom line:</strong> Get a job or enrol in a course <em>before</em> or <em>immediately after</em> arrival. Even a part-time job counts.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── REGISTRATION ─────────────────── -->
+<div class="tab-content" id="tab-registration">
+  <div class="card">
+    <div class="section-label">Step 1 — Legal</div>
+    <h2>Registration Certificate &amp; Address Card</h2>
+    <p>As an EEA (EU) citizen, you do <strong>not</strong> need a visa or residence permit. But if you stay longer than 90 days within a 180-day period, you must register.</p>
+
+    <h3>How to Register</h3>
+    <ul class="steps">
+      <li>
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <strong>Go to Enter Hungary (online platform)</strong>
+          <p>Apply electronically at <a href="https://enterhungary.gov.hu" target="_blank" rel="noopener">enterhungary.gov.hu</a> — or visit the regional OIF office in person.</p>
+        </div>
+      </li>
+      <li>
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <strong>Bring your documents</strong>
+          <p>Valid Dutch ID/passport + proof of Hungarian address (rental contract, landlord’s written consent, or deed).</p>
+        </div>
+      </li>
+      <li>
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <strong>Declare your first address</strong>
+          <p>The office forwards your address to the Budapest Government Office, which issues your plastic <strong>Lakcímkártya</strong> (Address Card) and mails it to you.</p>
+        </div>
+      </li>
+      <li>
+        <span class="step-num">4</span>
+        <div class="step-body">
+          <strong>Receive your Registration Certificate</strong>
+          <p>This certificate + Address Card are your key to banking, healthcare, and discounted transport.</p>
+        </div>
+      </li>
+    </ul>
+
+    <h3>Documents Checklist</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Document</th><th>Notes</th></tr>
+        <tr><td>Dutch ID card or passport</td><td>Must be valid for the whole stay</td></tr>
+        <tr><td>Proof of Hungarian address</td><td>Rental contract, landlord declaration, or property deed</td></tr>
+        <tr><td>Proof of “sufficient resources”</td><td>Employment contract, student enrolment, or bank statement</td></tr>
+        <tr><td>Health insurance proof</td><td><a href="https://www.ehic.nl" target="_blank" rel="noopener">EHIC card</a> (from the Netherlands) or private insurance</td></tr>
+        <tr><td>Passport photo</td><td>Not always required — check the <a href="https://oif.gov.hu" target="_blank" rel="noopener">OIF list</a></td></tr>
+      </table>
+    </div>
+
+    <div class="callout">
+      <strong>Deadline: 93rd day after entry.</strong> Do not miss this. Late registration can lead to fines or refusal of residence rights. More info: <a href="https://oif.gov.hu" target="_blank" rel="noopener">oif.gov.hu</a>
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── HOUSING ─────────────────── -->
+<div class="tab-content" id="tab-housing">
+  <div class="card">
+    <div class="section-label">Where to Sleep</div>
+    <h2>Housing on a €0 Budget</h2>
+    <p>Housing is the biggest challenge when you arrive with no money. Here are your realistic options, from cheapest to most stable.</p>
+
+    <h3>🏠 Option 1: Hostels (First 1–2 Weeks)</h3>
+    <p>Budapest has dozens of hostels with dorm beds starting at <strong>$4–10 per night</strong>. Use them as a base while you job-hunt and find a room.</p>
+    <ul>
+      <li><strong><a href="https://www.aohostels.com/en/budapest/" target="_blank" rel="noopener">a&amp;o Budapest City</a></strong> — has a communal kitchen; good for long stays.</li>
+      <li><strong><a href="https://www.hostelworld.com/hostels/Budapest" target="_blank" rel="noopener">Hostelworld Budapest</a></strong> — search “long-term stay” filter.</li>
+    </ul>
+
+    <h3>🏠 Option 2: Shared Flat / Room</h3>
+    <p>A room in a shared Budapest flat costs roughly <strong>€300–550/month</strong> including utilities. Outside Budapest (Pécs, Debrecen), shared rooms can be <strong>€150–200/month</strong>.</p>
+    <ul>
+      <li><a href="https://www.alberlet.hu" target="_blank" rel="noopener">Alberlet.hu</a> — Hungary’s main rental site</li>
+      <li><a href="https://www.ingatlan.com" target="_blank" rel="noopener">Ingatlan.com</a> — large property portal</li>
+      <li>Facebook groups: <a href="https://www.facebook.com/search/groups/?q=Budapest%20Expats" target="_blank" rel="noopener">Budapest Expats</a>, <a href="https://www.facebook.com/search/groups/?q=Rooms%20for%20Rent%20Budapest" target="_blank" rel="noopener">Rooms for Rent Budapest</a></li>
+    </ul>
+
+    <h3>🏠 Option 3: Student Dormitory</h3>
+    <p>If you enrol in any Hungarian university, you can apply for a dormitory. Fees are as low as <strong>HUF 177,750 per semester (≈ €450) for EU citizens</strong>, plus a small deposit. Contact your university’s dormitory office directly.</p>
+
+    <h3>🏠 Option 4: Intergenerational Housing (Free/Cheap)</h3>
+    <p>Budapest runs the <strong>“Reliable Room Rental” (Megbízható Szobabérlet)</strong> programme, which pairs young people with elderly homeowners who have a spare room. In exchange for light household help and companionship, you get <strong>very low or free rent</strong>.</p>
+    <div class="callout green">
+      <strong>How to apply:</strong> Contact the <a href="https://budapest.hu" target="_blank" rel="noopener">Budapest Municipal Housing Office</a> or search for “Megbízható Szobabérlet Budapest” online. The programme includes a legal rental contract and mediation support.
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── WORK ─────────────────── -->
+<div class="tab-content" id="tab-work">
+  <div class="card">
+    <div class="section-label">Income</div>
+    <h2>Getting a Job With No Experience</h2>
+    <p>The minimum wage in Hungary (2026) is <strong>HUF 322,800/month gross</strong> (≈ €830) for unskilled work, and <strong>HUF 373,200</strong> for jobs requiring a qualification. Official source: <a href="https://www.mvh.allamkincstar.gov.hu" target="_blank" rel="noopener">Hungarian State Treasury</a>.</p>
+
+    <h3>Jobs That Hire English Speakers With Zero Experience</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Job</th><th>Typical Pay</th><th>Where to Apply</th></tr>
+        <tr><td>Wolt / Food Delivery Support Associate</td><td>HUF 2,150/hour (students)</td><td><a href="https://careers.wolt.com" target="_blank" rel="noopener">Wolt Careers</a></td></tr>
+        <tr><td>IT Systems Operator (trainee)</td><td>Competitive trainee rate</td><td><a href="https://www.themuse.com/jobs" target="_blank" rel="noopener">The Muse — Kyndryl programme</a></td></tr>
+        <tr><td>Recruitment Intern</td><td>Trainee rate</td><td><a href="https://www.profession.hu" target="_blank" rel="noopener">Profession.hu</a></td></tr>
+        <tr><td>Financial Trainee (20–40 hrs)</td><td>Trainee rate</td><td><a href="https://hu.linkedin.com/jobs" target="_blank" rel="noopener">LinkedIn Hungary</a></td></tr>
+        <tr><td>English Tutor / Babysitter</td><td>HUF 3,000–6,000/hour</td><td><a href="https://www.facebook.com/search/groups/?q=English%20Speaking%20Jobs%20Budapest" target="_blank" rel="noopener">Facebook groups</a></td></tr>
+      </table>
+    </div>
+
+    <h3>Where to Search</h3>
+    <ul>
+      <li><a href="https://www.profession.hu" target="_blank" rel="noopener">Profession.hu</a> — Hungary’s largest job board</li>
+      <li><a href="https://hu.linkedin.com/jobs" target="_blank" rel="noopener">LinkedIn Jobs Hungary</a></li>
+      <li><a href="https://www.jofogas.hu" target="_blank" rel="noopener">Jófogás.hu</a> — classifieds with part-time gigs</li>
+      <li>Facebook: <a href="https://www.facebook.com/search/groups/?q=English%20Speaking%20Jobs%20Budapest" target="_blank" rel="noopener">English Speaking Jobs Budapest</a>, <a href="https://www.facebook.com/search/groups/?q=Expats%20in%20Budapest" target="_blank" rel="noopener">Expats in Budapest</a></li>
+    </ul>
+
+    <h3>💰 Money Management</h3>
+    <ul>
+      <li><strong>Open a Hungarian bank account.</strong> EU citizens can open a basic payment account with just a passport. Major banks: <a href="https://www.otpbank.hu" target="_blank" rel="noopener">OTP</a>, <a href="https://www.erste.hu" target="_blank" rel="noopener">Erste</a>, <a href="https://www.kh.hu" target="_blank" rel="noopener">K&amp;H</a>.</li>
+      <li><strong>Get a prepaid SIM.</strong> <a href="https://www.telekom.hu" target="_blank" rel="noopener">Telekom</a>, <a href="https://www.vodafone.hu" target="_blank" rel="noopener">Vodafone</a>, or <a href="https://www.yettel.hu" target="_blank" rel="noopener">Yettel</a>. Data plans start from a few euros.</li>
+      <li><strong>Tax:</strong> You pay 15% flat income tax + 18.5% social contributions. Under-25s are exempt from income tax on earnings up to the median wage. Info: <a href="https://nav.gov.hu/en" target="_blank" rel="noopener">NAV (Hungarian Tax Authority)</a>.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ─────────────────── EDUCATION ─────────────────── -->
+<div class="tab-content" id="tab-education">
+  <div class="card">
+    <div class="section-label">Student Status = Legal Stay</div>
+    <h2>Enrolling in a Hungarian Course or University</h2>
+    <p>Student status is one of the easiest ways to satisfy the “sufficient resources” requirement for staying in Hungary longer than 90 days. It also gives you access to dormitories and discounted transport.</p>
+
+    <h3>Options for Dutch Students</h3>
+    <ul>
+      <li><strong>Full degree programmes</strong> at <a href="https://www.elte.hu/en" target="_blank" rel="noopener">ELTE</a>, <a href="https://www.uni-corvinus.hu" target="_blank" rel="noopener">Corvinus</a>, <a href="https://semmelweis.hu/english" target="_blank" rel="noopener">Semmelweis</a>, or the <a href="https://international.pte.hu" target="_blank" rel="noopener">University of Pécs</a>. Many are taught in English.</li>
+      <li><strong>Language courses</strong> — short Hungarian courses can provide student status and are often affordable.</li>
+      <li><strong>Erasmus+</strong> — if you are already enrolled at a Dutch institution, an Erasmus exchange to Hungary is a low-risk way to test living there. Info: <a href="https://erasmus-plus.ec.europa.eu" target="_blank" rel="noopener">Erasmus+ official site</a>.</li>
+    </ul>
+
+    <h3>Student Benefits</h3>
+    <ul>
+      <li><strong>Dormitory accommodation</strong> — as low as HUF 177,750/semester (EU rate) + HUF 40,000 deposit.</li>
+      <li><strong>Discounted Budapest transport pass</strong> — HUF 3,450/month, but <em>only</em> if you have a Hungarian residential address. Get your Lakcímkártya first. Info: <a href="https://bkk.hu/en" target="_blank" rel="noopener">BKK</a>.</li>
+      <li><strong>50% discount on intercity trains</strong> for ages 14–25 with valid ID. Info: <a href="https://www.mavcsoport.hu" target="_blank" rel="noopener">MÁV</a>.</li>
+    </ul>
+
+    <div class="callout">
+      <strong>Key link:</strong> <a href="https://www.stipendiumhungaricum.hu" target="_blank" rel="noopener">Stipendium Hungaricum</a> — government scholarship for international students. Check eligibility for Dutch applicants.
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── HEALTHCARE ─────────────────── -->
+<div class="tab-content" id="tab-healthcare">
+  <div class="card">
+    <div class="section-label">Staying Healthy</div>
+    <h2>Healthcare as a Dutch EU Citizen</h2>
+    <p>Your Dutch <strong>European Health Insurance Card (EHIC)</strong> — on the back of your zorgverzekering card — covers medically necessary treatment during a temporary stay in Hungary. Present it at hospitals, clinics, and GP offices. More info: <a href="https://www.ehic.nl" target="_blank" rel="noopener">ehic.nl</a>.</p>
+
+    <h3>Three Levels of Coverage</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Status</th><th>Coverage</th><th>How to Get It</th></tr>
+        <tr><td>Temporary stay (tourist)</td><td>Emergency + necessary care</td><td><a href="https://www.ehic.nl" target="_blank" rel="noopener">EHIC card</a> from your Dutch insurer</td></tr>
+        <tr><td>Employed in Hungary</td><td>Full public healthcare (TAJ card)</td><td>Automatically enrolled via employer</td></tr>
+        <tr><td>Student / not employed</td><td>Voluntary NEAK registration</td><td>Pay monthly contribution to <a href="https://www.neak.gov.hu" target="_blank" rel="noopener">NEAK</a></td></tr>
+      </table>
+    </div>
+
+    <h3>English-Speaking Clinics in Budapest</h3>
+    <ul>
+      <li><strong><a href="https://firstmedcenters.com" target="_blank" rel="noopener">FirstMed Centers</a></strong> (District II) — the reference clinic for expats. Consultations €80–150.</li>
+      <li><strong><a href="https://budahc.com" target="_blank" rel="noopener">Buda Health Center</a></strong> (District XII)</li>
+      <li><strong><a href="https://imsweb.hu" target="_blank" rel="noopener">International Medical Services (IMS)</a></strong> (District XIII)</li>
+    </ul>
+
+    <div class="callout green">
+      <strong>Low-cost tip:</strong> Hungarian public healthcare is free at the point of use if you have a TAJ card. Once you get any job, your employer registers you automatically. Info: <a href="https://www.neak.gov.hu" target="_blank" rel="noopener">neak.gov.hu</a>.
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── DAILY LIFE ─────────────────── -->
+<div class="tab-content" id="tab-daily">
+  <div class="card">
+    <div class="section-label">Living Cheaply</div>
+    <h2>Daily Life on a Tight Budget</h2>
+
+    <h3>🍞 Food</h3>
+    <ul>
+      <li>University canteen meal: <strong>€4–6</strong></li>
+      <li>1 litre milk: <strong>€1</strong> · 1 loaf bread: <strong>€1–2</strong></li>
+      <li>Free hot meals: <strong><a href="https://cedek.hu" target="_blank" rel="noopener">Cedek EMIH soup kitchens</a></strong> in Budapest — open to anyone over 18 with a Hungarian social security card.</li>
+      <li>Food bank: <a href="https://www.elelmiszerbank.hu" target="_blank" rel="noopener">Magyar Élelmiszerbank</a> — free food packages through partner organisations.</li>
+    </ul>
+
+    <h3>🚌 Transport</h3>
+    <ul>
+      <li>Monthly student Budapest pass: <strong>HUF 3,450</strong> (requires Hungarian address). Info: <a href="https://bkk.hu/en" target="_blank" rel="noopener">BKK</a>.</li>
+      <li>Single bus ticket: <strong>€1</strong> from kiosk, €1.25 from driver.</li>
+      <li>Monthly student bus pass in Pécs: <strong>€10</strong>. Info: <a href="https://www.pecs.hu" target="_blank" rel="noopener">City of Pécs</a>.</li>
+      <li>Budapest–Pécs InterCity (student): <strong>€7</strong> one-way. Book: <a href="https://www.mavcsoport.hu" target="_blank" rel="noopener">MÁV</a>.</li>
+    </ul>
+
+    <h3>📱 Phone &amp; Internet</h3>
+    <ul>
+      <li>Prepaid SIM from <a href="https://www.telekom.hu" target="_blank" rel="noopener">Telekom</a>, <a href="https://www.vodafone.hu" target="_blank" rel="noopener">Vodafone</a>, or <a href="https://www.yettel.hu" target="_blank" rel="noopener">Yettel</a>.</li>
+      <li>eSIM data plans from <strong>€1.91/day</strong> or <strong>€5 for 3GB/15 days</strong>.</li>
+      <li>Free Wi-Fi is available in most cafés, libraries, and hostels.</li>
+    </ul>
+
+    <h3>🎉 Entertainment</h3>
+    <ul>
+      <li>Cinema ticket (student): <strong>€3–4.50</strong>. Check <a href="https://www.cinemacity.hu" target="_blank" rel="noopener">Cinema City</a>.</li>
+      <li>Theatre ticket (student): <strong>€5–9</strong>. Check <a href="https://www.jegymester.hu" target="_blank" rel="noopener">Jegymester</a>.</li>
+      <li>Party entrance: <strong>€0–12.50</strong>.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ─────────────────── EMERGENCY ─────────────────── -->
+<div class="tab-content" id="tab-emergency">
+  <div class="card">
+    <div class="section-label">If Things Go Wrong</div>
+    <h2>Emergency Numbers &amp; Safety Net</h2>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="num">112</div>
+        <div class="label">All emergencies (EU-wide)</div>
+      </div>
+      <div class="stat">
+        <div class="num">104</div>
+        <div class="label">Ambulance</div>
+      </div>
+      <div class="stat">
+        <div class="num">107</div>
+        <div class="label">Police</div>
+      </div>
+      <div class="stat">
+        <div class="num">105</div>
+        <div class="label">Fire</div>
+      </div>
+    </div>
+
+    <h3>If You Run Out of Money Completely</h3>
+    <ul>
+      <li><strong>Contact the <a href="https://www.netherlandsworldwide.nl/countries/hungary" target="_blank" rel="noopener">Dutch Embassy in Budapest</a>.</strong> They can advise on emergency loans and repatriation.</li>
+      <li><strong>Hungarian social assistance:</strong> Municipalities (önkormányzat) may offer “települési támogatás” (municipal aid). Start with <a href="https://budapest.hu" target="_blank" rel="noopener">Budapest Municipality</a>.</li>
+      <li><strong>Charity food:</strong> <a href="https://cedek.hu" target="_blank" rel="noopener">Cedek EMIH</a> provides free hot meals in Budapest and the countryside. Requirements: over 18 and a valid Hungarian social security card.</li>
+      <li><strong>Food bank:</strong> <a href="https://www.elelmiszerbank.hu" target="_blank" rel="noopener">Magyar Élelmiszerbank</a> distributes free food packages through partner organisations.</li>
+    </ul>
+
+    <div class="callout amber">
+      <strong>Realistic advice:</strong> Hungary does not have a generous welfare safety net for EU citizens who arrive with no means. The fastest exit from a no-money situation is <strong>any job</strong> — even part-time delivery or hostel work.
+    </div>
+  </div>
+</div>
+
+<!-- ─────────────────── RESOURCES ─────────────────── -->
+<div class="tab-content" id="tab-resources">
+  <div class="card">
+    <div class="section-label">Links &amp; Tools</div>
+    <h2>Every Link You Need</h2>
+
+    <h3>Official Government</h3>
+    <ul>
+      <li><a href="https://enterhungary.gov.hu" target="_blank" rel="noopener">Enter Hungary</a> — online registration platform</li>
+      <li><a href="https://oif.gov.hu" target="_blank" rel="noopener">OIF (National Directorate-General for Aliens Policing)</a> — immigration authority</li>
+      <li><a href="https://www.netherlandsworldwide.nl/countries/hungary" target="_blank" rel="noopener">Dutch Embassy in Budapest</a></li>
+      <li><a href="https://hungary.representation.ec.europa.eu" target="_blank" rel="noopener">EU Representation in Hungary</a></li>
+      <li><a href="https://nav.gov.hu/en" target="_blank" rel="noopener">NAV (Hungarian Tax Authority)</a></li>
+    </ul>
+
+    <h3>Housing</h3>
+    <ul>
+      <li><a href="https://www.alberlet.hu" target="_blank" rel="noopener">Alberlet.hu</a></li>
+      <li><a href="https://www.ingatlan.com" target="_blank" rel="noopener">Ingatlan.com</a></li>
+      <li><a href="https://www.hostelworld.com/hostels/Budapest" target="_blank" rel="noopener">Hostelworld Budapest</a></li>
+      <li><a href="https://budapest.hu" target="_blank" rel="noopener">Budapest Municipality (housing aid)</a></li>
+    </ul>
+
+    <h3>Jobs</h3>
+    <ul>
+      <li><a href="https://www.profession.hu" target="_blank" rel="noopener">Profession.hu</a></li>
+      <li><a href="https://hu.linkedin.com/jobs" target="_blank" rel="noopener">LinkedIn Jobs Hungary</a></li>
+      <li><a href="https://careers.wolt.com" target="_blank" rel="noopener">Wolt Careers</a></li>
+      <li><a href="https://www.jofogas.hu" target="_blank" rel="noopener">Jófogás.hu</a></li>
+    </ul>
+
+    <h3>Healthcare</h3>
+    <ul>
+      <li><a href="https://www.neak.gov.hu" target="_blank" rel="noopener">NEAK (National Health Insurance)</a></li>
+      <li><a href="https://www.ehic.nl" target="_blank" rel="noopener">EHIC Information (Netherlands)</a></li>
+      <li><a href="https://firstmedcenters.com" target="_blank" rel="noopener">FirstMed Centers (English-speaking clinic)</a></li>
+    </ul>
+
+    <h3>Food &amp; Emergency</h3>
+    <ul>
+      <li><a href="https://www.elelmiszerbank.hu" target="_blank" rel="noopener">Magyar Élelmiszerbank</a></li>
+      <li><a href="https://cedek.hu" target="_blank" rel="noopener">Cedek EMIH Soup Kitchens</a></li>
+      <li><strong>Emergency:</strong> 112 (EU-wide)</li>
+    </ul>
+
+    <h3>Transport</h3>
+    <ul>
+      <li><a href="https://bkk.hu/en" target="_blank" rel="noopener">BKK (Budapest Transport)</a></li>
+      <li><a href="https://www.mavcsoport.hu" target="_blank" rel="noopener">MÁV (Hungarian Railways)</a></li>
+    </ul>
+
+    <h3>Education</h3>
+    <ul>
+      <li><a href="https://www.stipendiumhungaricum.hu" target="_blank" rel="noopener">Stipendium Hungaricum</a></li>
+      <li><a href="https://erasmus-plus.ec.europa.eu" target="_blank" rel="noopener">Erasmus+</a></li>
+      <li><a href="https://www.elte.hu/en" target="_blank" rel="noopener">ELTE University</a></li>
+      <li><a href="https://www.uni-corvinus.hu" target="_blank" rel="noopener">Corvinus University</a></li>
+      <li><a href="https://semmelweis.hu/english" target="_blank" rel="noopener">Semmelweis University</a></li>
+      <li><a href="https://international.pte.hu" target="_blank" rel="noopener">University of Pécs</a></li>
+    </ul>
+  </div>
+</div>
+
+</div><!-- /container -->
+
+<!-- ═══════════════════════════════════════════ FOOTER ═══════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="#tab-home" data-tab-link="home">Home</a>
+      <a href="#tab-registration" data-tab-link="registration">Registration</a>
+      <a href="#tab-housing" data-tab-link="housing">Housing</a>
+      <a href="#tab-work" data-tab-link="work">Work</a>
+      <a href="#tab-healthcare" data-tab-link="healthcare">Healthcare</a>
+      <a href="#tab-emergency" data-tab-link="emergency">Emergency</a>
+      <a href="#tab-resources" data-tab-link="resources">All Resources</a>
+    </div>
+    <p><strong>NL2HU</strong> — An independent guide for Dutch citizens aged 18–21 moving to Hungary.</p>
+    <p style="margin-top:.5rem;font-size:.8rem;">This site is for informational purposes only. Always verify current rules with official Hungarian authorities before making decisions. Last updated: October 2026.</p>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════ SCRIPT ═══════════════════════════════════════════ -->
+<script>
+  const tabLinks = document.querySelectorAll('[data-tab-link]');
+  const contents = document.querySelectorAll('.tab-content');
+  const navAnchors = document.querySelectorAll('.nav-tabs a');
+
+  function switchTab(id) {
+    navAnchors.forEach(a => a.classList.remove('active'));
+    contents.forEach(c => c.classList.remove('active'));
+
+    const navLink = document.querySelector(`.nav-tabs a[data-tab-link="${id}"]`);
+    if (navLink) navLink.classList.add('active');
+
+    const tab = document.getElementById('tab-' + id);
+    if (tab) tab.classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // All in-page tab links (header nav, hero badges, stat cards, footer)
+  tabLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const id = this.dataset.tabLink;
+      if (!id) return;
+      history.replaceState(null, '', '#tab-' + id);
+      switchTab(id);
+    });
+  });
+
+  // Handle direct hash on load + browser back/forward
+  function handleHash() {
+    const hash = window.location.hash.replace('#tab-', '');
+    if (hash && document.getElementById('tab-' + hash)) switchTab(hash);
+    else switchTab('home');
+  }
+
+  window.addEventListener('hashchange', handleHash);
+  window.addEventListener('DOMContentLoaded', handleHash);
+
+  // Ensure all external links open in a new tab safely
+  document.querySelectorAll('a[href^="http"]').forEach(a => {
+    a.setAttribute('target', '_blank');
+    a.setAttribute('rel', 'noopener');
+  });
+</script>
+
+</body>
+</html>
