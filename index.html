@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NL2HU — Start Your Life in Hungary | Dutch Youth Guide</title>
+  <title>NL2EU — Your Personalised Emigration Guide</title>
   <style>
     :root {
       --primary: #1a3a5c;
@@ -14,6 +14,8 @@
       --border: #dee2e6;
       --success: #2a9d8f;
       --warning: #e9c46a;
+      --card-shadow: 0 2px 12px rgba(0,0,0,.07);
+      --card-hover: 0 8px 28px rgba(0,0,0,.12);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -24,8 +26,238 @@
       line-height: 1.65;
     }
 
-    /* ── HEADER ── */
-    header {
+    /* ═══════════════════════════════════════════ SCREEN MANAGEMENT ═══════════════════════════════════════════ */
+    .screen { display: none; }
+    .screen.active { display: block; }
+
+    /* ═══════════════════════════════════════════ START SCREEN ═══════════════════════════════════════════ */
+    .start-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #0f2338 100%);
+      color: #fff;
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+    }
+    .start-hero h1 {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      margin-bottom: .75rem;
+      line-height: 1.1;
+    }
+    .start-hero h1 em { font-style: normal; color: var(--accent); }
+    .start-hero p {
+      font-size: 1.15rem;
+      max-width: 640px;
+      margin: 0 auto 2rem;
+      opacity: .85;
+    }
+    .start-hero .badge-row {
+      display: flex;
+      justify-content: center;
+      gap: .75rem;
+      flex-wrap: wrap;
+    }
+    .start-hero .badge {
+      background: rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: .4rem 1rem;
+      border-radius: 100px;
+      font-size: .8rem;
+      font-weight: 600;
+      letter-spacing: .3px;
+    }
+
+    .country-section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+    }
+    .country-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: .5rem;
+      color: var(--primary);
+    }
+    .country-section .sub {
+      color: var(--muted);
+      margin-bottom: 2rem;
+      font-size: .95rem;
+    }
+    .country-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .country-card {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all .2s ease;
+      position: relative;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+    .country-card:hover {
+      border-color: var(--accent);
+      box-shadow: var(--card-hover);
+      transform: translateY(-3px);
+    }
+    .country-card .flag { font-size: 2.2rem; line-height: 1; margin-bottom: .5rem; }
+    .country-card .name {
+      font-weight: 700;
+      font-size: .9rem;
+      color: var(--primary);
+      margin-bottom: .15rem;
+    }
+    .country-card .note {
+      font-size: .72rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+    .country-card .tag {
+      display: inline-block;
+      margin-top: .4rem;
+      font-size: .65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      padding: .15rem .5rem;
+      border-radius: 4px;
+      background: #f1f3f5;
+      color: var(--muted);
+    }
+    .country-card .tag.popular { background: #fff0f0; color: var(--accent); }
+    .country-card .tag.cheap { background: #e8f8f5; color: var(--success); }
+
+    /* ═══════════════════════════════════════════ PREFERENCE SCREEN ═══════════════════════════════════════════ */
+    .pref-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, var(--primary) 0%, #0f2338 100%);
+    }
+    .pref-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      max-width: 560px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0,0,0,.3);
+    }
+    .pref-card .selected-country {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-bottom: 1.5rem;
+      padding: .75rem 1rem;
+      background: #f8f9fa;
+      border-radius: 10px;
+    }
+    .pref-card .selected-country .flag { font-size: 2rem; }
+    .pref-card .selected-country .info { flex: 1; }
+    .pref-card .selected-country .info .name { font-weight: 700; color: var(--primary); }
+    .pref-card .selected-country .info .hint { font-size: .8rem; color: var(--muted); }
+    .pref-card h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: .5rem;
+    }
+    .pref-card .sub { color: var(--muted); font-size: .9rem; margin-bottom: 1.5rem; }
+    .pref-group { margin-bottom: 1.5rem; }
+    .pref-group label {
+      display: block;
+      font-weight: 700;
+      font-size: .85rem;
+      color: var(--primary);
+      margin-bottom: .5rem;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+    }
+    .pref-options {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+    .pref-options input { display: none; }
+    .pref-options label {
+      padding: .55rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: .85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      text-transform: none;
+      letter-spacing: 0;
+      margin-bottom: 0;
+      color: var(--text);
+    }
+    .pref-options input:checked + label {
+      border-color: var(--accent);
+      background: #fff5f5;
+      color: var(--accent);
+    }
+    .pref-options label:hover { border-color: #adb5bd; }
+
+    .budget-slider {
+      width: 100%;
+      margin-top: .5rem;
+    }
+    .budget-display {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin-top: .25rem;
+    }
+    .budget-display span { font-size: .9rem; font-weight: 500; color: var(--muted); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .5rem;
+      padding: .85rem 2rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: .95rem;
+      cursor: pointer;
+      transition: all .2s;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      width: 100%;
+    }
+    .btn-primary:hover { background: #c1121f; transform: translateY(-1px); }
+    .btn-secondary {
+      background: #f1f3f5;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: #e9ecef; }
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: .85rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .btn-back:hover { color: var(--accent); }
+
+    /* ═══════════════════════════════════════════ GUIDE SCREEN ═══════════════════════════════════════════ */
+    .guide-header {
       background: var(--primary);
       color: #fff;
       padding: 0 2rem;
@@ -34,41 +266,39 @@
       z-index: 100;
       box-shadow: 0 2px 12px rgba(0,0,0,.15);
     }
-    .header-inner {
+    .guide-header-inner {
       max-width: 1200px;
       margin: 0 auto;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 68px;
+      height: 60px;
     }
-    .logo {
-      font-size: 1.35rem;
+    .guide-logo {
+      font-size: 1.2rem;
       font-weight: 700;
-      letter-spacing: -.5px;
+      color: #fff;
       display: flex;
       align-items: center;
-      gap: .5rem;
-      color: #fff;
-      text-decoration: none;
-      border: none;
+      gap: .4rem;
     }
-    .logo span { color: var(--accent); }
-    .nav-tabs {
+    .guide-logo .flag { font-size: 1.3rem; }
+    .guide-logo span { color: var(--accent); }
+    .guide-nav {
       display: flex;
       gap: 0;
       list-style: none;
       height: 100%;
       overflow-x: auto;
     }
-    .nav-tabs li { height: 100%; }
-    .nav-tabs a {
+    .guide-nav li { height: 100%; }
+    .guide-nav a {
       display: flex;
       align-items: center;
       color: rgba(255,255,255,.7);
-      font-size: .85rem;
+      font-size: .8rem;
       font-weight: 600;
-      padding: 0 1rem;
+      padding: 0 .85rem;
       height: 100%;
       cursor: pointer;
       white-space: nowrap;
@@ -76,161 +306,77 @@
       transition: all .2s;
       text-decoration: none;
     }
-    .nav-tabs a:hover { color: #fff; background: rgba(255,255,255,.06); }
-    .nav-tabs a.active {
-      color: #fff;
-      border-bottom-color: var(--accent);
-    }
+    .guide-nav a:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .guide-nav a.active { color: #fff; border-bottom-color: var(--accent); }
 
-    /* ── HERO ── */
-    .hero {
+    .guide-hero {
       background: linear-gradient(135deg, var(--primary) 0%, #0f2338 100%);
       color: #fff;
-      padding: 4rem 2rem 3.5rem;
+      padding: 3rem 2rem 2.5rem;
       text-align: center;
     }
-    .hero h1 {
-      font-size: 2.6rem;
+    .guide-hero .country-flag { font-size: 3rem; margin-bottom: .5rem; }
+    .guide-hero h1 {
+      font-size: 2.2rem;
       font-weight: 800;
-      letter-spacing: -1px;
-      margin-bottom: .75rem;
-      line-height: 1.15;
+      letter-spacing: -.8px;
+      margin-bottom: .5rem;
     }
-    .hero h1 em {
-      font-style: normal;
-      color: var(--accent);
+    .guide-hero h1 em { font-style: normal; color: var(--accent); }
+    .guide-hero p {
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto;
+      opacity: .8;
     }
-    .hero p {
-      font-size: 1.1rem;
-      max-width: 680px;
-      margin: 0 auto 1.5rem;
-      opacity: .85;
-    }
-    .hero-badges {
+    .guide-hero .pref-tags {
       display: flex;
       justify-content: center;
-      gap: .75rem;
+      gap: .5rem;
       flex-wrap: wrap;
+      margin-top: 1.25rem;
     }
-    .badge {
+    .pref-tag {
       background: rgba(255,255,255,.12);
       border: 1px solid rgba(255,255,255,.2);
-      padding: .4rem 1rem;
+      padding: .3rem .85rem;
       border-radius: 100px;
-      font-size: .8rem;
+      font-size: .75rem;
       font-weight: 600;
-      letter-spacing: .3px;
-      color: #fff;
-      text-decoration: none;
-      transition: all .2s;
-    }
-    .badge:hover {
-      background: rgba(255,255,255,.22);
-      border-color: rgba(255,255,255,.5);
-      transform: translateY(-1px);
     }
 
-    /* ── LAYOUT ── */
-    .container {
+    .guide-container {
       max-width: 1100px;
       margin: 0 auto;
       padding: 0 2rem;
     }
-    .tab-content { display: none; padding: 3rem 0 4rem; }
-    .tab-content.active { display: block; }
+    .guide-tab { display: none; padding: 2.5rem 0 4rem; }
+    .guide-tab.active { display: block; }
 
-    /* ── CARDS ── */
-    .card {
+    .g-card {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 1.75rem;
-      margin-bottom: 1.5rem;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--card-shadow);
     }
-    .card h2 {
-      font-size: 1.35rem;
+    .g-card h2 {
+      font-size: 1.2rem;
       font-weight: 700;
-      margin-bottom: .5rem;
+      margin-bottom: .4rem;
       color: var(--primary);
     }
-    .card h3 {
-      font-size: 1.05rem;
+    .g-card h3 {
+      font-size: 1rem;
       font-weight: 700;
-      margin: 1.25rem 0 .5rem;
+      margin: 1rem 0 .4rem;
       color: var(--primary);
     }
-    .card p { margin-bottom: .75rem; color: #333; }
-    .card ul, .card ol { margin: .5rem 0 1rem 1.25rem; }
-    .card li { margin-bottom: .4rem; }
-
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.25rem;
-      margin-bottom: 1.5rem;
-    }
-
-    /* ── CALLOUTS ── */
-    .callout {
-      border-left: 4px solid var(--accent);
-      background: #fff5f5;
-      padding: 1rem 1.25rem;
-      border-radius: 0 8px 8px 0;
-      margin: 1rem 0;
-      font-size: .92rem;
-    }
-    .callout.green { border-color: var(--success); background: #f0faf8; }
-    .callout.amber { border-color: var(--warning); background: #fffbf0; }
-    .callout strong { display: block; margin-bottom: .25rem; }
-
-    /* ── TABLE ── */
-    .table-wrap { overflow-x: auto; margin: 1rem 0; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: .9rem;
-    }
-    th, td {
-      text-align: left;
-      padding: .65rem .85rem;
-      border-bottom: 1px solid var(--border);
-    }
-    th {
-      background: #f1f3f5;
-      font-weight: 700;
-      font-size: .8rem;
-      text-transform: uppercase;
-      letter-spacing: .4px;
-      color: var(--muted);
-    }
-
-    /* ── STEPS ── */
-    .steps { list-style: none; margin: 1rem 0; }
-    .steps li {
-      display: flex;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid var(--border);
-    }
-    .steps li:last-child { border-bottom: none; }
-    .step-num {
-      flex-shrink: 0;
-      width: 32px;
-      height: 32px;
-      background: var(--primary);
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: .85rem;
-    }
-    .step-body { flex: 1; }
-    .step-body strong { display: block; margin-bottom: .2rem; }
-
-    /* ── LINKS ── */
-    .card a, .callout a {
+    .g-card p { margin-bottom: .6rem; color: #333; font-size: .95rem; }
+    .g-card ul, .g-card ol { margin: .4rem 0 .8rem 1.2rem; }
+    .g-card li { margin-bottom: .35rem; font-size: .95rem; }
+    .g-card a {
       color: var(--primary);
       font-weight: 600;
       text-decoration: underline;
@@ -238,565 +384,1872 @@
       text-underline-offset: 3px;
       transition: all .2s;
     }
-    .card a:hover, .callout a:hover {
-      text-decoration-color: var(--accent);
-      color: var(--accent);
-    }
+    .g-card a:hover { text-decoration-color: var(--accent); color: var(--accent); }
 
-    /* ── FOOTER ── */
-    footer {
-      background: var(--primary);
-      color: rgba(255,255,255,.7);
-      padding: 2.5rem 2rem;
-      font-size: .85rem;
-      text-align: center;
-    }
-    footer a {
-      color: #fff;
-      text-decoration: underline;
-      text-decoration-color: rgba(255,255,255,.4);
-      text-underline-offset: 3px;
-      cursor: pointer;
-    }
-    footer a:hover { text-decoration-color: #fff; }
-    .footer-inner { max-width: 1100px; margin: 0 auto; }
-    .footer-links {
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      .header-inner { flex-direction: column; height: auto; padding: .75rem 0; gap: .5rem; }
-      .nav-tabs { width: 100%; justify-content: flex-start; }
-      .hero h1 { font-size: 1.8rem; }
-      .container { padding: 0 1.25rem; }
-      .card { padding: 1.25rem; }
-    }
-
-    /* ── QUICK STATS ── */
-    .stats {
+    .g-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1rem;
-      margin: 1.5rem 0;
+      margin-bottom: 1.25rem;
     }
-    .stat {
+
+    .g-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: .85rem;
+      margin: 1rem 0;
+    }
+    .g-stat {
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 1.1rem;
+      padding: 1rem;
       text-align: center;
-      text-decoration: none;
-      color: inherit;
-      display: block;
-      transition: all .2s;
     }
-    .stat:hover {
-      border-color: var(--accent);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,.08);
-    }
-    .stat .num {
-      font-size: 1.5rem;
+    .g-stat .num {
+      font-size: 1.35rem;
       font-weight: 800;
       color: var(--primary);
       line-height: 1.2;
     }
-    .stat .label {
-      font-size: .75rem;
+    .g-stat .label {
+      font-size: .7rem;
       text-transform: uppercase;
       letter-spacing: .5px;
       color: var(--muted);
       font-weight: 600;
-      margin-top: .25rem;
+      margin-top: .2rem;
+    }
+
+    .g-callout {
+      border-left: 4px solid var(--accent);
+      background: #fff5f5;
+      padding: .85rem 1.1rem;
+      border-radius: 0 8px 8px 0;
+      margin: .75rem 0;
+      font-size: .9rem;
+    }
+    .g-callout.green { border-color: var(--success); background: #f0faf8; }
+    .g-callout.amber { border-color: var(--warning); background: #fffbf0; }
+    .g-callout strong { display: block; margin-bottom: .2rem; }
+
+    .g-steps { list-style: none; margin: .75rem 0; }
+    .g-steps li {
+      display: flex;
+      gap: .85rem;
+      padding: .8rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .g-steps li:last-child { border-bottom: none; }
+    .g-step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      background: var(--primary);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: .8rem;
+    }
+    .g-step-body { flex: 1; }
+    .g-step-body strong { display: block; margin-bottom: .15rem; font-size: .95rem; }
+
+    .g-table-wrap { overflow-x: auto; margin: .75rem 0; }
+    .g-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: .88rem;
+    }
+    .g-table th, .g-table td {
+      text-align: left;
+      padding: .55rem .75rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .g-table th {
+      background: #f1f3f5;
+      font-weight: 700;
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      color: var(--muted);
     }
 
     .section-label {
-      font-size: .75rem;
+      font-size: .7rem;
       text-transform: uppercase;
       letter-spacing: 1px;
       color: var(--accent);
       font-weight: 700;
-      margin-bottom: .35rem;
+      margin-bottom: .3rem;
     }
 
-    /* Emergency stat links — no hover lift needed but keep clickable */
-    a.stat { cursor: pointer; }
+    .g-footer {
+      background: var(--primary);
+      color: rgba(255,255,255,.7);
+      padding: 2rem;
+      font-size: .82rem;
+      text-align: center;
+    }
+    .g-footer a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+    .g-footer .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-bottom: .75rem;
+    }
+
+    /* ═══════════════════════════════════════════ RESPONSIVE ═══════════════════════════════════════════ */
+    @media (max-width: 768px) {
+      .start-hero h1 { font-size: 1.9rem; }
+      .start-hero { padding: 3rem 1.25rem 2rem; }
+      .country-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+      .country-section { padding: 2rem 1.25rem 3rem; }
+      .pref-card { padding: 1.75rem 1.25rem; }
+      .guide-header-inner { flex-direction: column; height: auto; padding: .6rem 0; gap: .4rem; }
+      .guide-nav { width: 100%; justify-content: flex-start; }
+      .guide-hero h1 { font-size: 1.5rem; }
+      .guide-container { padding: 0 1.25rem; }
+      .g-card { padding: 1.15rem; }
+    }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════ HEADER ═══════════════════════════════════════════ -->
-<header>
-  <div class="header-inner">
-    <a href="#tab-home" class="logo" data-tab-link="home">NL<span>2</span>HU</a>
-    <ul class="nav-tabs" id="navTabs">
-      <li><a href="#tab-home" class="active" data-tab-link="home">Home</a></li>
-      <li><a href="#tab-registration" data-tab-link="registration">Registration</a></li>
-      <li><a href="#tab-housing" data-tab-link="housing">Housing</a></li>
-      <li><a href="#tab-work" data-tab-link="work">Work &amp; Money</a></li>
-      <li><a href="#tab-education" data-tab-link="education">Education</a></li>
-      <li><a href="#tab-healthcare" data-tab-link="healthcare">Healthcare</a></li>
-      <li><a href="#tab-daily" data-tab-link="daily">Daily Life</a></li>
-      <li><a href="#tab-emergency" data-tab-link="emergency">Emergency</a></li>
-      <li><a href="#tab-resources" data-tab-link="resources">Resources</a></li>
-    </ul>
-  </div>
-</header>
-
-<!-- ═══════════════════════════════════════════ HERO ═══════════════════════════════════════════ -->
-<section class="hero">
-  <h1>From the Netherlands to Hungary —<br><em>With Almost Nothing.</em></h1>
-  <p>A practical, no-nonsense guide for Dutch citizens aged 18–21 who want to build a life in Hungary on a tight budget.</p>
-  <div class="hero-badges">
-    <a href="https://europa.eu/youreurope/citizens/residence/residence-rights/index_en.htm" target="_blank" rel="noopener" class="badge">🇳🇱 EU Citizen Rights</a>
-    <a href="https://oif.gov.hu" target="_blank" rel="noopener" class="badge">🇭🇺 OIF Immigration</a>
-    <a href="#tab-work" data-tab-link="work" class="badge">💰 Low Cost of Living</a>
-    <a href="#tab-registration" data-tab-link="registration" class="badge">📅 Updated 2026</a>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════ CONTENT ═══════════════════════════════════════════ -->
-<div class="container">
-
-<!-- ─────────────────── HOME ─────────────────── -->
-<div class="tab-content active" id="tab-home">
-  <div class="card">
-    <div class="section-label">Why Hungary?</div>
-    <h2>Hungary is one of the most affordable EU countries for young Dutch people.</h2>
-    <p>As a Dutch citizen, you have the <strong>right to live, work, and study in Hungary</strong> without a visa. The cost of living is roughly <strong>40–50% lower than in the Netherlands</strong>, and Budapest offers a vibrant international community, cheap public transport, and a growing job market for English speakers.</p>
-    <p>This guide is built for people in your exact situation: <strong>18–21, Dutch, and with very little money.</strong> Every section is practical, linked, and updated for 2026.</p>
-  </div>
-
-  <div class="stats">
-    <a href="#tab-housing" data-tab-link="housing" class="stat">
-      <div class="num">€600</div>
-      <div class="label">Min. monthly budget (Pécs)</div>
-    </a>
-    <a href="#tab-housing" data-tab-link="housing" class="stat">
-      <div class="num">€300–550</div>
-      <div class="label">Cheap room in Budapest</div>
-    </a>
-    <a href="#tab-work" data-tab-link="work" class="stat">
-      <div class="num">322,800 Ft</div>
-      <div class="label">Monthly minimum wage (2026)</div>
-    </a>
-    <a href="#tab-work" data-tab-link="work" class="stat">
-      <div class="num">15%</div>
-      <div class="label">Flat income tax</div>
-    </a>
-  </div>
-
-  <div class="card-grid">
-    <div class="card">
-      <h3>🚀 First 3 Steps (Do These Now)</h3>
-      <ol>
-        <li><strong>Arrive with your Dutch ID card or passport.</strong> You can stay up to 90 days without any registration.</li>
-        <li><strong>Find a cheap bed.</strong> <a href="https://www.hostelworld.com/hostels/Budapest" target="_blank" rel="noopener">Hostels start at $4–10/night</a>; use them while you look for a room.</li>
-        <li><strong>Register your address within 93 days</strong> of arrival at the <a href="https://oif.gov.hu" target="_blank" rel="noopener">immigration office (OIF)</a>. This gives you a Registration Certificate and an Address Card (Lakcímkártya).</li>
-      </ol>
+<!-- ═══════════════════════════════════════════ SCREEN 1: START ═══════════════════════════════════════════ -->
+<div class="screen active" id="screen-start">
+  <div class="start-hero">
+    <h1>Where Will <em>You</em> Go?</h1>
+    <p>Pick your destination. Get a personalised, no-nonsense guide to living there as a young Dutch person on any budget.</p>
+    <div class="badge-row">
+      <span class="badge">🇳🇱 Dutch Citizen</span>
+      <span class="badge">🇪🇺 EU Free Movement</span>
+      <span class="badge">📅 Updated 2026</span>
     </div>
-    <div class="card">
-      <h3>⚠️ The One Thing You MUST Prove</h3>
-      <p>To stay longer than 90 days, Hungarian law requires you to show <strong>“sufficient resources”</strong> — meaning you have a job, are a student, or have enough money to support yourself. If you have no money <em>and</em> no job/student status, your registration can be refused.</p>
-      <div class="callout amber">
-        <strong>Bottom line:</strong> Get a job or enrol in a course <em>before</em> or <em>immediately after</em> arrival. Even a part-time job counts.
-      </div>
-    </div>
+  </div>
+
+  <div class="country-section">
+    <h2>25 Most Popular Destinations for Dutch Youth</h2>
+    <p class="sub">Based on CBS emigration data and EU free-movement trends. Tap a country to personalize your guide.</p>
+    <div class="country-grid" id="countryGrid"></div>
   </div>
 </div>
 
-<!-- ─────────────────── REGISTRATION ─────────────────── -->
-<div class="tab-content" id="tab-registration">
-  <div class="card">
-    <div class="section-label">Step 1 — Legal</div>
-    <h2>Registration Certificate &amp; Address Card</h2>
-    <p>As an EEA (EU) citizen, you do <strong>not</strong> need a visa or residence permit. But if you stay longer than 90 days within a 180-day period, you must register.</p>
-
-    <h3>How to Register</h3>
-    <ul class="steps">
-      <li>
-        <span class="step-num">1</span>
-        <div class="step-body">
-          <strong>Go to Enter Hungary (online platform)</strong>
-          <p>Apply electronically at <a href="https://enterhungary.gov.hu" target="_blank" rel="noopener">enterhungary.gov.hu</a> — or visit the regional OIF office in person.</p>
+<!-- ═══════════════════════════════════════════ SCREEN 2: PREFERENCES ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-prefs">
+  <div class="pref-screen">
+    <div class="pref-card">
+      <div class="selected-country" id="selectedCountryBox">
+        <span class="flag" id="prefFlag">🇭🇺</span>
+        <div class="info">
+          <div class="name" id="prefCountryName">Hungary</div>
+          <div class="hint">Ready to personalise your guide</div>
         </div>
-      </li>
-      <li>
-        <span class="step-num">2</span>
-        <div class="step-body">
-          <strong>Bring your documents</strong>
-          <p>Valid Dutch ID/passport + proof of Hungarian address (rental contract, landlord’s written consent, or deed).</p>
+      </div>
+      <h2>Tell us about yourself</h2>
+      <p class="sub">We'll tailor the guide to your situation. No wrong answers.</p>
+
+      <div class="pref-group">
+        <label>Your main goal</label>
+        <div class="pref-options">
+          <input type="radio" name="goal" id="goal-work" value="work" checked>
+          <label for="goal-work">💼 Find work</label>
+          <input type="radio" name="goal" id="goal-study" value="study">
+          <label for="goal-study">🎓 Study</label>
+          <input type="radio" name="goal" id="goal-both" value="both">
+          <label for="goal-both">🔄 Both</label>
         </div>
-      </li>
-      <li>
-        <span class="step-num">3</span>
-        <div class="step-body">
-          <strong>Declare your first address</strong>
-          <p>The office forwards your address to the Budapest Government Office, which issues your plastic <strong>Lakcímkártya</strong> (Address Card) and mails it to you.</p>
+      </div>
+
+      <div class="pref-group">
+        <label>Your monthly budget</label>
+        <input type="range" class="budget-slider" id="budgetSlider" min="300" max="2500" step="50" value="600">
+        <div class="budget-display">€<span id="budgetValue">600</span> <span>/ month</span></div>
+        <p style="font-size:.78rem;color:var(--muted);margin-top:.25rem;">How much you can spend on rent + living costs.</p>
+      </div>
+
+      <div class="pref-group">
+        <label>Do you speak the local language?</label>
+        <div class="pref-options">
+          <input type="radio" name="lang" id="lang-none" value="none" checked>
+          <label for="lang-none">Not yet</label>
+          <input type="radio" name="lang" id="lang-basic" value="basic">
+          <label for="lang-basic">A little</label>
+          <input type="radio" name="lang" id="lang-good" value="good">
+          <label for="lang-good">Yes, well</label>
         </div>
-      </li>
-      <li>
-        <span class="step-num">4</span>
-        <div class="step-body">
-          <strong>Receive your Registration Certificate</strong>
-          <p>This certificate + Address Card are your key to banking, healthcare, and discounted transport.</p>
+      </div>
+
+      <div class="pref-group">
+        <label>Housing priority</label>
+        <div class="pref-options">
+          <input type="radio" name="housing" id="house-cheap" value="cheap" checked>
+          <label for="house-cheap">💶 Cheapest possible</label>
+          <input type="radio" name="housing" id="house-social" value="social">
+          <label for="house-social">👥 Shared / social</label>
+          <input type="radio" name="housing" id="house-own" value="own">
+          <label for="house-own">🚪 Own place</label>
         </div>
-      </li>
-    </ul>
-
-    <h3>Documents Checklist</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Document</th><th>Notes</th></tr>
-        <tr><td>Dutch ID card or passport</td><td>Must be valid for the whole stay</td></tr>
-        <tr><td>Proof of Hungarian address</td><td>Rental contract, landlord declaration, or property deed</td></tr>
-        <tr><td>Proof of “sufficient resources”</td><td>Employment contract, student enrolment, or bank statement</td></tr>
-        <tr><td>Health insurance proof</td><td><a href="https://www.ehic.nl" target="_blank" rel="noopener">EHIC card</a> (from the Netherlands) or private insurance</td></tr>
-        <tr><td>Passport photo</td><td>Not always required — check the <a href="https://oif.gov.hu" target="_blank" rel="noopener">OIF list</a></td></tr>
-      </table>
-    </div>
-
-    <div class="callout">
-      <strong>Deadline: 93rd day after entry.</strong> Do not miss this. Late registration can lead to fines or refusal of residence rights. More info: <a href="https://oif.gov.hu" target="_blank" rel="noopener">oif.gov.hu</a>
-    </div>
-  </div>
-</div>
-
-<!-- ─────────────────── HOUSING ─────────────────── -->
-<div class="tab-content" id="tab-housing">
-  <div class="card">
-    <div class="section-label">Where to Sleep</div>
-    <h2>Housing on a €0 Budget</h2>
-    <p>Housing is the biggest challenge when you arrive with no money. Here are your realistic options, from cheapest to most stable.</p>
-
-    <h3>🏠 Option 1: Hostels (First 1–2 Weeks)</h3>
-    <p>Budapest has dozens of hostels with dorm beds starting at <strong>$4–10 per night</strong>. Use them as a base while you job-hunt and find a room.</p>
-    <ul>
-      <li><strong><a href="https://www.aohostels.com/en/budapest/" target="_blank" rel="noopener">a&amp;o Budapest City</a></strong> — has a communal kitchen; good for long stays.</li>
-      <li><strong><a href="https://www.hostelworld.com/hostels/Budapest" target="_blank" rel="noopener">Hostelworld Budapest</a></strong> — search “long-term stay” filter.</li>
-    </ul>
-
-    <h3>🏠 Option 2: Shared Flat / Room</h3>
-    <p>A room in a shared Budapest flat costs roughly <strong>€300–550/month</strong> including utilities. Outside Budapest (Pécs, Debrecen), shared rooms can be <strong>€150–200/month</strong>.</p>
-    <ul>
-      <li><a href="https://www.alberlet.hu" target="_blank" rel="noopener">Alberlet.hu</a> — Hungary’s main rental site</li>
-      <li><a href="https://www.ingatlan.com" target="_blank" rel="noopener">Ingatlan.com</a> — large property portal</li>
-      <li>Facebook groups: <a href="https://www.facebook.com/search/groups/?q=Budapest%20Expats" target="_blank" rel="noopener">Budapest Expats</a>, <a href="https://www.facebook.com/search/groups/?q=Rooms%20for%20Rent%20Budapest" target="_blank" rel="noopener">Rooms for Rent Budapest</a></li>
-    </ul>
-
-    <h3>🏠 Option 3: Student Dormitory</h3>
-    <p>If you enrol in any Hungarian university, you can apply for a dormitory. Fees are as low as <strong>HUF 177,750 per semester (≈ €450) for EU citizens</strong>, plus a small deposit. Contact your university’s dormitory office directly.</p>
-
-    <h3>🏠 Option 4: Intergenerational Housing (Free/Cheap)</h3>
-    <p>Budapest runs the <strong>“Reliable Room Rental” (Megbízható Szobabérlet)</strong> programme, which pairs young people with elderly homeowners who have a spare room. In exchange for light household help and companionship, you get <strong>very low or free rent</strong>.</p>
-    <div class="callout green">
-      <strong>How to apply:</strong> Contact the <a href="https://budapest.hu" target="_blank" rel="noopener">Budapest Municipal Housing Office</a> or search for “Megbízható Szobabérlet Budapest” online. The programme includes a legal rental contract and mediation support.
-    </div>
-  </div>
-</div>
-
-<!-- ─────────────────── WORK ─────────────────── -->
-<div class="tab-content" id="tab-work">
-  <div class="card">
-    <div class="section-label">Income</div>
-    <h2>Getting a Job With No Experience</h2>
-    <p>The minimum wage in Hungary (2026) is <strong>HUF 322,800/month gross</strong> (≈ €830) for unskilled work, and <strong>HUF 373,200</strong> for jobs requiring a qualification. Official source: <a href="https://www.mvh.allamkincstar.gov.hu" target="_blank" rel="noopener">Hungarian State Treasury</a>.</p>
-
-    <h3>Jobs That Hire English Speakers With Zero Experience</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Job</th><th>Typical Pay</th><th>Where to Apply</th></tr>
-        <tr><td>Wolt / Food Delivery Support Associate</td><td>HUF 2,150/hour (students)</td><td><a href="https://careers.wolt.com" target="_blank" rel="noopener">Wolt Careers</a></td></tr>
-        <tr><td>IT Systems Operator (trainee)</td><td>Competitive trainee rate</td><td><a href="https://www.themuse.com/jobs" target="_blank" rel="noopener">The Muse — Kyndryl programme</a></td></tr>
-        <tr><td>Recruitment Intern</td><td>Trainee rate</td><td><a href="https://www.profession.hu" target="_blank" rel="noopener">Profession.hu</a></td></tr>
-        <tr><td>Financial Trainee (20–40 hrs)</td><td>Trainee rate</td><td><a href="https://hu.linkedin.com/jobs" target="_blank" rel="noopener">LinkedIn Hungary</a></td></tr>
-        <tr><td>English Tutor / Babysitter</td><td>HUF 3,000–6,000/hour</td><td><a href="https://www.facebook.com/search/groups/?q=English%20Speaking%20Jobs%20Budapest" target="_blank" rel="noopener">Facebook groups</a></td></tr>
-      </table>
-    </div>
-
-    <h3>Where to Search</h3>
-    <ul>
-      <li><a href="https://www.profession.hu" target="_blank" rel="noopener">Profession.hu</a> — Hungary’s largest job board</li>
-      <li><a href="https://hu.linkedin.com/jobs" target="_blank" rel="noopener">LinkedIn Jobs Hungary</a></li>
-      <li><a href="https://www.jofogas.hu" target="_blank" rel="noopener">Jófogás.hu</a> — classifieds with part-time gigs</li>
-      <li>Facebook: <a href="https://www.facebook.com/search/groups/?q=English%20Speaking%20Jobs%20Budapest" target="_blank" rel="noopener">English Speaking Jobs Budapest</a>, <a href="https://www.facebook.com/search/groups/?q=Expats%20in%20Budapest" target="_blank" rel="noopener">Expats in Budapest</a></li>
-    </ul>
-
-    <h3>💰 Money Management</h3>
-    <ul>
-      <li><strong>Open a Hungarian bank account.</strong> EU citizens can open a basic payment account with just a passport. Major banks: <a href="https://www.otpbank.hu" target="_blank" rel="noopener">OTP</a>, <a href="https://www.erste.hu" target="_blank" rel="noopener">Erste</a>, <a href="https://www.kh.hu" target="_blank" rel="noopener">K&amp;H</a>.</li>
-      <li><strong>Get a prepaid SIM.</strong> <a href="https://www.telekom.hu" target="_blank" rel="noopener">Telekom</a>, <a href="https://www.vodafone.hu" target="_blank" rel="noopener">Vodafone</a>, or <a href="https://www.yettel.hu" target="_blank" rel="noopener">Yettel</a>. Data plans start from a few euros.</li>
-      <li><strong>Tax:</strong> You pay 15% flat income tax + 18.5% social contributions. Under-25s are exempt from income tax on earnings up to the median wage. Info: <a href="https://nav.gov.hu/en" target="_blank" rel="noopener">NAV (Hungarian Tax Authority)</a>.</li>
-    </ul>
-  </div>
-</div>
-
-<!-- ─────────────────── EDUCATION ─────────────────── -->
-<div class="tab-content" id="tab-education">
-  <div class="card">
-    <div class="section-label">Student Status = Legal Stay</div>
-    <h2>Enrolling in a Hungarian Course or University</h2>
-    <p>Student status is one of the easiest ways to satisfy the “sufficient resources” requirement for staying in Hungary longer than 90 days. It also gives you access to dormitories and discounted transport.</p>
-
-    <h3>Options for Dutch Students</h3>
-    <ul>
-      <li><strong>Full degree programmes</strong> at <a href="https://www.elte.hu/en" target="_blank" rel="noopener">ELTE</a>, <a href="https://www.uni-corvinus.hu" target="_blank" rel="noopener">Corvinus</a>, <a href="https://semmelweis.hu/english" target="_blank" rel="noopener">Semmelweis</a>, or the <a href="https://international.pte.hu" target="_blank" rel="noopener">University of Pécs</a>. Many are taught in English.</li>
-      <li><strong>Language courses</strong> — short Hungarian courses can provide student status and are often affordable.</li>
-      <li><strong>Erasmus+</strong> — if you are already enrolled at a Dutch institution, an Erasmus exchange to Hungary is a low-risk way to test living there. Info: <a href="https://erasmus-plus.ec.europa.eu" target="_blank" rel="noopener">Erasmus+ official site</a>.</li>
-    </ul>
-
-    <h3>Student Benefits</h3>
-    <ul>
-      <li><strong>Dormitory accommodation</strong> — as low as HUF 177,750/semester (EU rate) + HUF 40,000 deposit.</li>
-      <li><strong>Discounted Budapest transport pass</strong> — HUF 3,450/month, but <em>only</em> if you have a Hungarian residential address. Get your Lakcímkártya first. Info: <a href="https://bkk.hu/en" target="_blank" rel="noopener">BKK</a>.</li>
-      <li><strong>50% discount on intercity trains</strong> for ages 14–25 with valid ID. Info: <a href="https://www.mavcsoport.hu" target="_blank" rel="noopener">MÁV</a>.</li>
-    </ul>
-
-    <div class="callout">
-      <strong>Key link:</strong> <a href="https://www.stipendiumhungaricum.hu" target="_blank" rel="noopener">Stipendium Hungaricum</a> — government scholarship for international students. Check eligibility for Dutch applicants.
-    </div>
-  </div>
-</div>
-
-<!-- ─────────────────── HEALTHCARE ─────────────────── -->
-<div class="tab-content" id="tab-healthcare">
-  <div class="card">
-    <div class="section-label">Staying Healthy</div>
-    <h2>Healthcare as a Dutch EU Citizen</h2>
-    <p>Your Dutch <strong>European Health Insurance Card (EHIC)</strong> — on the back of your zorgverzekering card — covers medically necessary treatment during a temporary stay in Hungary. Present it at hospitals, clinics, and GP offices. More info: <a href="https://www.ehic.nl" target="_blank" rel="noopener">ehic.nl</a>.</p>
-
-    <h3>Three Levels of Coverage</h3>
-    <div class="table-wrap">
-      <table>
-        <tr><th>Status</th><th>Coverage</th><th>How to Get It</th></tr>
-        <tr><td>Temporary stay (tourist)</td><td>Emergency + necessary care</td><td><a href="https://www.ehic.nl" target="_blank" rel="noopener">EHIC card</a> from your Dutch insurer</td></tr>
-        <tr><td>Employed in Hungary</td><td>Full public healthcare (TAJ card)</td><td>Automatically enrolled via employer</td></tr>
-        <tr><td>Student / not employed</td><td>Voluntary NEAK registration</td><td>Pay monthly contribution to <a href="https://www.neak.gov.hu" target="_blank" rel="noopener">NEAK</a></td></tr>
-      </table>
-    </div>
-
-    <h3>English-Speaking Clinics in Budapest</h3>
-    <ul>
-      <li><strong><a href="https://firstmedcenters.com" target="_blank" rel="noopener">FirstMed Centers</a></strong> (District II) — the reference clinic for expats. Consultations €80–150.</li>
-      <li><strong><a href="https://budahc.com" target="_blank" rel="noopener">Buda Health Center</a></strong> (District XII)</li>
-      <li><strong><a href="https://imsweb.hu" target="_blank" rel="noopener">International Medical Services (IMS)</a></strong> (District XIII)</li>
-    </ul>
-
-    <div class="callout green">
-      <strong>Low-cost tip:</strong> Hungarian public healthcare is free at the point of use if you have a TAJ card. Once you get any job, your employer registers you automatically. Info: <a href="https://www.neak.gov.hu" target="_blank" rel="noopener">neak.gov.hu</a>.
-    </div>
-  </div>
-</div>
-
-<!-- ─────────────────── DAILY LIFE ─────────────────── -->
-<div class="tab-content" id="tab-daily">
-  <div class="card">
-    <div class="section-label">Living Cheaply</div>
-    <h2>Daily Life on a Tight Budget</h2>
-
-    <h3>🍞 Food</h3>
-    <ul>
-      <li>University canteen meal: <strong>€4–6</strong></li>
-      <li>1 litre milk: <strong>€1</strong> · 1 loaf bread: <strong>€1–2</strong></li>
-      <li>Free hot meals: <strong><a href="https://cedek.hu" target="_blank" rel="noopener">Cedek EMIH soup kitchens</a></strong> in Budapest — open to anyone over 18 with a Hungarian social security card.</li>
-      <li>Food bank: <a href="https://www.elelmiszerbank.hu" target="_blank" rel="noopener">Magyar Élelmiszerbank</a> — free food packages through partner organisations.</li>
-    </ul>
-
-    <h3>🚌 Transport</h3>
-    <ul>
-      <li>Monthly student Budapest pass: <strong>HUF 3,450</strong> (requires Hungarian address). Info: <a href="https://bkk.hu/en" target="_blank" rel="noopener">BKK</a>.</li>
-      <li>Single bus ticket: <strong>€1</strong> from kiosk, €1.25 from driver.</li>
-      <li>Monthly student bus pass in Pécs: <strong>€10</strong>. Info: <a href="https://www.pecs.hu" target="_blank" rel="noopener">City of Pécs</a>.</li>
-      <li>Budapest–Pécs InterCity (student): <strong>€7</strong> one-way. Book: <a href="https://www.mavcsoport.hu" target="_blank" rel="noopener">MÁV</a>.</li>
-    </ul>
-
-    <h3>📱 Phone &amp; Internet</h3>
-    <ul>
-      <li>Prepaid SIM from <a href="https://www.telekom.hu" target="_blank" rel="noopener">Telekom</a>, <a href="https://www.vodafone.hu" target="_blank" rel="noopener">Vodafone</a>, or <a href="https://www.yettel.hu" target="_blank" rel="noopener">Yettel</a>.</li>
-      <li>eSIM data plans from <strong>€1.91/day</strong> or <strong>€5 for 3GB/15 days</strong>.</li>
-      <li>Free Wi-Fi is available in most cafés, libraries, and hostels.</li>
-    </ul>
-
-    <h3>🎉 Entertainment</h3>
-    <ul>
-      <li>Cinema ticket (student): <strong>€3–4.50</strong>. Check <a href="https://www.cinemacity.hu" target="_blank" rel="noopener">Cinema City</a>.</li>
-      <li>Theatre ticket (student): <strong>€5–9</strong>. Check <a href="https://www.jegymester.hu" target="_blank" rel="noopener">Jegymester</a>.</li>
-      <li>Party entrance: <strong>€0–12.50</strong>.</li>
-    </ul>
-  </div>
-</div>
-
-<!-- ─────────────────── EMERGENCY ─────────────────── -->
-<div class="tab-content" id="tab-emergency">
-  <div class="card">
-    <div class="section-label">If Things Go Wrong</div>
-    <h2>Emergency Numbers &amp; Safety Net</h2>
-
-    <div class="stats">
-      <div class="stat">
-        <div class="num">112</div>
-        <div class="label">All emergencies (EU-wide)</div>
       </div>
-      <div class="stat">
-        <div class="num">104</div>
-        <div class="label">Ambulance</div>
-      </div>
-      <div class="stat">
-        <div class="num">107</div>
-        <div class="label">Police</div>
-      </div>
-      <div class="stat">
-        <div class="num">105</div>
-        <div class="label">Fire</div>
+
+      <button class="btn btn-primary" id="generateBtn">Generate My Guide →</button>
+      <div style="text-align:center;">
+        <button class="btn-back" id="backToStart">&larr; Choose a different country</button>
       </div>
     </div>
+  </div>
+</div>
 
-    <h3>If You Run Out of Money Completely</h3>
-    <ul>
-      <li><strong>Contact the <a href="https://www.netherlandsworldwide.nl/countries/hungary" target="_blank" rel="noopener">Dutch Embassy in Budapest</a>.</strong> They can advise on emergency loans and repatriation.</li>
-      <li><strong>Hungarian social assistance:</strong> Municipalities (önkormányzat) may offer “települési támogatás” (municipal aid). Start with <a href="https://budapest.hu" target="_blank" rel="noopener">Budapest Municipality</a>.</li>
-      <li><strong>Charity food:</strong> <a href="https://cedek.hu" target="_blank" rel="noopener">Cedek EMIH</a> provides free hot meals in Budapest and the countryside. Requirements: over 18 and a valid Hungarian social security card.</li>
-      <li><strong>Food bank:</strong> <a href="https://www.elelmiszerbank.hu" target="_blank" rel="noopener">Magyar Élelmiszerbank</a> distributes free food packages through partner organisations.</li>
-    </ul>
-
-    <div class="callout amber">
-      <strong>Realistic advice:</strong> Hungary does not have a generous welfare safety net for EU citizens who arrive with no means. The fastest exit from a no-money situation is <strong>any job</strong> — even part-time delivery or hostel work.
+<!-- ═══════════════════════════════════════════ SCREEN 3: GUIDE ═══════════════════════════════════════════ -->
+<div class="screen" id="screen-guide">
+  <header class="guide-header">
+    <div class="guide-header-inner">
+      <div class="guide-logo">
+        <span class="flag" id="headerFlag">🇭🇺</span>
+        NL<span>2</span>EU
+      </div>
+      <ul class="guide-nav" id="guideNav">
+        <li><a href="#" data-gtab="home" class="active">Overview</a></li>
+        <li><a href="#" data-gtab="registration">Registration</a></li>
+        <li><a href="#" data-gtab="housing">Housing</a></li>
+        <li><a href="#" data-gtab="work">Work &amp; Money</a></li>
+        <li><a href="#" data-gtab="education">Education</a></li>
+        <li><a href="#" data-gtab="healthcare">Healthcare</a></li>
+        <li><a href="#" data-gtab="daily">Daily Life</a></li>
+        <li><a href="#" data-gtab="emergency">Emergency</a></li>
+      </ul>
     </div>
+  </header>
+
+  <section class="guide-hero">
+    <div class="country-flag" id="heroFlag">🇭🇺</div>
+    <h1>Your Life in <em id="heroCountryName">Hungary</em></h1>
+    <p id="heroSubtitle">Personalised for a young Dutch person looking for work with a €600/month budget.</p>
+    <div class="pref-tags" id="prefTags"></div>
+  </section>
+
+  <div class="guide-container" id="guideContent">
+    <!-- Content injected dynamically by JS -->
   </div>
-</div>
 
-<!-- ─────────────────── RESOURCES ─────────────────── -->
-<div class="tab-content" id="tab-resources">
-  <div class="card">
-    <div class="section-label">Links &amp; Tools</div>
-    <h2>Every Link You Need</h2>
-
-    <h3>Official Government</h3>
-    <ul>
-      <li><a href="https://enterhungary.gov.hu" target="_blank" rel="noopener">Enter Hungary</a> — online registration platform</li>
-      <li><a href="https://oif.gov.hu" target="_blank" rel="noopener">OIF (National Directorate-General for Aliens Policing)</a> — immigration authority</li>
-      <li><a href="https://www.netherlandsworldwide.nl/countries/hungary" target="_blank" rel="noopener">Dutch Embassy in Budapest</a></li>
-      <li><a href="https://hungary.representation.ec.europa.eu" target="_blank" rel="noopener">EU Representation in Hungary</a></li>
-      <li><a href="https://nav.gov.hu/en" target="_blank" rel="noopener">NAV (Hungarian Tax Authority)</a></li>
-    </ul>
-
-    <h3>Housing</h3>
-    <ul>
-      <li><a href="https://www.alberlet.hu" target="_blank" rel="noopener">Alberlet.hu</a></li>
-      <li><a href="https://www.ingatlan.com" target="_blank" rel="noopener">Ingatlan.com</a></li>
-      <li><a href="https://www.hostelworld.com/hostels/Budapest" target="_blank" rel="noopener">Hostelworld Budapest</a></li>
-      <li><a href="https://budapest.hu" target="_blank" rel="noopener">Budapest Municipality (housing aid)</a></li>
-    </ul>
-
-    <h3>Jobs</h3>
-    <ul>
-      <li><a href="https://www.profession.hu" target="_blank" rel="noopener">Profession.hu</a></li>
-      <li><a href="https://hu.linkedin.com/jobs" target="_blank" rel="noopener">LinkedIn Jobs Hungary</a></li>
-      <li><a href="https://careers.wolt.com" target="_blank" rel="noopener">Wolt Careers</a></li>
-      <li><a href="https://www.jofogas.hu" target="_blank" rel="noopener">Jófogás.hu</a></li>
-    </ul>
-
-    <h3>Healthcare</h3>
-    <ul>
-      <li><a href="https://www.neak.gov.hu" target="_blank" rel="noopener">NEAK (National Health Insurance)</a></li>
-      <li><a href="https://www.ehic.nl" target="_blank" rel="noopener">EHIC Information (Netherlands)</a></li>
-      <li><a href="https://firstmedcenters.com" target="_blank" rel="noopener">FirstMed Centers (English-speaking clinic)</a></li>
-    </ul>
-
-    <h3>Food &amp; Emergency</h3>
-    <ul>
-      <li><a href="https://www.elelmiszerbank.hu" target="_blank" rel="noopener">Magyar Élelmiszerbank</a></li>
-      <li><a href="https://cedek.hu" target="_blank" rel="noopener">Cedek EMIH Soup Kitchens</a></li>
-      <li><strong>Emergency:</strong> 112 (EU-wide)</li>
-    </ul>
-
-    <h3>Transport</h3>
-    <ul>
-      <li><a href="https://bkk.hu/en" target="_blank" rel="noopener">BKK (Budapest Transport)</a></li>
-      <li><a href="https://www.mavcsoport.hu" target="_blank" rel="noopener">MÁV (Hungarian Railways)</a></li>
-    </ul>
-
-    <h3>Education</h3>
-    <ul>
-      <li><a href="https://www.stipendiumhungaricum.hu" target="_blank" rel="noopener">Stipendium Hungaricum</a></li>
-      <li><a href="https://erasmus-plus.ec.europa.eu" target="_blank" rel="noopener">Erasmus+</a></li>
-      <li><a href="https://www.elte.hu/en" target="_blank" rel="noopener">ELTE University</a></li>
-      <li><a href="https://www.uni-corvinus.hu" target="_blank" rel="noopener">Corvinus University</a></li>
-      <li><a href="https://semmelweis.hu/english" target="_blank" rel="noopener">Semmelweis University</a></li>
-      <li><a href="https://international.pte.hu" target="_blank" rel="noopener">University of Pécs</a></li>
-    </ul>
-  </div>
-</div>
-
-</div><!-- /container -->
-
-<!-- ═══════════════════════════════════════════ FOOTER ═══════════════════════════════════════════ -->
-<footer>
-  <div class="footer-inner">
+  <footer class="g-footer">
     <div class="footer-links">
-      <a href="#tab-home" data-tab-link="home">Home</a>
-      <a href="#tab-registration" data-tab-link="registration">Registration</a>
-      <a href="#tab-housing" data-tab-link="housing">Housing</a>
-      <a href="#tab-work" data-tab-link="work">Work</a>
-      <a href="#tab-healthcare" data-tab-link="healthcare">Healthcare</a>
-      <a href="#tab-emergency" data-tab-link="emergency">Emergency</a>
-      <a href="#tab-resources" data-tab-link="resources">All Resources</a>
+      <a href="#" data-gtab="home">Overview</a>
+      <a href="#" data-gtab="registration">Registration</a>
+      <a href="#" data-gtab="work">Work</a>
+      <a href="#" data-gtab="healthcare">Healthcare</a>
+      <a href="#" data-gtab="emergency">Emergency</a>
     </div>
-    <p><strong>NL2HU</strong> — An independent guide for Dutch citizens aged 18–21 moving to Hungary.</p>
-    <p style="margin-top:.5rem;font-size:.8rem;">This site is for informational purposes only. Always verify current rules with official Hungarian authorities before making decisions. Last updated: October 2026.</p>
-  </div>
-</footer>
+    <p><strong>NL2EU</strong> — Personalised emigration guide for Dutch youth.</p>
+    <p style="margin-top:.4rem;font-size:.78rem;">Informational only. Always verify official administrative details. Last updated October 2026.</p>
+    <p style="margin-top:.6rem;"><button class="btn-back" style="color:#fff;" id="restartBtn">Change country or preferences</button></p>
+  </footer>
+</div>
 
-<!-- ═══════════════════════════════════════════ SCRIPT ═══════════════════════════════════════════ -->
 <script>
-  const tabLinks = document.querySelectorAll('[data-tab-link]');
-  const contents = document.querySelectorAll('.tab-content');
-  const navAnchors = document.querySelectorAll('.nav-tabs a');
+/* ══════════════════════════════════════════════════════════════════════════════════════
+   25 POPULAR COUNTRIES DATA
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+const COUNTRIES = [
+  {
+    id: 'belgium', name: 'Belgium', flag: '🇧🇪', note: 'Closest & easiest', tag: 'popular',
+    registration: {
+      title: 'EU Registration (Bijlage 19)',
+      steps: [
+        { t: 'Register at your local commune', d: 'Apply for an Annex 19 registration certificate at the town hall within 3 months. Bring valid ID, proof of address, and proof of health insurance.' },
+        { t: 'Prove sufficient resources', d: 'Show an employment contract, student enrolment, or bank statements.' },
+        { t: 'Receive your BIS number', d: 'Your national register number is issued after approval. Needed for work, banking, and healthcare.' }
+      ],
+      docs: ['Valid Dutch ID/passport', 'Proof of address (rental contract)', 'Health insurance proof (EHIC or Belgian mutuelle)', 'Employment/study proof'],
+      link: 'https://www.siod.belgie.be', linkText: 'Belgian Immigration Office (Siod)'
+    },
+    housing: {
+      title: 'Housing in Belgium',
+      options: [
+        { n: 'Kot (student room)', p: '€250–450/month', d: 'Flemish university cities (Leuven, Ghent) have affordable student rooms.' },
+        { n: 'Shared apartment', p: '€400–650/month', d: 'Brussels and Antwerp are pricier; Liège and Charleroi are cheaper.' },
+        { n: 'Social housing (SVK)', p: '€300–500/month', d: 'Social rental agencies (SVK) offer affordable housing.' }
+      ],
+      link: 'https://www.immoweb.be', linkText: 'Immoweb.be — Property portal'
+    },
+    work: {
+      title: 'Work & Income in Belgium',
+      minWage: '€2,070/month gross',
+      jobs: ['Warehouse & logistics (English OK)', 'Horeca (cafés, restaurants)', 'Delivery services', 'Call centre (bilingual NL/EN)'],
+      where: [['VDAB', 'https://www.vdab.be'], ['Le Forem', 'https://www.leforem.be'], ['Actiris', 'https://www.actiris.brussels']],
+      tax: 'Progressive tax (25–50%) + social contributions.'
+    },
+    education: {
+      title: 'Study in Belgium',
+      unis: [['KU Leuven', 'https://www.kuleuven.be'], ['Ghent University', 'https://www.ugent.be'], ['ULB Brussels', 'https://www.ulb.be']],
+      cost: 'EU tuition: ~€1,000/year for most programmes.',
+      dorm: 'Student dorms (koten) from €250/month.'
+    },
+    healthcare: {
+      title: 'Healthcare in Belgium',
+      system: 'Join a Belgian health insurance fund (mutualité/ziekenfonds). It reimburses most medical costs.',
+      link: 'https://www.ehic.nl', linkText: 'EHIC Information'
+    },
+    daily: {
+      title: 'Daily Life in Belgium',
+      food: 'Supermarkets: Colruyt (cheapest), Delhaize, Lidl. Budget €180–240/month.',
+      transport: 'Monthly bus/tram pass: €50–60. Student discounts available.',
+      fun: 'Cinema: €8–12. Beer: €2.50–4.50 in student bars.'
+    },
+    emergency: { number: '112', police: '101', embassy: 'https://www.netherlandsworldwide.nl/countries/belgium', embassyName: 'Dutch Embassy Brussels' }
+  },
+  {
+    id: 'germany', name: 'Germany', flag: '🇩🇪', note: 'Big job market', tag: 'popular',
+    registration: {
+      title: 'Anmeldung (Address Registration)',
+      steps: [
+        { t: 'Register within 14 days', d: 'Go to the Bürgeramt with your passport and rental confirmation (Wohnungsgeberbestätigung).' },
+        { t: 'Get your Meldebescheinigung', d: 'Needed for tax ID, bank accounts, and health insurance.' },
+        { t: 'Apply for tax ID (Steuer-ID)', d: 'Automatically sent via post after registration.' }
+      ],
+      docs: ['Valid ID/passport', 'Landlord confirmation', 'Anmeldung form'],
+      link: 'https://www.eu-gleichbehandlungsstelle.de', linkText: 'EU Advice Germany'
+    },
+    housing: {
+      title: 'Housing in Germany',
+      options: [
+        { n: 'WG (shared flat)', p: '€300–500/month', d: 'Search on WG-Gesucht.de. Leipzig & Dortmund are very affordable.' },
+        { n: 'Student dormitory', p: '€250–400/month', d: 'Apply through Studierendenwerk immediately upon arrival.' },
+        { n: 'Zwischenmiete (sublet)', p: '€250–450/month', d: 'Short-term sublets are great for the first few months.' }
+      ],
+      link: 'https://www.wg-gesucht.de', linkText: 'WG-Gesucht.de'
+    },
+    work: {
+      title: 'Work & Income in Germany',
+      minWage: '€12.82/hour',
+      jobs: ['Logistics & warehouses', 'Lieferando delivery', 'Barista / café work', 'Call centre (English/Dutch)'],
+      where: [['Indeed DE', 'https://de.indeed.com'], ['StepStone', 'https://www.stepstone.de'], ['Arbeitsagentur', 'https://www.arbeitsagentur.de']],
+      tax: 'Progressive tax. Mini-jobs under €538/month are tax-free.'
+    },
+    education: {
+      title: 'Study in Germany',
+      unis: [['FU Berlin', 'https://www.fu-berlin.de'], ['LMU Munich', 'https://www.lmu.de'], ['TU Berlin', 'https://www.tu.berlin']],
+      cost: 'Public universities: no tuition fees! Only semester contributions (€150–350).',
+      dorm: 'Studierendenwerk dorms from €250/month.'
+    },
+    healthcare: {
+      title: 'Healthcare in Germany',
+      system: 'Statutory health insurance (AOK, TK, Barmer) is mandatory for workers/residents.',
+      link: 'https://www.eu-gleichbehandlungsstelle.de', linkText: 'EU Health Info'
+    },
+    daily: {
+      title: 'Daily Life in Germany',
+      food: 'Supermarkets: Aldi, Lidl, Kaufland. Budget €160–220/month.',
+      transport: 'Deutschlandticket: €58/month for regional transport nationwide.',
+      fun: 'Cinema: €8–13. Beer: €1.50–3 in shops.'
+    },
+    emergency: { number: '112', police: '110', embassy: 'https://www.netherlandsworldwide.nl/countries/germany', embassyName: 'Dutch Embassy Berlin' }
+  },
+  {
+    id: 'spain', name: 'Spain', flag: '🇪🇸', note: 'Sun & low cost', tag: 'popular',
+    registration: {
+      title: 'NIE & EU Registration',
+      steps: [
+        { t: 'Get your NIE number', d: 'Apply at Policía Nacional. Essential for jobs, bank accounts, and leases.' },
+        { t: 'Register on the Padrón', d: 'Register address at the local Ayuntamiento.' },
+        { t: 'Certificado de Registro', d: 'Obtain green EU resident certificate at Oficina de Extranjería.' }
+      ],
+      docs: ['Valid ID/passport', 'Padrón certificate', 'Employment or financial proof'],
+      link: 'https://www.citizensadvice.org.es', linkText: 'Citizens Advice Spain'
+    },
+    housing: {
+      title: 'Housing in Spain',
+      options: [
+        { n: 'Shared piso', p: '€250–450/month', d: 'Valencia, Seville, and Granada offer great value.' },
+        { n: 'Residencia (student)', p: '€300–500/month', d: 'Includes utilities and sometimes meals.' },
+        { n: 'Studio / Small Flat', p: '€450–700/month', d: 'Available outside major city centers.' }
+      ],
+      link: 'https://www.idealista.com', linkText: 'Idealista Spain'
+    },
+    work: {
+      title: 'Work & Income in Spain',
+      minWage: '€1,134/month (14 payments)',
+      jobs: ['Tourism & hospitality', 'English/Dutch tutoring', 'Delivery (Glovo/Uber Eats)', 'Customer support hubs'],
+      where: [['InfoJobs', 'https://www.infojobs.net'], ['Indeed ES', 'https://es.indeed.com']],
+      tax: 'Progressive tax scale (19–47%).'
+    },
+    education: {
+      title: 'Study in Spain',
+      unis: [['UCM Madrid', 'https://www.ucm.es'], ['UB Barcelona', 'https://www.ub.edu'], ['UV Valencia', 'https://www.uv.es']],
+      cost: 'Public tuition: €800–2,000/year for EU citizens.',
+      dorm: 'Shared pisos are generally cheaper than formal residencias.'
+    },
+    healthcare: {
+      title: 'Healthcare in Spain',
+      system: 'Register for SIP/health card once employed and registered on padrón.',
+      link: 'https://www.citizensadvice.org.es', linkText: 'Spain Health Guide'
+    },
+    daily: {
+      title: 'Daily Life in Spain',
+      food: 'Mercadona, Lidl, Dia. Budget €150–200/month.',
+      transport: 'Monthly pass: €20–55 depending on regional subsidies.',
+      fun: 'Menu del día: €9–12. Coffee: €1.50.'
+    },
+    emergency: { number: '112', police: '091', embassy: 'https://www.netherlandsworldwide.nl/countries/spain', embassyName: 'Dutch Embassy Madrid' }
+  },
+  {
+    id: 'france', name: 'France', flag: '🇫🇷', note: 'No formal registration', tag: '',
+    registration: {
+      title: 'Minimal Administrative Hurdles',
+      steps: [
+        { t: 'No population register required', d: 'France does not require municipal registration for EU citizens.' },
+        { t: 'Prove your address', d: 'Keep a rental agreement or utility bill as proof of address (justificatif de domicile).' },
+        { t: 'Apply for Carte Vitale', d: 'Request state health coverage via CPAM once working/studying.' }
+      ],
+      docs: ['Valid ID/passport', 'Proof of address', 'Job/Student enrolment proof'],
+      link: 'https://www.service-public.fr', linkText: 'Service-Public France'
+    },
+    housing: {
+      title: 'Housing in France',
+      options: [
+        { n: 'Colocation (shared flat)', p: '€300–500/month', d: 'Lille, Lyon, and Toulouse are vibrant and affordable.' },
+        { n: 'CROUS student dorm', p: '€200–400/month', d: 'Government-subsidised housing for students.' },
+        { n: 'Chambre chez l\'habitant', p: '€250–450/month', d: 'Room rented inside a local family house.' }
+      ],
+      link: 'https://www.leboncoin.fr', linkText: 'Le Bon Coin'
+    },
+    work: {
+      title: 'Work & Income in France',
+      minWage: '€1,766/month gross (SMIC)',
+      jobs: ['Horeca / Cafés', 'Delivery (Deliveroo, Uber Eats)', 'Au Pair', 'Seasonal grape/farm harvest'],
+      where: [['France Travail', 'https://www.francetravail.fr'], ['Welcome to the Jungle', 'https://www.welcometothejungle.com']],
+      tax: 'Income tax deducted directly at source (prélèvement à la source).'
+    },
+    education: {
+      title: 'Study in France',
+      unis: [['Sorbonne', 'https://www.sorbonne-universite.fr'], ['Aix-Marseille', 'https://www.univ-amu.fr']],
+      cost: 'Public university tuition: €170/year for Bachelor degrees.',
+      dorm: 'Apply early through CROUS portal.'
+    },
+    healthcare: {
+      title: 'Healthcare in France',
+      system: 'Register with Ameli (Sécurité Sociale) for ~70% reimbursement; get a mutuelle for the rest.',
+      link: 'https://www.ameli.fr', linkText: 'Ameli.fr Portal'
+    },
+    daily: {
+      title: 'Daily Life in France',
+      food: 'Supermarkets: Leclerc, Carrefour, Lidl. Budget €180–240/month.',
+      transport: 'Navigo / regional transport passes ~€30–80/month.',
+      fun: 'Baguettes: €1.10. Cinema: €7–11.'
+    },
+    emergency: { number: '112', police: '17', embassy: 'https://www.netherlandsworldwide.nl/countries/france', embassyName: 'Dutch Embassy Paris' }
+  },
+  {
+    id: 'poland', name: 'Poland', flag: '🇵🇱', note: 'Very cheap & dynamic', tag: 'cheap',
+    registration: {
+      title: 'EU Registration & PESEL',
+      steps: [
+        { t: 'Obtain PESEL number', d: 'National ID number needed for tax and work.' },
+        { t: 'Register residency', d: 'Apply at Voivodeship Office if staying over 3 months.' },
+        { t: 'ZUS Registration', d: 'Social security registration via employer.' }
+      ],
+      docs: ['Valid ID/passport', 'Rental agreement', 'Employment or study contract'],
+      link: 'https://www.gov.pl/web/udsc-en', linkText: 'Poland Foreigners Office'
+    },
+    housing: {
+      title: 'Housing in Poland',
+      options: [
+        { n: 'Pokój (shared flat room)', p: 'PLN 800–1,400/mo (€180–320)', d: 'Kraków, Wrocław, and Poznań are massive student hotspots.' },
+        { n: 'Public University Dorm', p: 'PLN 400–800/mo (€90–180)', d: 'Unbeatable price for enrolled students.' },
+        { n: 'Kawalerka (Studio)', p: 'PLN 1,600–2,400/mo (€370–550)', d: 'Private studio flat.' }
+      ],
+      link: 'https://www.otodom.pl', linkText: 'Otodom Poland'
+    },
+    work: {
+      title: 'Work & Income in Poland',
+      minWage: 'PLN 4,300/month gross (~€1,000)',
+      jobs: ['Multilingual customer support (Dutch/English paid higher!)', 'Logistics', 'Tech support', 'Teaching'],
+      where: [['Pracuj.pl', 'https://www.pracuj.pl'], ['OLX Praca', 'https://www.olx.pl/praca']],
+      tax: 'Youth tax exemption: 0% income tax for workers under 26 years old!'
+    },
+    education: {
+      title: 'Study in Poland',
+      unis: [['Univ. of Warsaw', 'https://www.uw.edu.pl'], ['Jagiellonian Univ.', 'https://www.uj.edu.pl']],
+      cost: 'Free tuition for EU citizens in Polish-taught full-time programmes; low fees for English.',
+      dorm: 'Very cheap public student dormitories.'
+    },
+    healthcare: {
+      title: 'Healthcare in Poland',
+      system: 'Free public care via NFZ once working or enrolled at university.',
+      link: 'https://www.nfz.gov.pl', linkText: 'Polish NFZ Fund'
+    },
+    daily: {
+      title: 'Daily Life in Poland',
+      food: 'Biedronka, Lidl, Dino. Budget PLN 700–1,000/month (€160–230).',
+      transport: 'Monthly pass: PLN 80–110 (€18–25). 50% discount for students.',
+      fun: 'Beer in pub: PLN 10–16 (€2.30–3.70).'
+    },
+    emergency: { number: '112', police: '997', embassy: 'https://www.netherlandsworldwide.nl/countries/poland', embassyName: 'Dutch Embassy Warsaw' }
+  },
+  {
+    id: 'portugal', name: 'Portugal', flag: '🇵🇹', note: 'Sunny & affordable', tag: 'cheap',
+    registration: {
+      title: 'NIF & CRUE Registration',
+      steps: [
+        { t: 'Get NIF (Tax Number)', d: 'Apply at Finanças office; essential for renting or working.' },
+        { t: 'Register EU Residence (CRUE)', d: 'Apply at local Câmara Municipal after 3 months.' },
+        { t: 'Get NISS Number', d: 'Social Security number issued upon job contract.' }
+      ],
+      docs: ['Valid passport/ID', 'NIF document', 'Lease or local address proof'],
+      link: 'https://www2.gov.pt', linkText: 'Gov.pt Portal'
+    },
+    housing: {
+      title: 'Housing in Portugal',
+      options: [
+        { n: 'Shared room (Quarto)', p: '€200–380/month', d: 'Coimbra, Braga, and Évora are much cheaper than Lisbon.' },
+        { n: 'Student Dorm', p: '€180–300/month', d: 'University-run halls.' },
+        { n: '1-Bedroom Apartment', p: '€400–650/month', d: 'Outside central metropolitan areas.' }
+      ],
+      link: 'https://www.idealista.pt', linkText: 'Idealista Portugal'
+    },
+    work: {
+      title: 'Work & Income in Portugal',
+      minWage: '€820/month (14 payments base)',
+      jobs: ['Customer service hubs (Teleperformance, Concentrix)', 'Tourism & surf camps', 'Hospitality', 'English tutoring'],
+      where: [['Net-Empregos', 'https://www.net-empregos.com'], ['IT Jobs', 'https://www.itjobs.pt']],
+      tax: 'Progressive rates starting from 13.25%.'
+    },
+    education: {
+      title: 'Study in Portugal',
+      unis: [['Univ. of Lisbon', 'https://www.ulisboa.pt'], ['Univ. of Porto', 'https://www.up.pt'], ['Univ. of Coimbra', 'https://www.uc.pt']],
+      cost: 'EU tuition max cap around €697/year for bachelor degrees!',
+      dorm: 'Affordable university housing.'
+    },
+    healthcare: {
+      title: 'Healthcare in Portugal',
+      system: 'SNS (National Health Service) provides nearly free care at health centers (Centros de Saúde).',
+      link: 'https://www.sns.gov.pt', linkText: 'SNS Portal'
+    },
+    daily: {
+      title: 'Daily Life in Portugal',
+      food: 'Pingo Doce, Continente, Lidl. Budget €140–190/month.',
+      transport: 'Navegante pass: €30–40/month.',
+      fun: 'Espresso: €0.90. Lunch menu: €7.50–10.'
+    },
+    emergency: { number: '112', police: '112', embassy: 'https://www.netherlandsworldwide.nl/countries/portugal', embassyName: 'Dutch Embassy Lisbon' }
+  },
+  {
+    id: 'czech', name: 'Czech Republic', flag: '🇨🇭', note: 'Central & low cost', tag: 'cheap',
+    registration: {
+      title: 'Foreign Police & Birth Number',
+      steps: [
+        { t: 'Register within 30 days', d: 'Report address to Foreign Police Office.' },
+        { t: 'Get Rodné Číslo', d: 'Personal identification number for long-term stays.' },
+        { t: 'Register for health insurance', d: 'VZP or commercial insurance depending on status.' }
+      ],
+      docs: ['Valid Passport/ID', 'Lease agreement', 'Proof of health insurance'],
+      link: 'https://www.mvcr.cz', linkText: 'Czech Ministry of Interior'
+    },
+    housing: {
+      title: 'Housing in Czechia',
+      options: [
+        { n: 'Shared flat room', p: 'CZK 6,000–10,000 (€240–400)', d: 'Brno and Ostrava offer great low-budget options.' },
+        { n: 'Dormitory (Koleje)', p: 'CZK 3,500–6,000 (€140–240)', d: 'Very cheap public student dorms.' },
+        { n: 'Studio', p: 'CZK 11,000–16,000 (€440–640)', d: 'Private studio units.' }
+      ],
+      link: 'https://www.sreality.cz', linkText: 'Sreality Czech'
+    },
+    work: {
+      title: 'Work & Income in Czechia',
+      minWage: 'CZK 18,900/month (~€750)',
+      jobs: ['Shared service centers (NL speaker jobs)', 'Logistics', 'Teaching', 'Hospitality'],
+      where: [['Jobs.cz', 'https://www.jobs.cz'], ['Prace.cz', 'https://www.prace.cz']],
+      tax: 'Flat 15% income tax rate up to higher income bracket.'
+    },
+    education: {
+      title: 'Study in Czechia',
+      unis: [['Charles University', 'https://cuni.cz'], ['Masaryk Univ.', 'https://muni.cz']],
+      cost: 'Tuition is FREE for all nationalities if studied in the Czech language!',
+      dorm: 'Koleje dorms available to enrolled students.'
+    },
+    healthcare: {
+      title: 'Healthcare in Czechia',
+      system: 'VZP public health insurance covers standard medical care when working.',
+      link: 'https://www.vzp.cz', linkText: 'VZP Health Insurance'
+    },
+    daily: {
+      title: 'Daily Life in Czechia',
+      food: 'Albert, Kaufland, Lidl. Budget CZK 4,500–6,500 (€180–260).',
+      transport: 'Prague transit pass: ~CZK 550/month (€22).',
+      fun: 'Famous Czech beer: CZK 40–60 (€1.60–2.40).'
+    },
+    emergency: { number: '112', police: '158', embassy: 'https://www.netherlandsworldwide.nl/countries/czech-republic', embassyName: 'Dutch Embassy Prague' }
+  },
+  {
+    id: 'italy', name: 'Italy', flag: '🇮🇹', note: 'Rich culture, cheap south', tag: '',
+    registration: {
+      title: 'Codice Fiscale & Anagrafe',
+      steps: [
+        { t: 'Get Codice Fiscale', d: 'Tax code issued by Agenzia delle Entrate; needed immediately.' },
+        { t: 'Register at Anagrafe', d: 'Register municipal residence at the local Comune town hall.' },
+        { t: 'Join SSN Healthcare', d: 'Apply at local ASL health authority.' }
+      ],
+      docs: ['Passport/ID', 'Codice Fiscale document', 'Rental agreement'],
+      link: 'https://www.anagrafenazionale.interno.it', linkText: 'Italian National Registry'
+    },
+    housing: {
+      title: 'Housing in Italy',
+      options: [
+        { n: 'Stanza doppia/singola', p: '€200–400/month', d: 'Turin, Bologna, and Southern Italy (Palermo, Naples) are super affordable.' },
+        { n: 'Residenza universitaria', p: '€180–350/month', d: 'Subsidised housing via regional DSU offices.' },
+        { n: 'Small Apartment', p: '€350–600/month', d: 'In non-metropolitan towns.' }
+      ],
+      link: 'https://www.subito.it', linkText: 'Subito.it Rentals'
+    },
+    work: {
+      title: 'Work & Income in Italy',
+      minWage: 'No national statutory minimum (sector contracts average ~€8–10/hr)',
+      jobs: ['Tourism & tour guides', 'Language instruction', 'Agriculture/Seasonal', 'Gastronomy'],
+      where: [['Indeed IT', 'https://it.indeed.com'], ['InfoJobs IT', 'https://www.infojobs.it']],
+      tax: 'IRPEF tax rates start at 23%.'
+    },
+    education: {
+      title: 'Study in Italy',
+      unis: [['Univ. of Bologna', 'https://www.unibo.it'], ['Sapienza Rome', 'https://www.uniroma1.it']],
+      cost: 'Tuition based on family income (ISEE); ranges from €156 to €2,000/year.',
+      dorm: 'DSU regional scholarships provide free housing to low income applicants.'
+    },
+    healthcare: {
+      title: 'Healthcare in Italy',
+      system: 'SSN provides comprehensive healthcare via your assigned family doctor (medico di base).',
+      link: 'https://www.salute.gov.it', linkText: 'Ministry of Health'
+    },
+    daily: {
+      title: 'Daily Life in Italy',
+      food: 'Eurospin, Conad, Lidl. Budget €150–220/month.',
+      transport: 'Monthly city pass: €25–45.',
+      fun: 'Espresso: €1.10. Pizza Margherita: €5–8.'
+    },
+    emergency: { number: '112', police: '113', embassy: 'https://www.netherlandsworldwide.nl/countries/italy', embassyName: 'Dutch Embassy Rome' }
+  },
+  {
+    id: 'austria', name: 'Austria', flag: '🇦🇹', note: 'High quality of life', tag: '',
+    registration: {
+      title: 'Meldezettel Registration',
+      steps: [
+        { t: 'Register within 3 days', d: 'Submit Meldezettel form signed by landlord to Meldeamt.' },
+        { t: 'Anmeldebescheinigung', d: 'Apply for EU residency certificate within 4 months.' },
+        { t: 'e-card setup', d: 'Obtain Austrian health insurance card.' }
+      ],
+      docs: ['ID/Passport', 'Signed Meldezettel form', 'Proof of funds/job'],
+      link: 'https://www.oesterreich.gv.at', linkText: 'oesterreich.gv.at Portal'
+    },
+    housing: {
+      title: 'Housing in Austria',
+      options: [
+        { n: 'WG-Zimmer (shared)', p: '€320–480/month', d: 'Vienna, Graz, and Innsbruck have massive WG cultures.' },
+        { n: 'Studentenheim', p: '€260–420/month', d: 'Dormitories managed by OeAD or Akademikerhilfe.' },
+        { n: 'Garconniere (Studio)', p: '€450–680/month', d: 'Small single apartment.' }
+      ],
+      link: 'https://www.wg-gesucht.de/oesterreich-wgs.html', linkText: 'WG-Gesucht Austria'
+    },
+    work: {
+      title: 'Work & Income in Austria',
+      minWage: 'Collective agreements (typically min €1,750/month gross)',
+      jobs: ['Ski resort seasonal jobs', 'Hospitality', 'Logistics', 'Tutoring'],
+      where: [['AMS Jobroom', 'https://jobroom.ams.or.at'], ['Karriere.at', 'https://www.karriere.at']],
+      tax: 'First €12,816 per year is 0% tax.'
+    },
+    education: {
+      title: 'Study in Austria',
+      unis: [['Univ. of Vienna', 'https://www.univie.ac.at'], ['TU Wien', 'https://www.tuwien.at']],
+      cost: 'EU students pay ONLY Student Union fee (~€22.70/semester)!',
+      dorm: 'Dormitories readily available via student housing bodies.'
+    },
+    healthcare: {
+      title: 'Healthcare in Austria',
+      system: 'ÖGK health insurance automatically setup with employment or student coverage.',
+      link: 'https://www.gesundheitskasse.at', linkText: 'ÖGK Portal'
+    },
+    daily: {
+      title: 'Daily Life in Austria',
+      food: 'Hofer (Aldi), Lidl, Spar. Budget €180–250/month.',
+      transport: 'Klimaticket regional / Vienna annual pass (€365/yr = €1/day!).',
+      fun: 'Coffee & Manner wafer: €4.00.'
+    },
+    emergency: { number: '112', police: '133', embassy: 'https://www.netherlandsworldwide.nl/countries/austria', embassyName: 'Dutch Embassy Vienna' }
+  },
+  {
+    id: 'sweden', name: 'Sweden', flag: '🇸🇪', note: 'Free tuition, high quality', tag: '',
+    registration: {
+      title: 'Personnummer & Skatteverket',
+      steps: [
+        { t: 'Apply for Personnummer', d: 'Visit Skatteverket if staying over 1 year with study/job proof.' },
+        { t: 'Get BankID', d: 'Essential digital key for Swedish society and banking.' },
+        { t: 'Register with Försäkringskassan', d: 'Social insurance registration.' }
+      ],
+      docs: ['Passport/ID', 'Proof of 1+ year stay capability', 'Proof of health coverage'],
+      link: 'https://www.skatteverket.se', linkText: 'Skatteverket Sweden'
+    },
+    housing: {
+      title: 'Housing in Sweden',
+      options: [
+        { n: 'Student corridor room', p: 'SEK 3,000–4,800 (€260–420)', d: 'Lund, Uppsala, and Umeå have great student housing queues.' },
+        { n: 'Inackordering / Room', p: 'SEK 3,500–5,500 (€300–480)', d: 'Renting a room in a family home.' },
+        { n: 'Andra hand (sublet)', p: 'SEK 5,000–8,000 (€430–690)', d: 'Second-hand rental sublet.' }
+      ],
+      link: 'https://www.blocket.se', linkText: 'Blocket Bostad'
+    },
+    work: {
+      title: 'Work & Income in Sweden',
+      minWage: 'No statutory minimum (collective agreements ~SEK 135/hr)',
+      jobs: ['Foodora delivery', 'Warehouse & logistics', 'English speaking IT/startup jobs', 'Cleaning services'],
+      where: [['Arbetsförmedlingen', 'https://arbetsformedlingen.se'], ['Blocket Jobb', 'https://jobb.blocket.se']],
+      tax: 'Municipal tax averaging around 32%.'
+    },
+    education: {
+      title: 'Study in Sweden',
+      unis: [['Lund University', 'https://www.lunduniversity.lu.se'], ['Uppsala Univ.', 'https://www.uu.se']],
+      cost: 'Tuition is 100% FREE for EU/EEA passport holders!',
+      dorm: 'Queue up on SFSB / local housing sites immediately upon applying.'
+    },
+    healthcare: {
+      title: 'Healthcare in Sweden',
+      system: 'Subsidised healthcare via Vårdcentral health centers once Personnummer is assigned.',
+      link: 'https://www.1177.se', linkText: '1177 Vårdguiden'
+    },
+    daily: {
+      title: 'Daily Life in Sweden',
+      food: 'Willy:s, Lidl, ICA Basic. Budget SEK 2,000–2,800 (€170–240).',
+      transport: 'Student monthly pass: ~SEK 650–800 (€55–70).',
+      fun: 'Fika (Coffee + Cinnamon bun): SEK 50–70.'
+    },
+    emergency: { number: '112', police: '114 14', embassy: 'https://www.netherlandsworldwide.nl/countries/sweden', embassyName: 'Dutch Embassy Stockholm' }
+  },
+  {
+    id: 'ireland', name: 'Ireland', flag: '🇮🇪', note: 'English-speaking hub', tag: '',
+    registration: {
+      title: 'PPS Number & Right to Work',
+      steps: [
+        { t: 'No EU visa needed', d: 'Full free movement right to live and work.' },
+        { t: 'Get PPS Number', d: 'Apply at MyWelfare.ie with job offer or search proof.' },
+        { t: 'Revenue registration', d: 'Register employment online to avoid emergency tax.' }
+      ],
+      docs: ['Valid Passport/ID', 'Address proof in Ireland', 'Employer letter'],
+      link: 'https://www.citizensinformation.ie', linkText: 'Citizens Information Ireland'
+    },
+    housing: {
+      title: 'Housing in Ireland',
+      options: [
+        { n: 'Shared room', p: '€400–650/month', d: 'Cork, Galway, and Limerick are significantly cheaper than Dublin.' },
+        { n: 'Digs (Home stay)', p: '€450–700/month', d: 'Renting a room in a homeowner\'s house.' },
+        { n: 'Single room in flatshare', p: '€650–950/month', d: 'High demand area.' }
+      ],
+      link: 'https://www.daft.ie', linkText: 'Daft.ie Ireland'
+    },
+    work: {
+      title: 'Work & Income in Ireland',
+      minWage: '€12.70/hour',
+      jobs: ['Multilingual Tech support (Google/Meta NL teams)', 'Pubs & Restaurants', 'Retail', 'Warehousing'],
+      where: [['Jobs.ie', 'https://www.jobs.ie'], ['IrishJobs', 'https://www.irishjobs.ie']],
+      tax: '20% rate up to €42,000 income.'
+    },
+    education: {
+      title: 'Study in Ireland',
+      unis: [['Trinity College Dublin', 'https://www.tcd.ie'], ['UCD', 'https://www.ucd.ie']],
+      cost: 'EU undergraduate tuition fees covered by Free Fees Initiative (Student Contribution ~€3,000/yr).',
+      dorm: 'Campus accommodation or local off-campus shares.'
+    },
+    healthcare: {
+      title: 'Healthcare in Ireland',
+      system: 'EHIC for initial stays; Medical Card or GP Visit Card based on income threshold.',
+      link: 'https://www.hse.ie', linkText: 'HSE Health Service'
+    },
+    daily: {
+      title: 'Daily Life in Ireland',
+      food: 'Aldi, Lidl, Tesco. Budget €200–280/month.',
+      transport: 'Student Leap Card gives 50% discount on public transport.',
+      fun: 'Pint of Stout: €5.50–7.00.'
+    },
+    emergency: { number: '112', police: '999', embassy: 'https://www.netherlandsworldwide.nl/countries/ireland', embassyName: 'Dutch Embassy Dublin' }
+  },
+  {
+    id: 'hungary', name: 'Hungary', flag: '🇭🇺', note: 'Super cheap & lively', tag: 'cheap',
+    registration: {
+      title: 'Registration Card (Regisztrációs Igazolás)',
+      steps: [
+        { t: 'Register within 90 days', d: 'Apply at the National Directorate-General for Aliens Policing (OIF).' },
+        { t: 'Get Address Card (Lakcímkártya)', d: 'Issued alongside your registration card.' },
+        { t: 'Obtain TAJ Card', d: 'Hungarian health insurance card for employees/students.' }
+      ],
+      docs: ['Valid ID/Passport', 'Rental agreement signed by owner', 'Proof of income/enrolment'],
+      link: 'http://oif.gov.hu/index.php/en/', linkText: 'OIF Immigration Directorate'
+    },
+    housing: {
+      title: 'Housing in Hungary',
+      options: [
+        { n: 'Shared flat room', p: 'HUF 70k–120k (€180–300)', d: 'Budapest student districts (7th, 8th, 9th) are lively and budget-friendly.' },
+        { n: 'Dormitory', p: 'HUF 30k–60k (€75–150)', d: 'University dorm rooms.' },
+        { n: 'Private Studio', p: 'HUF 140k–200k (€350–500)', d: 'Fully private studio in city center.' }
+      ],
+      link: 'https://ingatlan.com', linkText: 'Ingatlan.com Hungary'
+    },
+    work: {
+      title: 'Work & Income in Hungary',
+      minWage: 'HUF 266,800 gross (~€680)',
+      jobs: ['NL/EN Business Service Centers (Roche, Wise, Diageo)', 'English teaching', 'Tourism', 'Delivery'],
+      where: [['Profession.hu', 'https://www.profession.hu'], ['NoFluffJobs', 'https://nofluffjobs.com/hu']],
+      tax: 'Flat 15% income tax. Under 25 years old? ZERO income tax up to average wage!'
+    },
+    education: {
+      title: 'Study in Hungary',
+      unis: [['ELTE Budapest', 'https://www.elte.hu'], ['Corvinus', 'https://www.uni-corvinus.hu']],
+      cost: 'EU state-funded slots available or self-funded ~€1,200–2,500/semester.',
+      dorm: 'Dorm spots allocated to international/EU students.'
+    },
+    healthcare: {
+      title: 'Healthcare in Hungary',
+      system: 'TAJ insurance system provides full medical care at state clinics.',
+      link: 'https://www.neak.gov.hu', linkText: 'NEAK Health Authority'
+    },
+    daily: {
+      title: 'Daily Life in Hungary',
+      food: 'Lidl, Penny, Aldi. Budget HUF 60,000–85,000 (€150–215).',
+      transport: 'Budapest monthly student transit pass: HUF 3,450 (~€9!).',
+      fun: 'Draft beer in Ruin Bars: HUF 800–1,200 (€2–3).'
+    },
+    emergency: { number: '112', police: '107', embassy: 'https://www.netherlandsworldwide.nl/countries/hungary', embassyName: 'Dutch Embassy Budapest' }
+  },
+  {
+    id: 'denmark', name: 'Denmark', flag: '🇩🇰', note: 'CPR number & high income', tag: '',
+    registration: {
+      title: 'EU Residence & CPR Number',
+      steps: [
+        { t: 'Get EU Residence Document', d: 'Apply at SIRI (Danish Agency for International Recruitment).' },
+        { t: 'Register for CPR Number', d: 'Obtain CPR at local Borgerservice with your lease.' },
+        { t: 'MitID & Yellow Card', d: 'Receive digital ID key and health insurance card.' }
+      ],
+      docs: ['Passport/ID', 'SIRI document', 'Rental agreement'],
+      link: 'https://www.nyidanmark.dk', linkText: 'New to Denmark Portal'
+    },
+    housing: {
+      title: 'Housing in Denmark',
+      options: [
+        { n: 'Kollegium room', p: 'DKK 2,500–4,200 (€335–560)', d: 'Aarhus, Odense, and Aalborg are much cheaper than Copenhagen.' },
+        { n: 'Shared apartment room', p: 'DKK 3,500–5,500 (€470–740)', d: 'Standard flatshare.' },
+        { n: 'Fremleje (sublet)', p: 'DKK 3,000–5,000 (€400–670)', d: 'Temporary subletting.' }
+      ],
+      link: 'https://www.boligportal.dk', linkText: 'BoligPortal Denmark'
+    },
+    work: {
+      title: 'Work & Income in Denmark',
+      minWage: 'No legal minimum (union agreement average ~DKK 130/hr = €17.50)',
+      jobs: ['SU-eligible student jobs (10-12 hrs/wk gives ~€800/mo grant!)', 'Hospitality', 'Logistics', 'Delivery'],
+      where: [['Jobindex', 'https://www.jobindex.dk'], ['WorkinDenmark', 'https://www.workindenmark.dk']],
+      tax: 'Tax rate averages ~38% with basic allowance deductions.'
+    },
+    education: {
+      title: 'Study in Denmark',
+      unis: [['Univ. of Copenhagen', 'https://www.ku.dk'], ['Aarhus Univ.', 'https://www.au.dk']],
+      cost: '100% FREE higher education for EU citizens!',
+      dorm: 'Apply via KKIK or local municipal housing channels.'
+    },
+    healthcare: {
+      title: 'Healthcare in Denmark',
+      system: 'Free treatment via assigned GP printed on your Yellow Health Card.',
+      link: 'https://www.sundhed.dk', linkText: 'Sundhed Health Portal'
+    },
+    daily: {
+      title: 'Daily Life in Denmark',
+      food: 'Netto, Rema 1000, Lidl. Budget DKK 1,800–2,500 (€240–335).',
+      transport: 'Rejsekort card or local bike culture (bikes are free/cheap!).',
+      fun: 'Coffee: DKK 35–45.'
+    },
+    emergency: { number: '112', police: '114', embassy: 'https://www.netherlandsworldwide.nl/countries/denmark', embassyName: 'Dutch Embassy Copenhagen' }
+  },
+  {
+    id: 'norway', name: 'Norway', flag: '🇳🇴', note: 'High wages, fjord nature', tag: '',
+    registration: {
+      title: 'Police Registration & D-number',
+      steps: [
+        { t: 'Register with Police', d: 'Book appointment on UDI.no within 3 months.' },
+        { t: 'Get D-number or Fødselsnummer', d: 'Issued by Skatteetaten for tax and banking.' },
+        { t: 'Tax deduction card', d: 'Apply online before starting employment.' }
+      ],
+      docs: ['Valid Passport/ID', 'Employment contract or student acceptance', 'Rental contract'],
+      link: 'https://www.udi.no', linkText: 'UDI Norway Directorate'
+    },
+    housing: {
+      title: 'Housing in Norway',
+      options: [
+        { n: 'Kollektiv room', p: 'NOK 4,000–6,500 (€350–570)', d: 'Bergen, Trondheim, and Tromsø are student centers.' },
+        { n: 'Student Housing (Sammen/SiO)', p: 'NOK 3,500–5,200 (€300–450)', d: 'Subsidised housing associations.' },
+        { n: 'Private Studio', p: 'NOK 7,000–10,000 (€610–870)', d: 'Individual studio.' }
+      ],
+      link: 'https://www.finn.no/realestate/rent/browse.html', linkText: 'Finn.no Rental'
+    },
+    work: {
+      title: 'Work & Income in Norway',
+      minWage: 'Sectoral minimums (e.g. hospitality ~NOK 190/hr = €16.50)',
+      jobs: ['Seasonal fish processing', 'Tourism & outdoor guides', 'Hospitality', 'Delivery'],
+      where: [['Finn Jobb', 'https://www.finn.no/job/browse.html'], ['NAV.no', 'https://arbeidsplassen.nav.no']],
+      tax: 'Pay-As-You-Earn (PAYE) tax scheme for foreign workers ~25% flat.'
+    },
+    education: {
+      title: 'Study in Norway',
+      unis: [['Univ. of Oslo', 'https://www.uio.no'], ['NTNU Trondheim', 'https://www.ntnu.edu']],
+      cost: 'Public university tuition remains FREE for EU/EEA citizens!',
+      dorm: 'Apply via regional student welfare organisations (SiO, Sammen, etc.).'
+    },
+    healthcare: {
+      title: 'Healthcare in Norway',
+      system: 'Assigned Fastlege (GP) through Helsenorge once registered in National Registry.',
+      link: 'https://www.helsenorge.no', linkText: 'Helsenorge Portal'
+    },
+    daily: {
+      title: 'Daily Life in Norway',
+      food: 'Rema 1000, Kiwi, Extra. Budget NOK 2,800–3,800 (€240–330).',
+      transport: 'Monthly pass ~NOK 650–850 (€57–75).',
+      fun: 'Outdoor hiking and cross-country skiing: 100% free!'
+    },
+    emergency: { number: '112', police: '112', embassy: 'https://www.netherlandsworldwide.nl/countries/norway', embassyName: 'Dutch Embassy Oslo' }
+  },
+  {
+    id: 'greece', name: 'Greece', flag: '🇬🇷', note: 'Island life & warm weather', tag: 'cheap',
+    registration: {
+      title: 'AFM Tax Number & Registration',
+      steps: [
+        { t: 'Get AFM (Tax ID)', d: 'Apply at local AADE tax office.' },
+        { t: 'Register at Police Department', d: 'Obtain EU Citizen Registration Certificate if staying >3 months.' },
+        { t: 'Get AMKA Number', d: 'Social security identification for medical/work.' }
+      ],
+      docs: ['Passport/ID', 'AFM document', 'Proof of residence'],
+      link: 'https://www.aade.gr', linkText: 'AADE Greek Tax Portal'
+    },
+    housing: {
+      title: 'Housing in Greece',
+      options: [
+        { n: 'Shared apartment room', p: '€180–320/month', d: 'Athens, Thessaloniki, and Patras have extremely budget options.' },
+        { n: 'Small 1-Bed Flat', p: '€280–450/month', d: 'Private living on a low budget.' },
+        { n: 'Island seasonal room', p: 'Free / €150', d: 'Often supplied by hospitality employers during summer.' }
+      ],
+      link: 'https://www.spitogatos.gr', linkText: 'Spitogatos Greece'
+    },
+    work: {
+      title: 'Work & Income in Greece',
+      minWage: '€830/month gross',
+      jobs: ['Multilingual Call Centers (Teleperformance NL teams in Athens)', 'Summer resort/island hospitality', 'Diving/Sailing instructors'],
+      where: [['Kariera.gr', 'https://www.kariera.gr'], ['XE.gr', 'https://www.xe.gr/jobs']],
+      tax: 'Progressive starting at 9% on lower brackets.'
+    },
+    education: {
+      title: 'Study in Greece',
+      unis: [['NKUA Athens', 'https://en.uoa.gr'], ['Aristotle Univ. Thessaloniki', 'https://www.auth.gr']],
+      cost: 'Undergraduate tuition is FREE for EU citizens at public universities!',
+      dorm: 'Free student meals and dorm opportunities via university welfare offices.'
+    },
+    healthcare: {
+      title: 'Healthcare in Greece',
+      system: 'EOPYY public insurance system covers state hospitals and health centers.',
+      link: 'https://www.eopyy.gov.gr', linkText: 'EOPYY Health Fund'
+    },
+    daily: {
+      title: 'Daily Life in Greece',
+      food: 'Lidl, Sklavenitis. Local street markets (Laiki Agora) are super cheap for fresh food!',
+      transport: 'Athens monthly transit pass: €27 (student: €13.50!).',
+      fun: 'Freddo Espresso: €1.80. Souvlaki: €3.50.'
+    },
+    emergency: { number: '112', police: '100', embassy: 'https://www.netherlandsworldwide.nl/countries/greece', embassyName: 'Dutch Embassy Athens' }
+  },
+  {
+    id: 'croatia', name: 'Croatia', flag: '🇭🇷', note: 'Adriatic coast & cheap', tag: 'cheap',
+    registration: {
+      title: 'OIB Number & Residence',
+      steps: [
+        { t: 'Get OIB (Tax ID)', d: 'Issued instantly at Porezna Uprava (Tax Administration).' },
+        { t: 'Register temporary stay', d: 'Apply at local police station (MUP) within 3 months.' },
+        { t: 'HZZO Registration', d: 'Health insurance registration.' }
+      ],
+      docs: ['Valid Passport/ID', 'OIB certificate', 'Address rental contract'],
+      link: 'https://mup.gov.hr', linkText: 'MUP Police Portal'
+    },
+    housing: {
+      title: 'Housing in Croatia',
+      options: [
+        { n: 'Shared flat room', p: '€180–320/month', d: 'Zagreb, Rijeka, and Osijek offer great rental deals.' },
+        { n: 'Studentski Dom (Dorm)', p: '€80–160/month', d: 'State subsidised dorm rooms.' },
+        { n: 'Private Apartment', p: '€300–500/month', d: 'Entire flat outside high-tourism coastal peaks.' }
+      ],
+      link: 'https://www.njuskalo.hr', linkText: 'Njuškalo Real Estate'
+    },
+    work: {
+      title: 'Work & Income in Croatia',
+      minWage: '€840/month gross',
+      jobs: ['Summer coastal tourism', 'Customer service', 'IT/Startups in Zagreb', 'English tutoring'],
+      where: [['MojPosao', 'https://www.mojposao.net'], ['Posao.hr', 'https://www.posao.hr']],
+      tax: 'Income tax scale between 20% and 30%.'
+    },
+    education: {
+      title: 'Study in Croatia',
+      unis: [['Univ. of Zagreb', 'https://www.unizg.hr'], ['Univ. of Split', 'https://www.unist.hr']],
+      cost: 'EU students pay same low fees as locals (often free state-subsidised slots).',
+      dorm: 'Studentski Centar handles affordable dorm allocations.'
+    },
+    healthcare: {
+      title: 'Healthcare in Croatia',
+      system: 'HZZO provides national medical coverage upon employment or registration.',
+      link: 'https://hzzo.hr', linkText: 'HZZO Health Service'
+    },
+    daily: {
+      title: 'Daily Life in Croatia',
+      food: 'Konzum, Lidl, Plodine. Budget €150–220/month.',
+      transport: 'Monthly bus transit pass ~€25–40.',
+      fun: 'Coffee on the Riva: €2.00.'
+    },
+    emergency: { number: '112', police: '192', embassy: 'https://www.netherlandsworldwide.nl/countries/croatia', embassyName: 'Dutch Embassy Zagreb' }
+  },
+  {
+    id: 'finland', name: 'Finland', flag: '🇫🇮', note: 'Nordic safety & nature', tag: '',
+    registration: {
+      title: 'DVV & Migri EU Registration',
+      steps: [
+        { t: 'Register EU Right of Residence', d: 'Apply at Finnish Immigration Service (Migri).' },
+        { t: 'Get Personal Identity Code', d: 'Register address at DVV (Digital and Population Data Agency).' },
+        { t: 'Kela Social Security', d: 'Apply for social security & healthcare coverage.' }
+      ],
+      docs: ['Passport/ID', 'Study/Work contract', 'Proof of funds'],
+      link: 'https://dvv.fi/en/foreigner-registration', linkText: 'DVV Finland'
+    },
+    housing: {
+      title: 'Housing in Finland',
+      options: [
+        { n: 'Soluasunto (Shared Student Flat)', p: '€250–390/month', d: 'HOAS in Helsinki, TOAS in Tampere offer subsidized dorm rooms.' },
+        { n: 'Shared private flat', p: '€350–500/month', d: 'Standard roommate option.' },
+        { n: 'Yksiö (Studio)', p: '€450–700/month', d: 'Private single apartment.' }
+      ],
+      link: 'https://www.vuokraovi.com', linkText: 'Vuokraovi Finland'
+    },
+    work: {
+      title: 'Work & Income in Finland',
+      minWage: 'No legal minimum (collective trade union agreements ~€11–13/hr base)',
+      jobs: ['Wolt delivery driving', 'Cleaning services', 'Tech/Software startups', 'Seasonal berry picking/farming'],
+      where: [['Työmarkkinatori', 'https://tyomarkkinatori.fi'], ['Duunitori', 'https://duunitori.fi']],
+      tax: 'Progressive tax card (Verokortti) issued by Vero.'
+    },
+    education: {
+      title: 'Study in Finland',
+      unis: [['Univ. of Helsinki', 'https://www.helsinki.fi'], ['Aalto University', 'https://www.aalto.fi']],
+      cost: 'Higher education is 100% FREE for EU citizens!',
+      dorm: 'Student housing foundations (HOAS, TOAS, POAS) guarantee low rents.'
+    },
+    healthcare: {
+      title: 'Healthcare in Finland',
+      system: 'Public healthcare via local wellbeing services counties (hyvinvointialue) at very low co-pay rates.',
+      link: 'https://www.kela.fi', linkText: 'Kela Social Insurance'
+    },
+    daily: {
+      title: 'Daily Life in Finland',
+      food: 'S-Market, Lidl, K-Citymarket. Budget €170–240/month.',
+      transport: 'HSL Helsinki student pass: ~€40/month.',
+      fun: 'Sauna visits: Often FREE in your student building!'
+    },
+    emergency: { number: '112', police: '112', embassy: 'https://www.netherlandsworldwide.nl/countries/finland', embassyName: 'Dutch Embassy Helsinki' }
+  },
+  {
+    id: 'romania', name: 'Romania', flag: '🇷🇴', note: 'Fast internet, ultra low budget', tag: 'cheap',
+    registration: {
+      title: 'CNP & Registration Certificate',
+      steps: [
+        { t: 'Apply at IGI (Immigration)', d: 'Obtain Registration Certificate (Adevărinţă de Înregistrare).' },
+        { t: 'Get CNP', d: 'Personal numeric code assigned for tax/work.' },
+        { t: 'Health Insurance', d: 'CAS national insurance registration.' }
+      ],
+      docs: ['Valid Passport/ID', 'Lease agreement', 'Proof of financial resources or job'],
+      link: 'http://igi.mai.gov.ro/en', linkText: 'IGI Romanian Immigration'
+    },
+    housing: {
+      title: 'Housing in Romania',
+      options: [
+        { n: 'Shared apartment room', p: 'RON 600–1,100 (€120–220)', d: 'Cluj-Napoca, Bucharest, Timișoara, and Iași are vibrant tech/student towns.' },
+        { n: 'Garsonieră (Studio)', p: 'RON 1,000–1,600 (€200–320)', d: 'Unbeatable price for entire private flat.' },
+        { n: 'Student Campus Dorm', p: 'RON 300–600 (€60–120)', d: 'State university dorms.' }
+      ],
+      link: 'https://www.storia.ro', linkText: 'Storia Real Estate'
+    },
+    work: {
+      title: 'Work & Income in Romania',
+      minWage: 'RON 3,700 gross (~€740)',
+      jobs: ['Multilingual IT support & Dutch BPO hubs', 'Digital marketing', 'English instruction'],
+      where: [['eJobs.ro', 'https://www.ejobs.ro'], ['BestJobs.ro', 'https://www.bestjobs.eu']],
+      tax: 'Flat 10% income tax rate + social contributions.'
+    },
+    education: {
+      title: 'Study in Romania',
+      unis: [['Babeș-Bolyai Univ.', 'https://www.ubbcluj.ro'], ['Univ. of Bucharest', 'https://unibuc.ro']],
+      cost: 'Free state-budgeted places for EU students passing entry; self-funded ~€1,000/yr.',
+      dorm: 'Campus dorms available.'
+    },
+    healthcare: {
+      title: 'Healthcare in Romania',
+      system: 'CNAS public health coverage once employed or enrolled at university.',
+      link: 'http://www.casan.ro', linkText: 'CNAS Health Authority'
+    },
+    daily: {
+      title: 'Daily Life in Romania',
+      food: 'Lidl, Profi, Penny, Kaufland. Budget RON 600–900 (€120–180).',
+      transport: 'Metro / Surface pass: RON 80/mo (€16). Students get 90% discount on trains!',
+      fun: 'Draft Beer: RON 10–14 (€2–2.80).'
+    },
+    emergency: { number: '112', police: '112', embassy: 'https://www.netherlandsworldwide.nl/countries/romania', embassyName: 'Dutch Embassy Bucharest' }
+  },
+  {
+    id: 'slovakia', name: 'Slovakia', flag: '🇸🇰', note: 'Euro currency & low cost', tag: 'cheap',
+    registration: {
+      title: 'Rodné Číslo & Foreign Police',
+      steps: [
+        { t: 'Register address within 10 days', d: 'Report presence to Foreign Police department.' },
+        { t: 'Obtain EU Registration Card', d: 'Apply if staying longer than 90 days.' },
+        { t: 'Get health insurance', d: 'Union or VšZP public coverage.' }
+      ],
+      docs: ['Passport/ID', 'Housing confirmation', 'Proof of funds or job'],
+      link: 'https://www.minv.sk/?residence-of-an-eu-citizen', linkText: 'Slovak Ministry of Interior'
+    },
+    housing: {
+      title: 'Housing in Slovakia',
+      options: [
+        { n: 'Shared flat room', p: '€180–320/month', d: 'Bratislava and Košice are great budget spots.' },
+        { n: 'Mlyny Dormitory (Student)', p: '€80–150/month', d: 'Large student campus housing.' },
+        { n: '1-Bedroom Flat', p: '€350–550/month', d: 'Private living.' }
+      ],
+      link: 'https://www.nehnutelnosti.sk', linkText: 'Slovak Real Estate'
+    },
+    work: {
+      title: 'Work & Income in Slovakia',
+      minWage: '€750/month gross',
+      jobs: ['Shared Service Centers (NL/EN language roles in Bratislava)', 'Automotive/Manufacturing', 'Logistics'],
+      where: [['Profesia.sk', 'https://www.profesia.sk']],
+      tax: '19% tax rate on lower income bracket.'
+    },
+    education: {
+      title: 'Study in Slovakia',
+      unis: [['Comenius University', 'https://uniba.sk'], ['STU Bratislava', 'https://www.stuba.sk']],
+      cost: 'Tuition is FREE for EU students in Slovak-medium full-time study!',
+      dorm: 'Subsidised university dormitories.'
+    },
+    healthcare: {
+      title: 'Healthcare in Slovakia',
+      system: 'VšZP or Dôvera health insurance covers doctors and treatments.',
+      link: 'https://www.vszp.sk', linkText: 'VšZP Health Fund'
+    },
+    daily: {
+      title: 'Daily Life in Slovakia',
+      food: 'Lidl, Kaufland, Tesco. Budget €150–220/month.',
+      transport: 'Bratislava student transit: ~€13/month.',
+      fun: 'Lunch menu (Denné menu): €6.00–8.00.'
+    },
+    emergency: { number: '112', police: '158', embassy: 'https://www.netherlandsworldwide.nl/countries/slovakia', embassyName: 'Dutch Embassy Bratislava' }
+  },
+  {
+    id: 'bulgaria', name: 'Bulgaria', flag: '🇧🇬', note: 'Cheapest in the EU', tag: 'cheap',
+    registration: {
+      title: 'EGN Number & Long-Term Residence',
+      steps: [
+        { t: 'Apply for Residence Certificate', d: 'Visit Migration Directorate of Ministry of Interior in Sofia or regional office.' },
+        { t: 'Get Personal Number (LNCH/EGN)', d: 'Needed for employment and healthcare.' },
+        { t: 'Register with NRA (NAP)', d: 'National Revenue Agency setup.' }
+      ],
+      docs: ['Valid Passport/ID', 'Lease agreement', 'Proof of income or employment'],
+      link: 'https://www.mvr.bg/migration', linkText: 'Bulgaria Migration Directorate'
+    },
+    housing: {
+      title: 'Housing in Bulgaria',
+      options: [
+        { n: 'Shared flat room', p: 'BGN 300–500 (€150–250)', d: 'Sofia, Plovdiv, and Varna offer unbelievably cheap living.' },
+        { n: 'Private Studio', p: 'BGN 500–800 (€250–400)', d: 'Modern private apartment.' },
+        { n: 'Student Dormitory', p: 'BGN 100–200 (€50–100)', d: 'Studentski Grad (Student City) in Sofia.' }
+      ],
+      link: 'https://www.imot.bg', linkText: 'Imot.bg Bulgaria'
+    },
+    work: {
+      title: 'Work & Income in Bulgaria',
+      minWage: 'BGN 933/month gross (~€477)',
+      jobs: ['Dutch / English Call Center Hubs (Pays much higher than min wage: ~€1,200–1,800!)', 'IT Support', 'Tourism'],
+      where: [['Jobs.bg', 'https://www.jobs.bg'], ['Zaplata.bg', 'https://www.zaplata.bg']],
+      tax: '10% FLAT TAX RATE! The lowest income tax in the entire EU.'
+    },
+    education: {
+      title: 'Study in Bulgaria',
+      unis: [['Sofia University', 'https://www.uni-sofia.bg'], ['TU Sofia', 'https://tu-sofia.bg']],
+      cost: 'Low tuition fees for English programmes (~€1,500–3,000/yr), cheaper in Bulgarian.',
+      dorm: 'Studentski Grad offers legendary cheap student housing.'
+    },
+    healthcare: {
+      title: 'Healthcare in Bulgaria',
+      system: 'NHIF (NZOK) public healthcare covers state clinics and doctors.',
+      link: 'https://www.nhif.bg', linkText: 'NZOK Health Fund'
+    },
+    daily: {
+      title: 'Daily Life in Bulgaria',
+      food: 'Kaufland, Lidl, Fantastiko. Budget BGN 300–450 (€150–230).',
+      transport: 'Sofia monthly public transport pass: BGN 50 (€25). Student pass: BGN 15 (€7.50!).',
+      fun: 'Draft Beer: BGN 3–5 (€1.50–2.50).'
+    },
+    emergency: { number: '112', police: '166', embassy: 'https://www.netherlandsworldwide.nl/countries/bulgaria', embassyName: 'Dutch Embassy Sofia' }
+  },
+  {
+    id: 'estonia', name: 'Estonia', flag: '🇪🇪', note: '100% digital e-society', tag: '',
+    registration: {
+      title: 'Isikukood & EU Registration',
+      steps: [
+        { t: 'Register place of residence', d: 'Visit local city district government office.' },
+        { t: 'Get Isikukood', d: 'Estonian personal code for digital services.' },
+        { t: 'Obtain Estonian ID Card', d: 'Digital card enabling online signing of everything.' }
+      ],
+      docs: ['Passport/ID', 'Rental contract', 'Work or university proof'],
+      link: 'https://www.eesti.ee', linkText: 'eesti.ee State Portal'
+    },
+    housing: {
+      title: 'Housing in Estonia',
+      options: [
+        { n: 'Shared flat room', p: '€200–380/month', d: 'Tartu (university town) and Tallinn offer great tech-forward living.' },
+        { n: 'Student Dormitory', p: '€120–250/month', d: 'Modern dorms at UT or TalTech.' },
+        { n: 'Private Studio', p: '€380–580/month', d: 'Compact private studio flat.' }
+      ],
+      link: 'https://www.kv.ee', linkText: 'KV.ee Estonia'
+    },
+    work: {
+      title: 'Work & Income in Estonia',
+      minWage: '€820/month gross',
+      jobs: ['Tech startups (Wise, Bolt, Skype hubs)', 'Customer support', 'Delivery', 'Digital marketing'],
+      where: [['CVKeskus', 'https://www.cvkeskus.ee'], ['MeetFrank', 'https://meetfrank.com']],
+      tax: '20% flat income tax rate with generous basic exemption.'
+    },
+    education: {
+      title: 'Study in Estonia',
+      unis: [['Univ. of Tartu', 'https://ut.ee'], ['TalTech', 'https://taltech.ee']],
+      cost: 'Free tuition for state-budget slots; tuition waivers available for international students.',
+      dorm: 'Subsidised dormitories.'
+    },
+    healthcare: {
+      title: 'Healthcare in Estonia',
+      system: 'Haigekassa national health insurance covers GP and emergency treatment.',
+      link: 'https://www.tervisekassa.ee', linkText: 'Tervisekassa Health Fund'
+    },
+    daily: {
+      title: 'Daily Life in Estonia',
+      food: 'Selver, Maxima, Rimi, Lidl. Budget €160–230/month.',
+      transport: 'Public transport in Tallinn is 100% FREE for registered residents!',
+      fun: 'Craft beer: €4.00–6.00.'
+    },
+    emergency: { number: '112', police: '112', embassy: 'https://www.netherlandsworldwide.nl/countries/estonia', embassyName: 'Dutch Embassy Tallinn' }
+  },
+  {
+    id: 'lithuania', name: 'Lithuania', flag: '🇱🇹', note: 'Fintech hub & cheap', tag: 'cheap',
+    registration: {
+      title: 'Asmens Kodas & EU Certificate',
+      steps: [
+        { t: 'Register residence', d: 'At local Eldership (Seniūnija) within 1 month.' },
+        { t: 'Get Asmens Kodas', d: 'Personal code for tax and banking.' },
+        { t: 'Apply for EU Certificate', d: 'At Migration Department (MIGRIS).' }
+      ],
+      docs: ['Passport/ID', 'Proof of lease', 'Work or study contract'],
+      link: 'https://www.migracija.lt', linkText: 'MIGRIS Migration Lithuania'
+    },
+    housing: {
+      title: 'Housing in Lithuania',
+      options: [
+        { n: 'Shared flat room', p: '€180–320/month', d: 'Vilnius and Kaunas are young, tech-savvy cities.' },
+        { n: 'Student Dorm', p: '€90–180/month', d: 'Cheap university dorms.' },
+        { n: '1-Bed Flat', p: '€320–500/month', d: 'Private living.' }
+      ],
+      link: 'https://www.aruodas.lt', linkText: 'Aruodas Real Estate'
+    },
+    work: {
+      title: 'Work & Income in Lithuania',
+      minWage: '€924/month gross',
+      jobs: ['Fintech & banking support (Revolut hubs)', 'Logistics (Girteka)', 'Customer care', 'Teaching'],
+      where: [['CVOnline', 'https://www.cvonline.lt'], ['CVBankas', 'https://www.cvbankas.lt']],
+      tax: '20% income tax rate.'
+    },
+    education: {
+      title: 'Study in Lithuania',
+      unis: [['Vilnius University', 'https://www.vu.lt'], ['KTU Kaunas', 'https://ktu.edu']],
+      cost: 'EU students can apply for state-funded tuition-free spots.',
+      dorm: 'Inexpensive campus accommodation.'
+    },
+    healthcare: {
+      title: 'Healthcare in Lithuania',
+      system: 'Compulsory Health Insurance (PSD) via VLK gives access to polyclinics.',
+      link: 'https://vlk.lt', linkText: 'VLK Health Authority'
+    },
+    daily: {
+      title: 'Daily Life in Lithuania',
+      food: 'Maxima, IKI, Norfa, Lidl. Budget €150–220/month.',
+      transport: 'Vilnius student monthly transit pass: ~€6.00!',
+      fun: 'Coffee: €2.20. Local cepelinai meal: €6.00.'
+    },
+    emergency: { number: '112', police: '112', embassy: 'https://www.netherlandsworldwide.nl/countries/lithuania', embassyName: 'Dutch Embassy Vilnius' }
+  },
+  {
+    id: 'latvia', name: 'Latvia', flag: '🇱🇻', note: 'Art Nouveau & Baltic beach', tag: 'cheap',
+    registration: {
+      title: 'Personas Kods & Registration',
+      steps: [
+        { t: 'Register address', d: 'At Office of Citizenship and Migration Affairs (PMLP).' },
+        { t: 'Get Personas Kods', d: 'National Identity number.' },
+        { t: 'EU Registration Card', d: 'Issued for stays longer than 3 months.' }
+      ],
+      docs: ['Passport/ID', 'Lease agreement', 'Health insurance proof'],
+      link: 'https://www.pmlp.gov.lv/en', linkText: 'PMLP Migration Latvia'
+    },
+    housing: {
+      title: 'Housing in Latvia',
+      options: [
+        { n: 'Shared flat room', p: '€170–300/month', d: 'Riga city center and student district.' },
+        { n: 'Student Dormitory', p: '€100–200/month', d: 'University dorms.' },
+        { n: 'Studio Flat', p: '€300–480/month', d: 'Private studio.' }
+      ],
+      link: 'https://www.ss.com/en/real-estate/', linkText: 'SS.com Latvia'
+    },
+    work: {
+      title: 'Work & Income in Latvia',
+      minWage: '€700/month gross',
+      jobs: ['Shared Service Centers (EVRY, Transcom)', 'Aviation / airBaltic hubs', 'Logistics', 'Delivery'],
+      where: [['CV.lv', 'https://www.cv.lv'], ['SS.lv Jobs', 'https://www.ss.com/en/work/']],
+      tax: 'Progressive tax starting at 20%.'
+    },
+    education: {
+      title: 'Study in Latvia',
+      unis: [['Univ. of Latvia', 'https://www.lu.lv'], ['RTU Riga', 'https://www.rtu.lv']],
+      cost: 'EU students eligible for budget-funded tuition free places.',
+      dorm: 'Dorm spots provided by universities.'
+    },
+    healthcare: {
+      title: 'Healthcare in Latvia',
+      system: 'NVD public health system covers healthcare services with small patient co-payments.',
+      link: 'https://www.vmnvd.gov.lv', linkText: 'NVD Health Service'
+    },
+    daily: {
+      title: 'Daily Life in Latvia',
+      food: 'Rimi, Maxima, Lidl. Budget €150–210/month.',
+      transport: 'Riga student monthly transit pass: €15.',
+      fun: 'Local beer: €3.00.'
+    },
+    emergency: { number: '112', police: '110', embassy: 'https://www.netherlandsworldwide.nl/countries/latvia', embassyName: 'Dutch Embassy Riga' }
+  },
+  {
+    id: 'slovenia', name: 'Slovenia', flag: '🇸🇮', note: 'Alps, lakes & clean towns', tag: '',
+    registration: {
+      title: 'EMŠO & Residence Registration',
+      steps: [
+        { t: 'Register presence', d: 'At local Administrative Unit (Upravna Enota) within 3 days.' },
+        { t: 'Get EMŠO Number', d: 'Unique master citizen number.' },
+        { t: 'Obtain Residence Certificate', d: 'Confirmation of registration for EU citizens.' }
+      ],
+      docs: ['Passport/ID', 'Proof of residence', 'Work/Study paper'],
+      link: 'https://www.gov.si/en/', linkText: 'Gov.si Portal'
+    },
+    housing: {
+      title: 'Housing in Slovenia',
+      options: [
+        { n: 'Shared room (Soba)', p: '€200–350/month', d: 'Ljubljana and Maribor are green student capitals.' },
+        { n: 'Študentski Dom (Dorm)', p: '€100–180/month', d: 'Subsidised dormitories.' },
+        { n: 'Private Studio', p: '€380–580/month', d: 'Private living.' }
+      ],
+      link: 'https://www.nepremicnine.net', linkText: 'Nepremicnine Slovenia'
+    },
+    work: {
+      title: 'Work & Income in Slovenia',
+      minWage: '€1,254/month gross',
+      jobs: ['Študentski Servis (specialized high-flexibility student work system!)', 'Pharmaceuticals', 'Tourism', 'Logistics'],
+      where: [['MojeDelo', 'https://www.mojedelo.com'], ['e-Študentski Servis', 'https://www.studentski-servis.com']],
+      tax: 'Progressive rates starting at 16%.'
+    },
+    education: {
+      title: 'Study in Slovenia',
+      unis: [['Univ. of Ljubljana', 'https://www.uni-lj.si'], ['Univ. of Maribor', 'https://www.um.si']],
+      cost: 'Tuition is 100% FREE for all EU citizens in full-time degrees!',
+      dorm: 'Subsidised housing plus famous government-subsidised food coupons (Študentska Prehrana = €3–4 gourmet restaurant meals!).'
+    },
+    healthcare: {
+      title: 'Healthcare in Slovenia',
+      system: 'ZZZS public health insurance card provides complete healthcare coverage.',
+      link: 'https://www.zzzs.si', linkText: 'ZZZS Health Insurance'
+    },
+    daily: {
+      title: 'Daily Life in Slovenia',
+      food: 'Hofer (Aldi), Eurospin, Mercator, Lidl. Budget €160–220/month.',
+      transport: 'Ljubljana Urbana card student monthly pass: €20.',
+      fun: 'Coffee: €1.80. Subsidised student meal coupon: €3.50!'
+    },
+    emergency: { number: '112', police: '113', embassy: 'https://www.netherlandsworldwide.nl/countries/slovenia', embassyName: 'Dutch Embassy Ljubljana' }
+  },
+  {
+    id: 'cyprus', name: 'Cyprus', flag: '🇨🇾', note: 'Year-round sun & English widely spoken', tag: 'cheap',
+    registration: {
+      title: 'Yellow Slip (MEU1)',
+      steps: [
+        { t: 'Apply for MEU1 Certificate', d: 'At Civil Registry and Migration Department within 4 months.' },
+        { t: 'Get Social Insurance Number', d: 'Obtained via Ministry of Labour.' },
+        { t: 'Get TIC (Tax Identification Code)', d: 'Issued by Tax Department.' }
+      ],
+      docs: ['Passport/ID', 'Rental contract', 'Employment or study enrolment'],
+      link: 'http://www.moi.gov.cy/crmd', linkText: 'Cyprus Migration Dept'
+    },
+    housing: {
+      title: 'Housing in Cyprus',
+      options: [
+        { n: 'Shared flat room', p: '€220–380/month', d: 'Nicosia, Limassol, and Larnaca.' },
+        { n: '1-Bedroom Apartment', p: '€380–600/month', d: 'Great prices outside central tourist strips.' },
+        { n: 'Seasonal Resort Housing', p: 'Free / Low cost', d: 'Provided by hotel employers.' }
+      ],
+      link: 'https://www.bazaraki.com', linkText: 'Bazaraki Cyprus'
+    },
+    work: {
+      title: 'Work & Income in Cyprus',
+      minWage: '€1,000/month gross',
+      jobs: ['Forex / Fintech customer service (Dutch teams!)', 'Resort hospitality & diving', 'Sailing / Yachting', 'IT'],
+      where: [['Ergodotisi', 'https://www.ergodotisi.com'], ['CareerFinders', 'https://www.careerfinders.com.cy']],
+      tax: 'First €19,500 of annual income is completely 0% TAX-FREE!'
+    },
+    education: {
+      title: 'Study in Cyprus',
+      unis: [['Univ. of Cyprus', 'https://www.ucy.ac.cy'], ['TEPAK', 'https://www.cut.ac.cy']],
+      cost: 'Undergraduate tuition is FREE for EU citizens at public universities!',
+      dorm: 'Student halls available.'
+    },
+    healthcare: {
+      title: 'Healthcare in Cyprus',
+      system: 'GeSY (General Healthcare System) offers universal care for registered workers.',
+      link: 'https://www.gesy.org.cy', linkText: 'GeSY Health Portal'
+    },
+    daily: {
+      title: 'Daily Life in Cyprus',
+      food: 'Lidl, Alphamega, Metro. Budget €160–230/month.',
+      transport: 'Bus monthly pass: €40 (Student: €20).',
+      fun: 'Pita Gyros: €4.50. Beach visits: 100% Free.'
+    },
+    emergency: { number: '112', police: '112', embassy: 'https://www.netherlandsworldwide.nl/countries/cyprus', embassyName: 'Dutch Embassy Nicosia' }
+  },
+  {
+    id: 'malta', name: 'Malta', flag: '🇲🇹', note: 'Island gaming & tech hub', tag: '',
+    registration: {
+      title: 'e-Residence Card',
+      steps: [
+        { t: 'Apply at Identità', d: 'Submit Form A (employment) or Form M (study) within 3 months.' },
+        { t: 'Get Social Security Number', d: 'Apply online at Social Security Dept.' },
+        { t: 'Tax Number Registration', d: 'Automatic alignment with social security.' }
+      ],
+      docs: ['Passport/ID', 'Lease agreement (registered with Housing Authority)', 'Employment/Student contract'],
+      link: 'https://identita.gov.mt', linkText: 'Identità Malta Agency'
+    },
+    housing: {
+      title: 'Housing in Malta',
+      options: [
+        { n: 'Shared flat room', p: '€350–550/month', d: 'Msida, Birkirkara, and Gżira are high student/expat areas.' },
+        { n: 'Shared Room (Twin)', p: '€250–350/month', d: 'Sharing a room in a shared apartment.' },
+        { n: 'Private 1-Bed Flat', p: '€600–850/month', d: 'Private living.' }
+      ],
+      link: 'https://www.maltapark.com/property', linkText: 'MaltaPark Property'
+    },
+    work: {
+      title: 'Work & Income in Malta',
+      minWage: '€850/month gross',
+      jobs: ['iGaming Customer Support / Game Presenter (Huge Dutch language demand = €2,000–3,000/mo!)', 'Hospitality', 'Diving instruction'],
+      where: [['Keepmeposted', 'https://www.keepmeposted.com.mt'], ['CareerJet MT', 'https://www.careerjet.com.mt']],
+      tax: 'Progressive rates with standard main tax bands.'
+    },
+    education: {
+      title: 'Study in Malta',
+      unis: [['Univ. of Malta', 'https://www.um.edu.mt'], ['MCAST', 'https://www.mcast.edu.mt']],
+      cost: 'Tuition is FREE for EU citizens in full-time undergraduate courses!',
+      dorm: 'Campus Hub student housing.'
+    },
+    healthcare: {
+      title: 'Healthcare in Malta',
+      system: 'Free public health treatment at Mater Dei hospital and local health centres when paying national insurance.',
+      link: 'https://deputyprimeminister.gov.mt/en/health', linkText: 'Ministry for Health'
+    },
+    daily: {
+      title: 'Daily Life in Malta',
+      food: 'Lidl, Wellbee\'s. Budget €180–250/month.',
+      transport: 'Tallinja bus transit card is FREE for all Maltese residents!',
+      fun: 'Pint of Cisk beer: €2.50–4.00.'
+    },
+    emergency: { number: '112', police: '112', embassy: 'https://www.netherlandsworldwide.nl/countries/malta', embassyName: 'Dutch Embassy Valletta' }
+  }
+];
 
-  function switchTab(id) {
-    navAnchors.forEach(a => a.classList.remove('active'));
-    contents.forEach(c => c.classList.remove('active'));
+/* ══════════════════════════════════════════════════════════════════════════════════════
+   APP STATE & INTERACTION LOGIC
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+let selectedCountry = COUNTRIES.find(c => c.id === 'spain') || COUNTRIES[0];
+let userPreferences = {
+  goal: 'work',
+  budget: 600,
+  lang: 'none',
+  housing: 'cheap'
+};
 
-    const navLink = document.querySelector(`.nav-tabs a[data-tab-link="${id}"]`);
-    if (navLink) navLink.classList.add('active');
+// DOM Elements
+const screenStart = document.getElementById('screen-start');
+const screenPrefs = document.getElementById('screen-prefs');
+const screenGuide = document.getElementById('screen-guide');
+const countryGrid = document.getElementById('countryGrid');
 
-    const tab = document.getElementById('tab-' + id);
-    if (tab) tab.classList.add('active');
+const prefFlag = document.getElementById('prefFlag');
+const prefCountryName = document.getElementById('prefCountryName');
+const budgetSlider = document.getElementById('budgetSlider');
+const budgetValue = document.getElementById('budgetValue');
+const generateBtn = document.getElementById('generateBtn');
+const backToStart = document.getElementById('backToStart');
+const restartBtn = document.getElementById('restartBtn');
 
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+const headerFlag = document.getElementById('headerFlag');
+const heroFlag = document.getElementById('heroFlag');
+const heroCountryName = document.getElementById('heroCountryName');
+const heroSubtitle = document.getElementById('heroSubtitle');
+const prefTags = document.getElementById('prefTags');
+const guideContent = document.getElementById('guideContent');
+const guideNav = document.getElementById('guideNav');
+
+// 1. Render Country Cards on Start Screen
+function renderCountryCards() {
+  countryGrid.innerHTML = '';
+  COUNTRIES.forEach(c => {
+    const card = document.createElement('a');
+    card.className = 'country-card';
+    card.href = '#';
+    let tagHtml = '';
+    if (c.tag === 'popular') tagHtml = `<span class="tag popular">🔥 Popular</span>`;
+    else if (c.tag === 'cheap') tagHtml = `<span class="tag cheap">💶 Low Cost</span>`;
+    else tagHtml = `<span class="tag">🇪🇺 EU/EEA</span>`;
+
+    card.innerHTML = `
+      <div class="flag">${c.flag}</div>
+      <div class="name">${c.name}</div>
+      <div class="note">${c.note}</div>
+      ${tagHtml}
+    `;
+
+    card.addEventListener('click', (e) => {
+      e.preventDefault();
+      selectCountry(c);
+    });
+    countryGrid.appendChild(card);
+  });
+}
+
+// Switch Screens
+function showScreen(screenId) {
+  [screenStart, screenPrefs, screenGuide].forEach(s => s.classList.remove('active'));
+  document.getElementById(screenId).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// Select Country -> Go to Prefs
+function selectCountry(country) {
+  selectedCountry = country;
+  prefFlag.textContent = country.flag;
+  prefCountryName.textContent = country.name;
+  showScreen('screen-prefs');
+}
+
+// Slider Input Listener
+budgetSlider.addEventListener('input', (e) => {
+  budgetValue.textContent = e.target.value;
+});
+
+// Generate Guide Event
+generateBtn.addEventListener('click', () => {
+  const goalVal = document.querySelector('input[name="goal"]:checked').value;
+  const langVal = document.querySelector('input[name="lang"]:checked').value;
+  const houseVal = document.querySelector('input[name="housing"]:checked').value;
+  const budgetVal = parseInt(budgetSlider.value, 10);
+
+  userPreferences = { goal: goalVal, budget: budgetVal, lang: langVal, housing: houseVal };
+
+  renderPersonalisedGuide();
+  showScreen('screen-guide');
+});
+
+// Back Buttons
+backToStart.addEventListener('click', () => showScreen('screen-start'));
+restartBtn.addEventListener('click', () => showScreen('screen-start'));
+
+/* ══════════════════════════════════════════════════════════════════════════════════════
+   PERSONALISATION & GUIDE CONTENT GENERATION
+   ══════════════════════════════════════════════════════════════════════════════════════ */
+function renderPersonalisedGuide() {
+  const c = selectedCountry;
+  const p = userPreferences;
+
+  // Header & Hero Setup
+  headerFlag.textContent = c.flag;
+  heroFlag.textContent = c.flag;
+  heroCountryName.textContent = c.name;
+
+  let goalText = p.goal === 'work' ? 'work & career' : p.goal === 'study' ? 'higher education' : 'work & studies';
+  heroSubtitle.textContent = `Tailored roadmap for a young Dutch citizen moving to ${c.name} for ${goalText} with a budget of €${p.budget}/month.`;
+
+  // Preference Badges
+  const langLabels = { none: '🗣️ Language: Beginner', basic: '🗣️ Language: Basic', good: '🗣️ Language: Fluent' };
+  const houseLabels = { cheap: '🏠 Priority: Cheapest Room', social: '🏠 Priority: Shared/Social', own: '🏠 Priority: Private Space' };
+  const goalLabels = { work: '💼 Goal: Work', study: '🎓 Goal: Study', both: '🔄 Goal: Work & Study' };
+
+  prefTags.innerHTML = `
+    <span class="pref-tag">${goalLabels[p.goal]}</span>
+    <span class="pref-tag">💶 Budget: €${p.budget}/mo</span>
+    <span class="pref-tag">${langLabels[p.lang]}</span>
+    <span class="pref-tag">${houseLabels[p.housing]}</span>
+  `;
+
+  // Render Tabs Dynamic HTML
+  guideContent.innerHTML = `
+    <!-- OVERVIEW TAB -->
+    <div class="guide-tab active" id="gtab-home">
+      <div class="g-card">
+        <div class="section-label">Personalised Summary</div>
+        <h2>Moving to ${c.name} at a Glance</h2>
+        <p>As a Dutch passport holder, you enjoy <strong>full EU/EEA free movement rights</strong> in ${c.name}. You do not need a visa or work permit to enter or work.</p>
+        
+        <div class="g-stats">
+          <div class="g-stat">
+            <div class="num">${c.work.minWage.split(' ')[0]}</div>
+            <div class="label">Min. Income Ref</div>
+          </div>
+          <div class="g-stat">
+            <div class="num">€${p.budget}</div>
+            <div class="label">Your Budget</div>
+          </div>
+          <div class="g-stat">
+            <div class="num">${p.lang === 'none' ? 'English Hubs' : 'Local Jobs'}</div>
+            <div class="label">Target Market</div>
+          </div>
+          <div class="g-stat">
+            <div class="num">EU/EEA</div>
+            <div class="label">Visa Status</div>
+          </div>
+        </div>
+
+        ${p.budget < 500 ? `
+          <div class="g-callout amber">
+            <strong>⚠️ Budget Advisory (€${p.budget}/mo)</strong>
+            Your budget is lean. In ${c.name}, focus on shared rooms, student dormitories (if studying), or job positions that offer employee accommodation.
+          </div>
+        ` : `
+          <div class="g-callout green">
+            <strong>✅ Realistic Monthly Budget (€${p.budget}/mo)</strong>
+            Your budget gives you solid flexibility for renting a flatshare room and managing daily expenses in ${c.name}.
+          </div>
+        `}
+      </div>
+
+      <div class="g-grid">
+        <div class="g-card">
+          <h2>⚡ Immediate Action Plan</h2>
+          <ol style="padding-left: 1.1rem; margin-top: .5rem;">
+            <li>Secure temporary housing for your first 2–4 weeks.</li>
+            <li>Apply for local identification/tax number (${c.registration.steps[0].t.split(' ')[0]}).</li>
+            <li>Open a local bank account or use Revolut/Wise with EUR/local currency.</li>
+            <li>Apply for local jobs or confirm university enrolment.</li>
+          </ol>
+        </div>
+        <div class="g-card">
+          <h2>💡 Language & Integration Tip</h2>
+          <p>${p.lang === 'none' 
+            ? `Since you don't speak the local language yet, target international companies, English-speaking customer support hubs, or tourism. Start learning basic greetings immediately!` 
+            : `Your language skills will give you a significant advantage in ${c.name}'s local job market over other expats!`}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- REGISTRATION TAB -->
+    <div class="guide-tab" id="gtab-registration">
+      <div class="g-card">
+        <div class="section-label">Official Bureaucracy</div>
+        <h2>${c.registration.title}</h2>
+        <p>Follow these exact administrative steps upon arriving in ${c.name}:</p>
+        
+        <ul class="g-steps">
+          ${c.registration.steps.map((step, idx) => `
+            <li>
+              <div class="step-num">${idx + 1}</div>
+              <div class="g-step-body">
+                <strong>${step.t}</strong>
+                <span>${step.d}</span>
+              </div>
+            </li>
+          `).join('')}
+        </ul>
+
+        <h3>Required Documents Check-list</h3>
+        <ul>
+          ${c.registration.docs.map(doc => `<li>${doc}</li>`).join('')}
+        </ul>
+
+        <div class="g-callout green" style="margin-top: 1rem;">
+          <strong>Official Link:</strong>
+          <a href="${c.registration.link}" target="_blank" rel="noopener">${c.registration.linkText} →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOUSING TAB -->
+    <div class="guide-tab" id="gtab-housing">
+      <div class="g-card">
+        <div class="section-label">Accommodation</div>
+        <h2>${c.housing.title}</h2>
+        <p>Housing options matching your budget (€${p.budget}/mo) and preference (${p.housing}):</p>
+
+        <div class="g-table-wrap">
+          <table class="g-table">
+            <thead>
+              <tr>
+                <th>Option Type</th>
+                <th>Est. Price</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${c.housing.options.map(opt => `
+                <tr>
+                  <td><strong>${opt.n}</strong></td>
+                  <td><span style="color:var(--accent);font-weight:700;">${opt.p}</span></td>
+                  <td>${opt.d}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <div class="g-callout amber">
+          <strong>🔍 Recommended Search Portal:</strong>
+          Find listings on <a href="${c.housing.link}" target="_blank" rel="noopener">${c.housing.linkText}</a>.
+        </div>
+      </div>
+    </div>
+
+    <!-- WORK TAB -->
+    <div class="guide-tab" id="gtab-work">
+      <div class="g-card">
+        <div class="section-label">Employment & Income</div>
+        <h2>${c.work.title}</h2>
+        <p><strong>Minimum Wage Reference:</strong> ${c.work.minWage}</p>
+        <p><strong>Tax Overview:</strong> ${c.work.tax}</p>
+
+        <h3>Top Job Opportunities for You</h3>
+        <ul>
+          ${c.work.jobs.map(j => `<li>${j}</li>`).join('')}
+        </ul>
+
+        <h3>Where to Apply</h3>
+        <p>Use these popular local job portals:</p>
+        <ul>
+          ${c.work.where.map(w => `<li><a href="${w[1]}" target="_blank" rel="noopener">${w[0]} →</a></li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <!-- EDUCATION TAB -->
+    <div class="guide-tab" id="gtab-education">
+      <div class="g-card">
+        <div class="section-label">Studies & Student Life</div>
+        <h2>${c.education.title}</h2>
+        <p><strong>Tuition Cost for EU Citizens:</strong> ${c.education.cost}</p>
+        <p><strong>Student Housing Info:</strong> ${c.education.dorm}</p>
+
+        <h3>Top Universities in ${c.name}</h3>
+        <ul>
+          ${c.education.unis.map(u => `<li><a href="${u[1]}" target="_blank" rel="noopener">${u[0]} →</a></li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    <!-- HEALTHCARE TAB -->
+    <div class="guide-tab" id="gtab-healthcare">
+      <div class="g-card">
+        <div class="section-label">Medical Coverage</div>
+        <h2>${c.healthcare.title}</h2>
+        <p>${c.healthcare.system}</p>
+        <div class="g-callout green" style="margin-top:1rem;">
+          <strong>Important Note for Dutch Citizens:</strong> Keep your EHIC (European Health Insurance Card) active during initial visits. Switch to local registration once employed or permanently resident.
+          <br><a href="${c.healthcare.link}" target="_blank" rel="noopener">${c.healthcare.linkText} →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DAILY LIFE TAB -->
+    <div class="guide-tab" id="gtab-daily">
+      <div class="g-card">
+        <div class="section-label">Living Costs & Lifestyle</div>
+        <h2>${c.daily.title}</h2>
+        <p><strong>Groceries:</strong> ${c.daily.food}</p>
+        <p><strong>Public Transport:</strong> ${c.daily.transport}</p>
+        <p><strong>Leisure & Nightlife:</strong> ${c.daily.fun}</p>
+      </div>
+    </div>
+
+    <!-- EMERGENCY TAB -->
+    <div class="guide-tab" id="gtab-emergency">
+      <div class="g-card">
+        <div class="section-label">Help & Emergency</div>
+        <h2>Important Contacts in ${c.name}</h2>
+        <div class="g-stats">
+          <div class="g-stat">
+            <div class="num" style="color:var(--accent);">${c.emergency.number}</div>
+            <div class="label">General Emergency</div>
+          </div>
+          <div class="g-stat">
+            <div class="num">${c.emergency.police}</div>
+            <div class="label">Police Direct</div>
+          </div>
+        </div>
+
+        <div class="g-callout amber" style="margin-top: 1rem;">
+          <strong>Dutch Embassy & Consular Services:</strong>
+          <br><a href="${c.emergency.embassy}" target="_blank" rel="noopener">${c.emergency.embassyName} →</a>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Setup Inner Tab Switching Logic
+  setupGuideNav();
+}
+
+// Guide Sub-navigation Handlers
+function setupGuideNav() {
+  const navLinks = guideNav.querySelectorAll('a');
+  const footerLinks = document.querySelectorAll('.g-footer a[data-gtab]');
+
+  function activateTab(tabId) {
+    document.querySelectorAll('.guide-nav a').forEach(a => {
+      a.classList.toggle('active', a.dataset.gtab === tabId);
+    });
+    document.querySelectorAll('.guide-tab').forEach(t => {
+      t.classList.toggle('active', t.id === `gtab-${tabId}`);
+    });
+    window.scrollTo({ top: 300, behavior: 'smooth' });
   }
 
-  // All in-page tab links (header nav, hero badges, stat cards, footer)
-  tabLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
+  navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
       e.preventDefault();
-      const id = this.dataset.tabLink;
-      if (!id) return;
-      history.replaceState(null, '', '#tab-' + id);
-      switchTab(id);
+      activateTab(link.dataset.gtab);
     });
   });
 
-  // Handle direct hash on load + browser back/forward
-  function handleHash() {
-    const hash = window.location.hash.replace('#tab-', '');
-    if (hash && document.getElementById('tab-' + hash)) switchTab(hash);
-    else switchTab('home');
-  }
-
-  window.addEventListener('hashchange', handleHash);
-  window.addEventListener('DOMContentLoaded', handleHash);
-
-  // Ensure all external links open in a new tab safely
-  document.querySelectorAll('a[href^="http"]').forEach(a => {
-    a.setAttribute('target', '_blank');
-    a.setAttribute('rel', 'noopener');
+  footerLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      activateTab(link.dataset.gtab);
+    });
   });
+}
+
+// Initialize App
+window.addEventListener('DOMContentLoaded', () => {
+  renderCountryCards();
+});
 </script>
 
 </body>
