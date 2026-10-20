@@ -1,1104 +1,1227 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NL2EU — Your Personalised Emigration Guide</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --terracotta: #C2410C;
-      --sunset: #EA580C;
-      --coral: #F97316;
-      --amber: #F59E0B;
-      --sand-light: #FFFBEB;
-      --sand-bg: #FEF3C7;
-      --warm-white: #FFFBFA;
-      --dark-walnut: #1C1917;
-      --text-muted: #78716C;
-      --border-warm: #E7E5E4;
-      --accent-green: #059669;
-      --card-shadow: 0 4px 20px -2px rgba(28, 25, 23, 0.08);
-      --card-hover: 0 12px 30px -4px rgba(194, 65, 12, 0.18);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NL2EU — Your Personalised Emigration Guide</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Font Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif'],
+                    },
+                    colors: {
+                        terracotta: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        },
+                        sand: {
+                            50: '#fafaf9',
+                            100: '#f5f5f4',
+                            200: '#e7e5e4',
+                            300: '#d6d3d1',
+                            800: '#292524',
+                            900: '#1c1917',
+                        },
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.6' },
+                            '50%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #1c1917;
+            color: #f5f5f4;
+            overflow-x: hidden;
+        }
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-      color: var(--dark-walnut);
-      background: #FAFAF9;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+        /* Glassmorphism warm variations */
+        .glass-panel {
+            background: rgba(41, 37, 36, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(251, 146, 60, 0.15);
+        }
 
-    /* Screen Management */
-    .screen { display: none; opacity: 0; transition: opacity 0.35s ease-in-out; }
-    .screen.active { display: block; opacity: 1; }
+        .glass-card {
+            background: rgba(28, 25, 23, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-    /* ════════════════════════ SCREEN 1: START ════════════════════════ */
-    .hero-start {
-      background: linear-gradient(135deg, #292524 0%, #1C1917 100%);
-      color: var(--warm-white);
-      padding: 4.5rem 1.5rem 4rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-start::before {
-      content: '';
-      position: absolute;
-      top: -30%; left: 50%; transform: translateX(-50%);
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(249,115,22,0.22) 0%, rgba(0,0,0,0) 70%);
-      pointer-events: none;
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: rgba(254, 243, 199, 0.15);
-      border: 1px solid rgba(249, 115, 22, 0.4);
-      color: #FDE68A;
-      padding: 0.4rem 1.1rem;
-      border-radius: 999px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      margin-bottom: 1.25rem;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(8px);
-    }
-    .hero-start h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.2rem, 5vw, 3.8rem);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 1rem;
-    }
-    .hero-start h1 em {
-      font-style: italic;
-      color: var(--coral);
-      background: linear-gradient(120deg, #F97316, #F59E0B);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero-start p {
-      font-size: 1.1rem;
-      max-width: 680px;
-      margin: 0 auto 2rem;
-      color: #E7E5E4;
-      font-weight: 400;
-    }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(249, 115, 22, 0.4);
+            box-shadow: 0 20px 35px -10px rgba(194, 65, 12, 0.25);
+        }
 
-    .quick-actions-bar {
-      display: flex;
-      justify-content: center;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-    .btn-quick {
-      background: rgba(255,255,255,0.1);
-      border: 1px solid rgba(255,255,255,0.2);
-      color: #fff;
-      padding: 0.6rem 1.2rem;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-    .btn-quick:hover {
-      background: var(--coral);
-      border-color: var(--coral);
-      transform: translateY(-2px);
-    }
-    .btn-quick.surprise {
-      background: linear-gradient(135deg, var(--sunset), var(--amber));
-      border: none;
-      box-shadow: 0 4px 15px rgba(249, 115, 22, 0.4);
-    }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1c1917;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #44403c;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ea580c;
+        }
 
-    .filter-section {
-      max-width: 1200px;
-      margin: 2.5rem auto 1rem;
-      padding: 0 1.5rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .filter-title h2 {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--dark-walnut);
-    }
-    .filter-pills {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-    }
-    .pill {
-      padding: 0.45rem 0.9rem;
-      border-radius: 999px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      background: #F5F5F4;
-      color: var(--text-muted);
-      border: 1px solid var(--border-warm);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    .pill:hover, .pill.active {
-      background: var(--dark-walnut);
-      color: var(--warm-white);
-      border-color: var(--dark-walnut);
-    }
+        /* Range Slider custom styling */
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #ea580c;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(234, 88, 12, 0.8);
+            transition: transform 0.15s ease;
+        }
 
-    .country-grid-container {
-      max-width: 1200px;
-      margin: 0 auto 4rem;
-      padding: 0 1.5rem;
-    }
-    .country-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.25rem;
-    }
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
 
-    .country-card {
-      background: var(--warm-white);
-      border: 1px solid var(--border-warm);
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: var(--card-shadow);
-      position: relative;
-      display: flex;
-      flex-direction: column;
-    }
-    .country-card:hover {
-      transform: translateY(-6px);
-      box-shadow: var(--card-hover);
-      border-color: var(--coral);
-    }
-    
-    .card-img-wrapper {
-      position: relative;
-      height: 140px;
-      overflow: hidden;
-      background: #292524;
-    }
-    .card-img-wrapper img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.5s ease;
-    }
-    .country-card:hover .card-img-wrapper img {
-      transform: scale(1.08);
-    }
-    .card-img-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(28,25,23,0.7) 100%);
-    }
-    .card-flag-badge {
-      position: absolute;
-      bottom: 10px;
-      left: 12px;
-      font-size: 1.8rem;
-      line-height: 1;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
-    }
-    .card-tag {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: rgba(28, 25, 23, 0.75);
-      backdrop-filter: blur(6px);
-      color: #FDE68A;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      border: 1px solid rgba(255,255,255,0.15);
-    }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
-    .card-body {
-      padding: 1rem 1.1rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .card-title-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 0.35rem;
-    }
-    .card-country-name {
-      font-size: 1.1rem;
-      font-weight: 800;
-      color: var(--dark-walnut);
-    }
-    .card-note {
-      font-size: 0.78rem;
-      color: var(--terracotta);
-      font-weight: 600;
-    }
-    .card-stats {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 0.5rem;
-      padding-top: 0.5rem;
-      border-top: 1px dashed var(--border-warm);
-    }
-
-    /* ════════════════════════ SCREEN 2: PREFERENCES ════════════════════════ */
-    .pref-wrapper {
-      min-height: 100vh;
-      background: linear-gradient(135deg, #1C1917 0%, #292524 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
-    }
-    .pref-box {
-      background: var(--warm-white);
-      border-radius: 24px;
-      padding: 2.5rem 2rem;
-      max-width: 580px;
-      width: 100%;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    .selected-banner {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      background: var(--sand-bg);
-      border: 1px solid #FDE68A;
-      padding: 0.85rem 1.25rem;
-      border-radius: 14px;
-      margin-bottom: 1.75rem;
-    }
-    .selected-flag { font-size: 2.4rem; line-height: 1; }
-    .selected-info h3 { font-size: 1.15rem; font-weight: 800; color: var(--dark-walnut); }
-    .selected-info p { font-size: 0.82rem; color: var(--terracotta); font-weight: 600; }
-
-    .pref-group { margin-bottom: 1.5rem; }
-    .pref-group label.group-title {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--terracotta);
-      margin-bottom: 0.6rem;
-    }
-    .options-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 0.5rem;
-    }
-    .options-grid input { display: none; }
-    .options-grid label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0.65rem 0.8rem;
-      border: 2px solid var(--border-warm);
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-      color: var(--dark-walnut);
-      background: #FAFAF9;
-      text-align: center;
-    }
-    .options-grid input:checked + label {
-      border-color: var(--coral);
-      background: #FFF7ED;
-      color: var(--terracotta);
-      box-shadow: 0 2px 8px rgba(249, 115, 22, 0.15);
-    }
-
-    .range-slider {
-      width: 100%;
-      accent-color: var(--coral);
-      height: 6px;
-      border-radius: 3px;
-      cursor: pointer;
-    }
-    .budget-readout {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-top: 0.4rem;
-    }
-    .budget-amount {
-      font-size: 1.8rem;
-      font-weight: 800;
-      color: var(--dark-walnut);
-    }
-    .budget-power {
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--accent-green);
-      background: #ECFDF5;
-      padding: 0.25rem 0.6rem;
-      border-radius: 6px;
-    }
-
-    .btn-submit {
-      width: 100%;
-      padding: 1rem;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--sunset), var(--terracotta));
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 800;
-      border: none;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 4px 15px rgba(234, 88, 12, 0.35);
-      margin-top: 1rem;
-    }
-    .btn-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 22px rgba(234, 88, 12, 0.45);
-    }
-    .btn-back-link {
-      display: block;
-      text-align: center;
-      margin-top: 1rem;
-      color: var(--text-muted);
-      font-size: 0.82rem;
-      font-weight: 600;
-      background: none;
-      border: none;
-      cursor: pointer;
-      text-decoration: underline;
-    }
-
-    /* ════════════════════════ SCREEN 3: GUIDE ════════════════════════ */
-    .guide-header {
-      background: var(--dark-walnut);
-      color: #fff;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    }
-    .guide-header-inner {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 64px;
-      padding: 0 1.5rem;
-    }
-    .guide-brand {
-      font-size: 1.25rem;
-      font-weight: 800;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      color: #fff;
-    }
-    .guide-brand span { color: var(--coral); }
-    
-    .guide-tabs-nav {
-      display: flex;
-      gap: 0.25rem;
-      list-style: none;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .guide-tabs-nav::-webkit-scrollbar { display: none; }
-    .guide-tabs-nav button {
-      background: none;
-      border: none;
-      color: #A8A29E;
-      font-size: 0.85rem;
-      font-weight: 700;
-      padding: 0.6rem 0.9rem;
-      border-radius: 8px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-    .guide-tabs-nav button:hover { color: #fff; background: rgba(255,255,255,0.08); }
-    .guide-tabs-nav button.active {
-      color: #fff;
-      background: var(--terracotta);
-    }
-
-    .guide-hero {
-      background: linear-gradient(135deg, #1C1917 0%, #292524 100%);
-      color: #fff;
-      padding: 3.5rem 1.5rem 3rem;
-      position: relative;
-    }
-    .guide-hero-container {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 320px;
-      gap: 2rem;
-      align-items: center;
-    }
-    .guide-hero-text h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      margin-bottom: 0.5rem;
-    }
-    .guide-hero-text h1 em {
-      color: var(--coral);
-      font-style: italic;
-    }
-    .guide-hero-text p {
-      font-size: 1rem;
-      color: #D6D3D1;
-      max-width: 600px;
-    }
-    .hero-tags {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
-      margin-top: 1.25rem;
-    }
-    .hero-tag {
-      background: rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.2);
-      padding: 0.3rem 0.8rem;
-      border-radius: 999px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #FDE68A;
-    }
-
-    .hero-country-card {
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 18px;
-      overflow: hidden;
-      backdrop-filter: blur(10px);
-    }
-    .hero-country-card img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-    }
-    .hero-country-card-body {
-      padding: 1rem;
-      text-align: center;
-    }
-
-    .guide-body {
-      max-width: 1100px;
-      margin: 2.5rem auto 4rem;
-      padding: 0 1.5rem;
-    }
-
-    .guide-tab-panel { display: none; }
-    .guide-tab-panel.active { display: block; animation: fadeIn 0.3s ease; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .card-block {
-      background: var(--warm-white);
-      border: 1px solid var(--border-warm);
-      border-radius: 18px;
-      padding: 1.75rem;
-      margin-bottom: 1.5rem;
-      box-shadow: var(--card-shadow);
-    }
-    .card-block h2 {
-      font-size: 1.3rem;
-      font-weight: 800;
-      color: var(--dark-walnut);
-      margin-bottom: 0.75rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .card-block p { font-size: 0.95rem; color: #44403C; margin-bottom: 0.75rem; }
-
-    .callout-box {
-      background: #FFF7ED;
-      border-left: 4px solid var(--coral);
-      padding: 1rem 1.2rem;
-      border-radius: 0 12px 12px 0;
-      margin: 1rem 0;
-      font-size: 0.9rem;
-      color: #9A3412;
-    }
-    .callout-box strong { font-size: 0.95rem; display: block; margin-bottom: 0.2rem; }
-
-    .checklist { list-style: none; margin: 1rem 0; }
-    .checklist li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border-warm);
-    }
-    .checklist li:last-child { border-bottom: none; }
-    .checklist input[type="checkbox"] {
-      width: 20px; height: 20px;
-      accent-color: var(--coral);
-      margin-top: 0.15rem;
-      cursor: pointer;
-    }
-
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 1rem;
-      margin: 1.25rem 0;
-    }
-    .stat-card {
-      background: #FAFAF9;
-      border: 1px solid var(--border-warm);
-      padding: 1rem;
-      border-radius: 12px;
-      text-align: center;
-    }
-    .stat-card .value {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: var(--terracotta);
-    }
-    .stat-card .label {
-      font-size: 0.72rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      color: var(--text-muted);
-    }
-
-    /* Footer */
-    footer {
-      background: var(--dark-walnut);
-      color: #A8A29E;
-      text-align: center;
-      padding: 2.5rem 1.5rem;
-      font-size: 0.85rem;
-      border-top: 1px solid rgba(255,255,255,0.1);
-    }
-    footer button {
-      background: var(--terracotta);
-      color: #fff;
-      border: none;
-      padding: 0.6rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-
-    @media (max-width: 768px) {
-      .guide-hero-container { grid-template-columns: 1fr; }
-      .hero-country-card { display: none; }
-      .guide-header-inner { flex-direction: column; height: auto; padding: 0.75rem; gap: 0.5rem; }
-      .guide-tabs-nav { width: 100%; }
-    }
-  </style>
+        .tab-active {
+            background-color: #ea580c;
+            color: #ffffff;
+            font-weight: 700;
+        }
+    </style>
 </head>
-<body>
+<body class="min-h-screen flex flex-col justify-between selection:bg-terracotta-600 selection:text-white">
 
-<!-- ════════════════════════ SCREEN 1: START ════════════════════════ -->
-<div class="screen active" id="screen-start">
-  <div class="hero-start">
-    <div class="hero-badge">🇳🇱 Dutch Youth Emigration Guide • Updated 2026</div>
-    <h1>Where Will <em>Your Next Chapter</em> Begin?</h1>
-    <p>Honest, actionable guides for young Dutch citizens looking to move abroad with small budgets and big dreams.</p>
-    
-    <div class="quick-actions-bar">
-      <button class="btn-quick surprise" id="btnSurprise">🎲 Surprise Me (Random Pick)</button>
-    </div>
-  </div>
+    <!-- Top Navigation Bar -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-stone-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateToScreen(1)">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-terracotta-700 via-terracotta-600 to-amber-500 flex items-center justify-center shadow-lg shadow-terracotta-700/30">
+                    <i data-lucide="sun" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <span class="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-stone-100 via-orange-100 to-amber-200">NL2EU</span>
+                    <span class="block text-[10px] uppercase tracking-widest font-semibold text-terracotta-500">Relocation Navigator</span>
+                </div>
+            </div>
 
-  <div class="filter-section">
-    <div class="filter-title">
-      <h2>25 Popular Destinations</h2>
-    </div>
-    <div class="filter-pills" id="filterPills">
-      <button class="pill active" data-filter="all">All Countries</button>
-      <button class="pill" data-filter="cheap">💶 Cheap & Budget</button>
-      <button class="pill" data-filter="popular">🔥 Most Popular</button>
-      <button class="pill" data-filter="sun">☀️ Warm & Sunny</button>
-    </div>
-  </div>
+            <!-- Breadcrumb Navigation Indicator -->
+            <nav class="hidden md:flex items-center space-x-2 text-xs sm:text-sm font-medium text-stone-400">
+                <button id="nav-step-1" onclick="navigateToScreen(1)" class="flex items-center space-x-2 text-terracotta-500 font-semibold transition-colors hover:text-white">
+                    <span class="w-6 h-6 rounded-full bg-terracotta-500/20 flex items-center justify-center text-terracotta-500 border border-terracotta-500/30 text-xs">1</span>
+                    <span>Destination</span>
+                </button>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-stone-600"></i>
+                <button id="nav-step-2" onclick="if(selectedCountryKey) navigateToScreen(2)" class="flex items-center space-x-2 hover:text-white transition-colors opacity-50 cursor-not-allowed">
+                    <span class="w-6 h-6 rounded-full bg-stone-800 flex items-center justify-center border border-stone-700 text-xs">2</span>
+                    <span>Preferences</span>
+                </button>
+                <i data-lucide="chevron-right" class="w-4 h-4 text-stone-600"></i>
+                <button id="nav-step-3" class="flex items-center space-x-2 hover:text-white transition-colors opacity-50 cursor-not-allowed">
+                    <span class="w-6 h-6 rounded-full bg-stone-800 flex items-center justify-center border border-stone-700 text-xs">3</span>
+                    <span>Your Canvas Guide</span>
+                </button>
+            </nav>
 
-  <div class="country-grid-container">
-    <div class="country-grid" id="countryGrid"></div>
-  </div>
-</div>
-
-<!-- ════════════════════════ SCREEN 2: PREFERENCES ════════════════════════ -->
-<div class="screen" id="screen-prefs">
-  <div class="pref-wrapper">
-    <div class="pref-box">
-      <div class="selected-banner">
-        <span class="selected-flag" id="prefFlag">🇭🇺</span>
-        <div class="selected-info">
-          <h3 id="prefCountryName">Hungary</h3>
-          <p id="prefNote">Budapest tech & culture hub</p>
+            <div class="flex items-center space-x-3">
+                <button onclick="triggerSurpriseMe()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-amber-500/20 to-terracotta-500/20 border border-amber-500/40 text-xs text-amber-300 font-bold hover:border-amber-400 transition-all flex items-center space-x-1.5 shadow-md hover:scale-105">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span>Surprise Me!</span>
+                </button>
+                <button onclick="resetApp()" class="px-3.5 py-1.5 rounded-xl border border-stone-700 hover:border-stone-500 text-xs text-stone-300 font-medium transition-all hover:bg-stone-800 flex items-center space-x-1">
+                    <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                    <span>Reset</span>
+                </button>
+            </div>
         </div>
-      </div>
+    </header>
 
-      <div class="pref-group">
-        <label class="group-title">Primary Goal</label>
-        <div class="options-grid">
-          <div>
-            <input type="radio" name="goal" id="goal-work" value="work" checked>
-            <label for="goal-work">💼 Find Work</label>
-          </div>
-          <div>
-            <input type="radio" name="goal" id="goal-study" value="study">
-            <label for="goal-study">🎓 Study</label>
-          </div>
-          <div>
-            <input type="radio" name="goal" id="goal-both" value="both">
-            <label for="goal-both">🔄 Both</label>
-          </div>
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        
+        <!-- ================= SCREEN 1: DESTINATION SELECTION ================= -->
+        <section id="screen-1" class="transition-all duration-500 ease-in-out opacity-100 block">
+            
+            <!-- Hero Header Section -->
+            <div class="relative py-16 lg:py-24 overflow-hidden">
+                <!-- Warm ambient light backdrops -->
+                <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-terracotta-700/25 via-amber-600/20 to-orange-500/10 blur-[130px] rounded-full pointer-events-none"></div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid lg:grid-cols-12 gap-12 items-center">
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                            <div class="inline-flex items-center space-x-2 px-3.5 py-1.5 rounded-full bg-terracotta-500/10 border border-terracotta-500/30 text-terracotta-500 text-xs font-bold tracking-wide uppercase">
+                                <i data-lucide="sun" class="w-4 h-4"></i>
+                                <span>Dutch Relocation & Expat Guide</span>
+                            </div>
+                            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-stone-100 leading-[1.15]">
+                                Swap the Rain for Your <span class="bg-clip-text text-transparent bg-gradient-to-r from-terracotta-500 via-amber-400 to-orange-300 font-serif italic">Next Chapter</span>
+                            </h1>
+                            <p class="text-base sm:text-lg text-stone-300 font-normal max-w-2xl leading-relaxed mx-auto lg:mx-0">
+                                Step-by-step guidance for relocating from the Netherlands to 25 European countries. Compare living costs, taxes, DigiD & Gemeente de-registration rules, and local lifestyle.
+                            </p>
+
+                            <!-- Interactive Quick Escape CTA -->
+                            <div class="pt-2 flex flex-wrap justify-center lg:justify-start items-center gap-4">
+                                <button onclick="document.getElementById('country-search').focus()" class="px-6 py-3.5 rounded-xl bg-gradient-to-r from-terracotta-600 to-amber-500 hover:from-terracotta-500 hover:to-amber-400 text-white font-extrabold text-sm shadow-xl shadow-terracotta-700/25 transition-all flex items-center space-x-2 hover:scale-[1.02]">
+                                    <i data-lucide="compass" class="w-4 h-4"></i>
+                                    <span>Explore All 25 Destinations</span>
+                                </button>
+                                <button onclick="triggerSurpriseMe()" class="px-6 py-3.5 rounded-xl bg-stone-800/80 hover:bg-stone-700/80 border border-stone-700 text-stone-200 font-bold text-sm transition-all flex items-center space-x-2">
+                                    <i data-lucide="dices" class="w-4 h-4 text-amber-400"></i>
+                                    <span>Random Escape Generator</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Hero Showcase Slider Card -->
+                        <div class="lg:col-span-5">
+                            <div class="glass-panel p-4 rounded-2xl relative overflow-hidden group shadow-2xl border border-stone-700/60">
+                                <div id="hero-slider" class="relative h-72 sm:h-80 rounded-xl overflow-hidden shadow-inner">
+                                    <img id="slider-img" src="https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80" alt="Destination Preview" class="w-full h-full object-cover transition-all duration-700 scale-105 group-hover:scale-100" onerror="handleImageError(this)">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/40 to-transparent"></div>
+                                    <div class="absolute bottom-4 left-4 right-4 text-white">
+                                        <div id="slider-badge" class="inline-block px-2.5 py-1 rounded bg-terracotta-600/90 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider mb-1">Top Sunshine Spot</div>
+                                        <h3 id="slider-title" class="text-xl font-bold font-serif">Spain</h3>
+                                        <p id="slider-desc" class="text-xs text-stone-300 mt-0.5">High quality of life, Mediterranean weather & Beckham Law tax perks.</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between mt-3 px-2">
+                                    <div class="text-xs text-stone-400 font-medium">Curated relocation hotspots</div>
+                                    <div class="flex space-x-1.5" id="slider-dots">
+                                        <button onclick="setSlide(0)" class="w-2.5 h-2.5 rounded-full bg-terracotta-500 transition-all"></button>
+                                        <button onclick="setSlide(1)" class="w-2.5 h-2.5 rounded-full bg-stone-600 hover:bg-stone-400 transition-all"></button>
+                                        <button onclick="setSlide(2)" class="w-2.5 h-2.5 rounded-full bg-stone-600 hover:bg-stone-400 transition-all"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search, Category Pills & Country Grid -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                
+                <!-- Search & Filter Controls -->
+                <div class="glass-panel p-5 rounded-2xl mb-8 flex flex-col md:flex-row gap-4 items-center justify-between">
+                    <div class="relative w-full md:w-80">
+                        <i data-lucide="search" class="w-5 h-5 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                        <input type="text" id="country-search" placeholder="Search country, capital, tag..." onkeyup="filterCountries()" class="w-full bg-stone-900/90 border border-stone-700/80 rounded-xl pl-11 pr-4 py-2.5 text-sm text-white placeholder-stone-400 focus:outline-none focus:border-terracotta-500 focus:ring-1 focus:ring-terracotta-500 transition-all">
+                    </div>
+
+                    <!-- Category Filter Pills -->
+                    <div class="flex flex-wrap items-center gap-2 w-full md:w-auto overflow-x-auto no-scrollbar py-1">
+                        <button onclick="setTagFilter('all')" class="tag-btn active px-3.5 py-2 rounded-xl text-xs font-semibold bg-terracotta-600 text-white transition-all">All (25)</button>
+                        <button onclick="setTagFilter('sun')" class="tag-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-stone-800 text-stone-300 hover:bg-stone-700 border border-stone-700/60 transition-all">☀️ Sunshine & Warmth</button>
+                        <button onclick="setTagFilter('cheap')" class="tag-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-stone-800 text-stone-300 hover:bg-stone-700 border border-stone-700/60 transition-all">💶 High Purchasing Power</button>
+                        <button onclick="setTagFilter('high_salary')" class="tag-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-stone-800 text-stone-300 hover:bg-stone-700 border border-stone-700/60 transition-all">💼 High Salary Hubs</button>
+                        <button onclick="setTagFilter('easy_start')" class="tag-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-stone-800 text-stone-300 hover:bg-stone-700 border border-stone-700/60 transition-all">🚀 Easy Start & English</button>
+                    </div>
+                </div>
+
+                <!-- Country Cards Grid -->
+                <div id="country-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Cards dynamically rendered here -->
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========== SCREEN 2: PREFERENCES & FORM ========== -->
+        <section id="screen-2" class="transition-all duration-500 ease-in-out opacity-0 hidden py-12">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <button onclick="navigateToScreen(1)" class="inline-flex items-center space-x-2 text-stone-400 hover:text-white mb-6 text-sm transition-colors">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Back to Country Selection</span>
+                </button>
+
+                <!-- Selected Country Banner Snapshot -->
+                <div id="selected-country-header" class="glass-panel p-6 rounded-2xl mb-8 flex items-center justify-between border-l-4 border-l-terracotta-500">
+                    <!-- Dynamically populated selected country -->
+                </div>
+
+                <!-- Configuration Form -->
+                <div class="glass-panel p-6 sm:p-10 rounded-2xl shadow-2xl space-y-8 border border-stone-800">
+                    <div>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Tailor Your Relocation Plan</h2>
+                        <p class="text-stone-400 text-sm mt-1">Provide a few quick details to generate your customized registration checklist, budget breakdown, and tax strategy.</p>
+                    </div>
+
+                    <form id="preferences-form" onsubmit="event.preventDefault(); generateGuide();" class="space-y-8">
+                        
+                        <!-- Goal Selection -->
+                        <div class="space-y-3">
+                            <label class="block text-sm font-semibold text-stone-200">
+                                1. What is your primary relocation objective?
+                            </label>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="goal" value="work" checked class="peer sr-only">
+                                    <div class="p-4 rounded-xl bg-stone-900/80 border border-stone-700/80 peer-checked:border-terracotta-500 peer-checked:bg-terracotta-500/10 hover:bg-stone-800 transition-all text-center">
+                                        <i data-lucide="briefcase" class="w-6 h-6 mx-auto text-terracotta-500 mb-2"></i>
+                                        <div class="text-xs font-bold text-white">Local Employment</div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="goal" value="remote" class="peer sr-only">
+                                    <div class="p-4 rounded-xl bg-stone-900/80 border border-stone-700/80 peer-checked:border-terracotta-500 peer-checked:bg-terracotta-500/10 hover:bg-stone-800 transition-all text-center">
+                                        <i data-lucide="laptop" class="w-6 h-6 mx-auto text-terracotta-500 mb-2"></i>
+                                        <div class="text-xs font-bold text-white">Remote Work / Freelance</div>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="goal" value="lifestyle" class="peer sr-only">
+                                    <div class="p-4 rounded-xl bg-stone-900/80 border border-stone-700/80 peer-checked:border-terracotta-500 peer-checked:bg-terracotta-500/10 hover:bg-stone-800 transition-all text-center">
+                                        <i data-lucide="palmtree" class="w-6 h-6 mx-auto text-terracotta-500 mb-2"></i>
+                                        <div class="text-xs font-bold text-white">Lifestyle & Early Retirement</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Budget Slider with Dynamic Purchasing Power Gauge -->
+                        <div class="space-y-4 glass-card p-5 rounded-xl border border-stone-700/60">
+                            <div class="flex justify-between items-center">
+                                <label class="text-sm font-semibold text-stone-200 flex items-center space-x-2">
+                                    <i data-lucide="wallet" class="w-4 h-4 text-terracotta-500"></i>
+                                    <span>2. Estimated Monthly Budget</span>
+                                </label>
+                                <span id="budget-value-display" class="text-lg font-extrabold text-terracotta-400 bg-terracotta-500/10 px-3 py-1 rounded-lg border border-terracotta-500/30">€2,500 / month</span>
+                            </div>
+
+                            <input type="range" id="budget-slider" min="1000" max="6000" step="250" value="2500" oninput="updateBudgetDisplay(this.value)" class="w-full h-2 bg-stone-800 rounded-lg appearance-none cursor-pointer">
+
+                            <div class="flex justify-between text-[11px] text-stone-400 font-medium">
+                                <span>€1,000 (Lean Budget)</span>
+                                <span>€3,000 (Balanced Expat)</span>
+                                <span>€6,000+ (High Luxury)</span>
+                            </div>
+
+                            <!-- Live Purchasing Power Gauge vs NL -->
+                            <div class="p-3.5 rounded-xl bg-stone-900/90 border border-stone-800 flex items-center justify-between text-xs">
+                                <span class="text-stone-300 font-medium">Randstad (NL) Buying Power Equivalent:</span>
+                                <span id="nl-equivalent-power" class="font-bold text-amber-400 bg-amber-500/10 px-2.5 py-1 rounded border border-amber-500/20">~ €3,100 / mo value</span>
+                            </div>
+                        </div>
+
+                        <!-- Language level -->
+                        <div class="space-y-3">
+                            <label class="block text-sm font-semibold text-stone-200">
+                                3. Destination Language Proficiency
+                            </label>
+                            <select id="language-level" class="w-full bg-stone-900 border border-stone-700/80 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-terracotta-500">
+                                <option value="beginner">Beginner (English speaking for start)</option>
+                                <option value="intermediate">Intermediate (Conversational basic)</option>
+                                <option value="advanced">Fluent / Native level</option>
+                            </select>
+                        </div>
+
+                        <!-- Housing Option -->
+                        <div class="space-y-3">
+                            <label class="block text-sm font-semibold text-stone-200">
+                                4. Target Housing Setup
+                            </label>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="housing" value="rent" checked class="peer sr-only">
+                                    <div class="p-3.5 rounded-xl bg-stone-900/80 border border-stone-700/80 peer-checked:border-terracotta-500 peer-checked:bg-terracotta-500/10 hover:bg-stone-800 transition-all flex items-center space-x-3">
+                                        <i data-lucide="home" class="w-5 h-5 text-terracotta-500"></i>
+                                        <span class="text-xs font-bold text-white">Long-term Apartment Rental</span>
+                                    </div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="housing" value="buy" class="peer sr-only">
+                                    <div class="p-3.5 rounded-xl bg-stone-900/80 border border-stone-700/80 peer-checked:border-terracotta-500 peer-checked:bg-terracotta-500/10 hover:bg-stone-800 transition-all flex items-center space-x-3">
+                                        <i data-lucide="key" class="w-5 h-5 text-terracotta-500"></i>
+                                        <span class="text-xs font-bold text-white">Purchasing Property</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-terracotta-600 via-terracotta-500 to-amber-500 hover:from-terracotta-500 hover:to-amber-400 text-white font-extrabold text-base shadow-xl shadow-terracotta-700/30 transition-all flex items-center justify-center space-x-2">
+                            <span>Build My Relocation Canvas</span>
+                            <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        </button>
+
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ========== SCREEN 3: TAILORED GUIDE CANVAS ========== -->
+        <section id="screen-3" class="transition-all duration-500 ease-in-out opacity-0 hidden py-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                
+                <!-- Action Header Bar -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 glass-panel p-6 rounded-2xl border-l-4 border-l-terracotta-500">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-terracotta-500">Personalized Canvas Blueprint</span>
+                        <h2 id="guide-country-title" class="text-3xl sm:text-4xl font-extrabold text-white font-serif">Your Plan to Spain</h2>
+                        <p id="guide-subtitle" class="text-stone-400 text-xs sm:text-sm mt-1">Configured for standard Dutch deregistration & arrival in Spain.</p>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button onclick="copyGuideLink()" class="px-4 py-2.5 rounded-xl bg-stone-800 hover:bg-stone-700 border border-stone-700 text-xs font-bold text-white transition-all flex items-center space-x-2">
+                            <i data-lucide="copy" class="w-4 h-4"></i>
+                            <span>Copy Action Plan</span>
+                        </button>
+                        <button onclick="exportGuideFile()" class="px-4 py-2.5 rounded-xl bg-terracotta-600 hover:bg-terracotta-500 text-white font-bold text-xs transition-all flex items-center space-x-2 shadow-lg shadow-terracotta-700/30">
+                            <i data-lucide="download" class="w-4 h-4"></i>
+                            <span>Export Canvas Text File</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive Tabbed Sub-Navigation -->
+                <div class="flex items-center space-x-2 overflow-x-auto no-scrollbar border-b border-stone-800 pb-2">
+                    <button onclick="switchGuideTab('overview')" id="tab-btn-overview" class="tab-btn tab-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                        <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                        <span>Overview & Checklist</span>
+                    </button>
+                    <button onclick="switchGuideTab('housing')" id="tab-btn-housing" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-stone-400 hover:text-white transition-all flex items-center space-x-2">
+                        <i data-lucide="home" class="w-4 h-4"></i>
+                        <span>Housing & Utilities</span>
+                    </button>
+                    <button onclick="switchGuideTab('taxes')" id="tab-btn-taxes" class="tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-stone-400 hover:text-white transition-all flex items-center space-x-2">
+                        <i data-lucide="receipt" class="w-4 h-4"></i>
+                        <span>Taxes & Banking</span>
+                    </button>
+                </div>
+
+                <!-- Main Canvas Dashboard Grid -->
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Left Column (8 Cols) -->
+                    <div class="lg:col-span-8 space-y-8">
+                        
+                        <!-- TAB 1: OVERVIEW & CHECKLIST -->
+                        <div id="tab-content-overview" class="space-y-6">
+                            
+                            <!-- Dutch Deregistration Checklist -->
+                            <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-stone-800 space-y-6">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 rounded-xl bg-terracotta-500/20 border border-terracotta-500/30 flex items-center justify-center text-terracotta-500">
+                                            <i data-lucide="file-check-2" class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-xl font-bold text-white">1. Dutch Administrative Offboarding</h3>
+                                            <p class="text-xs text-stone-400">Pre-departure steps required in the Netherlands</p>
+                                        </div>
+                                    </div>
+                                    <span id="nl-checklist-progress" class="text-xs font-bold text-terracotta-400 bg-terracotta-500/10 px-2.5 py-1 rounded-full border border-terracotta-500/20">0/3 Done</span>
+                                </div>
+
+                                <div class="space-y-3">
+                                    <label class="flex items-start space-x-3 p-3.5 rounded-xl bg-stone-900/80 border border-stone-800 cursor-pointer hover:border-stone-700 transition-all">
+                                        <input type="checkbox" id="chk-gemeente" onchange="toggleChecklist('gemeente')" class="mt-1 rounded border-stone-700 text-terracotta-500 focus:ring-terracotta-500 bg-stone-800">
+                                        <div>
+                                            <span class="text-sm font-bold text-white block">Gemeente Deregistration (RNI Transfer)</span>
+                                            <span class="text-xs text-stone-400">Report your departure to your municipality within 5 days before leaving NL. You will be registered under the RNI (Non-residents database).</span>
+                                        </div>
+                                    </label>
+
+                                    <label class="flex items-start space-x-3 p-3.5 rounded-xl bg-stone-900/80 border border-stone-800 cursor-pointer hover:border-stone-700 transition-all">
+                                        <input type="checkbox" id="chk-digid" onchange="toggleChecklist('digid')" class="mt-1 rounded border-stone-700 text-terracotta-500 focus:ring-terracotta-500 bg-stone-800">
+                                        <div>
+                                            <span class="text-sm font-bold text-white block">DigiD App & SMS Active Setup</span>
+                                            <span class="text-xs text-stone-400">Verify DigiD app login and ensure 2FA SMS functions with an international phone number before closing Dutch mobile contracts.</span>
+                                        </div>
+                                    </label>
+
+                                    <label class="flex items-start space-x-3 p-3.5 rounded-xl bg-stone-900/80 border border-stone-800 cursor-pointer hover:border-stone-700 transition-all">
+                                        <input type="checkbox" id="chk-zorg" onchange="toggleChecklist('zorg')" class="mt-1 rounded border-stone-700 text-terracotta-500 focus:ring-terracotta-500 bg-stone-800">
+                                        <div>
+                                            <span class="text-sm font-bold text-white block">Health Insurance Adjustment (Zorgverzekering)</span>
+                                            <span class="text-xs text-stone-400">Cancel standard Dutch health insurance as soon as you are locally employed/registered abroad or request form S1.</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Destination Onboarding -->
+                            <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-stone-800 space-y-6">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                                        <i data-lucide="map-pin" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-xl font-bold text-white">2. Arrival & Registration</h3>
+                                        <p class="text-xs text-stone-400">Official local procedures in target destination</p>
+                                    </div>
+                                </div>
+
+                                <div id="destination-onboarding-steps" class="space-y-3">
+                                    <!-- Dynamic details injected here -->
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- TAB 2: HOUSING FINDER -->
+                        <div id="tab-content-housing" class="hidden space-y-6">
+                            <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-stone-800 space-y-6">
+                                <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+                                    <i data-lucide="building" class="w-5 h-5 text-terracotta-500"></i>
+                                    <span>Housing Strategy & Local Portals</span>
+                                </h3>
+                                <p id="housing-strategy-text" class="text-xs sm:text-sm text-stone-300 leading-relaxed"></p>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                                    <div class="p-4 rounded-xl bg-stone-900/80 border border-stone-800 space-y-1">
+                                        <span class="text-xs text-terracotta-400 font-bold uppercase">Estimated Monthly Rent</span>
+                                        <div id="tab-rent-estimate" class="text-xl font-extrabold text-white">€1,125 / mo</div>
+                                    </div>
+                                    <div class="p-4 rounded-xl bg-stone-900/80 border border-stone-800 space-y-1">
+                                        <span class="text-xs text-amber-400 font-bold uppercase">Deposit Requirement</span>
+                                        <div class="text-xl font-extrabold text-white">1 - 2 Months Rent</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3: TAXES & BANKING -->
+                        <div id="tab-content-taxes" class="hidden space-y-6">
+                            <div class="glass-panel p-6 sm:p-8 rounded-2xl border border-stone-800 space-y-6">
+                                <h3 class="text-xl font-bold text-white flex items-center space-x-2">
+                                    <i data-lucide="landmark" class="w-5 h-5 text-terracotta-500"></i>
+                                    <span>Tax Treaties & Banking Guidelines</span>
+                                </h3>
+                                <p id="tax-treaty-text" class="text-xs sm:text-sm text-stone-300 leading-relaxed"></p>
+                                
+                                <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 space-y-2">
+                                    <span class="font-bold flex items-center space-x-1">
+                                        <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                                        <span>Important Tax Note:</span>
+                                    </span>
+                                    <p>Netherlands applies double taxation agreements (DTA) with all EU/EEA members to avoid paying income tax twice. Always file M-form tax return in NL for the year you move.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Sidebar Column (4 Cols) -->
+                    <div class="lg:col-span-4 space-y-6">
+                        
+                        <!-- Budget Allocation Chart Visualizer -->
+                        <div class="glass-panel p-6 rounded-2xl border border-stone-800 space-y-4">
+                            <h3 class="text-lg font-bold text-white flex items-center justify-between">
+                                <span>Monthly Budget Split</span>
+                                <i data-lucide="pie-chart" class="w-5 h-5 text-terracotta-500"></i>
+                            </h3>
+
+                            <div id="guide-budget-total" class="text-3xl font-extrabold text-white font-serif">€2,500 <span class="text-xs font-normal text-stone-400">/ mo</span></div>
+
+                            <div class="space-y-3 pt-2">
+                                <div>
+                                    <div class="flex justify-between text-xs text-stone-300 mb-1">
+                                        <span>Housing & Rent (45%)</span>
+                                        <span id="guide-rent-val" class="font-bold">€1,125</span>
+                                    </div>
+                                    <div class="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-terracotta-500 h-full rounded-full" style="width: 45%"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-xs text-stone-300 mb-1">
+                                        <span>Groceries & Living (35%)</span>
+                                        <span id="guide-living-val" class="font-bold">€875</span>
+                                    </div>
+                                    <div class="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-amber-500 h-full rounded-full" style="width: 35%"></div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex justify-between text-xs text-stone-300 mb-1">
+                                        <span>Savings / Extras (20%)</span>
+                                        <span id="guide-savings-val" class="font-bold">€500</span>
+                                    </div>
+                                    <div class="w-full bg-stone-800 h-2 rounded-full overflow-hidden">
+                                        <div class="bg-emerald-500 h-full rounded-full" style="width: 20%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Country Facts -->
+                        <div class="glass-panel p-6 rounded-2xl border border-stone-800 space-y-4">
+                            <h3 class="text-lg font-bold text-white">Country Snapshot</h3>
+                            
+                            <div class="space-y-3 text-xs">
+                                <div class="flex justify-between py-2 border-b border-stone-800">
+                                    <span class="text-stone-400">Capital</span>
+                                    <span id="fact-capital" class="font-bold text-white">Madrid</span>
+                                </div>
+                                <div class="flex justify-between py-2 border-b border-stone-800">
+                                    <span class="text-stone-400">Primary Language</span>
+                                    <span id="fact-language" class="font-bold text-white">Spanish</span>
+                                </div>
+                                <div class="flex justify-between py-2 border-b border-stone-800">
+                                    <span class="text-stone-400">Currency</span>
+                                    <span id="fact-currency" class="font-bold text-white">Euro (€)</span>
+                                </div>
+                                <div class="flex justify-between py-2 border-b border-stone-800">
+                                    <span class="text-stone-400">Climate Vibe</span>
+                                    <span id="fact-climate" class="font-bold text-amber-400">Warm & Sunny</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 glass-panel px-4 py-3 rounded-xl shadow-2xl border border-terracotta-500/40 text-xs text-white flex items-center space-x-2 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <i data-lucide="check-circle" class="w-4 h-4 text-terracotta-500"></i>
+        <span id="toast-msg">Action completed!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-stone-800/80 glass-panel mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-xs text-stone-400">
+            <p>© 2026 NL2EU Relocation Guide. Independent resource for residents moving from the Netherlands.</p>
         </div>
-      </div>
+    </footer>
 
-      <div class="pref-group">
-        <label class="group-title">Monthly Budget (Housing + Living)</label>
-        <input type="range" class="range-slider" id="budgetRange" min="300" max="2500" step="50" value="700">
-        <div class="budget-readout">
-          <div class="budget-amount">€<span id="budgetValue">700</span>/mo</div>
-          <div class="budget-power" id="budgetPower">Equivalency Score: High</div>
-        </div>
-      </div>
+    <!-- JS Logic -->
+    <script>
+        /* ================= 25 EU/EEA COUNTRIES DATABASE ================= */
+        const countriesData = {
+            spain: {
+                name: "Spain", flag: "🇪🇸", capital: "Madrid", language: "Spanish", currency: "Euro (€)",
+                tag: "sun", costIndex: "Moderate (€1,800 - €2,600/mo)", multiplier: 1.25,
+                image: "https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80",
+                description: "Vibrant Mediterranean lifestyle, mild winters, high quality of life, and Beckham Law tax advantages.",
+                localReg: "NIE (Número de Identificación de Extranjero) & Empadronamiento registration at local city hall.",
+                taxInfo: "Beckham Law offers flat 24% tax rate for qualifying foreign relocations. Active double tax treaty with NL."
+            },
+            portugal: {
+                name: "Portugal", flag: "🇵🇹", capital: "Lisbon", language: "Portuguese", currency: "Euro (€)",
+                tag: "sun", costIndex: "Moderate (€1,600 - €2,400/mo)", multiplier: 1.30,
+                image: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80",
+                description: "Sunny coastlines, welcoming remote tech community, and widespread English fluency.",
+                localReg: "NIF (Tax identification) & CRUE Certificate for EU citizens.",
+                taxInfo: "NHR program / updated incentive schemes for inbound digital & tech professionals."
+            },
+            germany: {
+                name: "Germany", flag: "🇩🇪", capital: "Berlin", language: "German", currency: "Euro (€)",
+                tag: "high_salary", costIndex: "Moderate-High (€2,200 - €3,200/mo)", multiplier: 1.05,
+                image: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80",
+                description: "Europe's largest economy, robust social security, and quick land transit back to NL.",
+                localReg: "Anmeldung at Bürgeramt within 14 days of arrival.",
+                taxInfo: "Comprehensive tax agreement with Netherlands. Cross-border worker provisions active."
+            },
+            france: {
+                name: "France", flag: "🇫🇷", capital: "Paris", language: "French", currency: "Euro (€)",
+                tag: "sun", costIndex: "Moderate-High (€2,200 - €3,400/mo)", multiplier: 1.05,
+                image: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80",
+                description: "Rich cultural heritage, diverse landscapes from Provence to the Alps, and universal healthcare.",
+                localReg: "Registration at local Mairie & Ameli health insurance setup.",
+                taxInfo: "Double taxation treaty with NL. Tax breaks for foreign workers under the Impatriate regime."
+            },
+            italy: {
+                name: "Italy", flag: "🇮🇹", capital: "Rome", language: "Italian", currency: "Euro (€)",
+                tag: "sun", costIndex: "Moderate (€1,700 - €2,600/mo)", multiplier: 1.25,
+                image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80",
+                description: "Historic charm, world-famous gastronomy, and generous income tax exemptions for inbound workers.",
+                localReg: "Codice Fiscale acquisition & Residenza at local Anagrafe office.",
+                taxInfo: "Lavoratori Impatriati regime offers major income tax relief for skilled workers moving to Italy."
+            },
+            belgium: {
+                name: "Belgium", flag: "🇧🇪", capital: "Brussels", language: "Dutch / French", currency: "Euro (€)",
+                tag: "easy_start", costIndex: "Moderate-High (€2,000 - €3,000/mo)", multiplier: 1.0,
+                image: "https://images.unsplash.com/photo-1559113202-c916b8e44373?auto=format&fit=crop&w=800&q=80",
+                description: "Direct neighbor with familiar Dutch language in Flanders and easy commuting options to NL.",
+                localReg: "Registration at local Commune / Gemeente for eID card.",
+                taxInfo: "Bilateral tax treaty with NL. Ideal for cross-border commuters and remote workers."
+            },
+            austria: {
+                name: "Austria", flag: "🇦🇹", capital: "Vienna", language: "German", currency: "Euro (€)",
+                tag: "high_salary", costIndex: "High (€2,200 - €3,200/mo)", multiplier: 1.0,
+                image: "https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&fit=crop&w=800&q=80",
+                description: "Clean Alpine living, top-ranked public infrastructure in Vienna, and outdoor sports lifestyle.",
+                localReg: "Meldebestätigung within 3 days & Anmeldebescheinigung for EU citizens.",
+                taxInfo: "Standard EU double taxation rules prevent double levies."
+            },
+            switzerland: {
+                name: "Switzerland", flag: "🇨🇭", capital: "Bern", language: "German / French", currency: "CHF",
+                tag: "high_salary", costIndex: "Very High (€3,500 - €5,500/mo)", multiplier: 0.7,
+                image: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99?auto=format&fit=crop&w=800&q=80",
+                description: "High gross salary standards, low income tax brackets in many cantons, and Alpine nature.",
+                localReg: "Permit L or B application at Cantonal Migration Office.",
+                taxInfo: "Swiss taxation levied at source depending on canton. Separate DTA agreement with NL."
+            },
+            sweden: {
+                name: "Sweden", flag: "🇸🇪", capital: "Stockholm", language: "Swedish", currency: "SEK",
+                tag: "easy_start", costIndex: "High (€2,200 - €3,200/mo)", multiplier: 0.95,
+                image: "https://images.unsplash.com/photo-1509356843151-3e7d96241e11?auto=format&fit=crop&w=800&q=80",
+                description: "High social equality, English spoken everywhere, and progressive workplace flexibility.",
+                localReg: "Personnummer registration at Skatteverket.",
+                taxInfo: "Foreign key employee tax relief scheme (Forskarskatt) for high-earning specialists."
+            },
+            denmark: {
+                name: "Denmark", flag: "🇩🇰", capital: "Copenhagen", language: "Danish", currency: "DKK",
+                tag: "high_salary", costIndex: "High (€2,400 - €3,600/mo)", multiplier: 0.9,
+                image: "https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&fit=crop&w=800&q=80",
+                description: "World-class bike commuting, excellent work-life balance, and efficient public services.",
+                localReg: "CPR Number & MitID setup at International House.",
+                taxInfo: "Special Researcher Tax Scheme offers reduced flat tax rate for foreign experts."
+            },
+            norway: {
+                name: "Norway", flag: "🇳🇴", capital: "Oslo", language: "Norwegian", currency: "NOK",
+                tag: "high_salary", costIndex: "Very High (€2,600 - €3,800/mo)", multiplier: 0.85,
+                image: "https://images.unsplash.com/photo-1506701100689-2751f5f19ad5?auto=format&fit=crop&w=800&q=80",
+                description: "Majestic fjords, high personal safety, and strong economic welfare standards.",
+                localReg: "Fødselsnummer registration via Skatteetaten.",
+                taxInfo: "PAYE (Pay As You Earn) voluntary flat tax option for temporary residents."
+            },
+            ireland: {
+                name: "Ireland", flag: "🇮🇪", capital: "Dublin", language: "English", currency: "Euro (€)",
+                tag: "easy_start", costIndex: "High (€2,300 - €3,500/mo)", multiplier: 0.9,
+                image: "https://images.unsplash.com/photo-1590089415225-401ed6b9db8e?auto=format&fit=crop&w=800&q=80",
+                description: "Native English environment, global European tech hub, and welcoming local culture.",
+                localReg: "PPS (Personal Public Service) Number via MyWelfare.",
+                taxInfo: "Double taxation treaty with NL. Special Assignee Relief Programme (SARP) available."
+            },
+            greece: {
+                name: "Greece", flag: "🇬🇷", capital: "Athens", language: "Greek", currency: "Euro (€)",
+                tag: "cheap", costIndex: "Inexpensive (€1,400 - €2,100/mo)", multiplier: 1.5,
+                image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
+                description: "300+ sunny days a year, lower living costs, and dedicated digital nomad tax reductions.",
+                localReg: "AFM (Tax identification number) from local tax office (DOY).",
+                taxInfo: "50% income tax exemption for 7 years for digital workers moving tax residence to Greece."
+            },
+            czech: {
+                name: "Czech Republic", flag: "🇨🇿", capital: "Prague", language: "Czech", currency: "CZK",
+                tag: "cheap", costIndex: "Moderate (€1,500 - €2,200/mo)", multiplier: 1.35,
+                image: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=800&q=80",
+                description: "Architectural beauty in Prague, central European location, and active international expat hubs.",
+                localReg: "Foreigners Police Department registration within 30 days.",
+                taxInfo: "Flat tax registration options for self-employed freelancers (Živnostenský list)."
+            },
+            poland: {
+                name: "Poland", flag: "🇵🇱", capital: "Warsaw", language: "Polish", currency: "PLN",
+                tag: "cheap", costIndex: "Inexpensive (€1,300 - €2,000/mo)", multiplier: 1.55,
+                image: "https://images.unsplash.com/photo-1519197924294-4ac99111422b?auto=format&fit=crop&w=800&q=80",
+                description: "Rapidly growing economy, affordable high quality of life, and booming IT sector.",
+                localReg: "PESEL number registration at local district municipality office.",
+                taxInfo: "Low flat-rate tax options for freelancers and B2B contractors."
+            },
+            croatia: {
+                name: "Croatia", flag: "🇭🇷", capital: "Zagreb", language: "Croatian", currency: "Euro (€)",
+                tag: "sun", costIndex: "Inexpensive (€1,400 - €2,100/mo)", multiplier: 1.45,
+                image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80",
+                description: "Stunning Adriatic coastline, Euro currency simplicity, and low cost living.",
+                localReg: "OIB number and EU registration certificate at police station.",
+                taxInfo: "DTA agreement active with the Netherlands."
+            },
+            hungary: {
+                name: "Hungary", flag: "🇭🇺", capital: "Budapest", language: "Hungarian", currency: "HUF",
+                tag: "cheap", costIndex: "Inexpensive (€1,200 - €1,900/mo)", multiplier: 1.6,
+                image: "https://images.unsplash.com/photo-1513622470522-26c3c8a854bc?auto=format&fit=crop&w=800&q=80",
+                description: "Thermal bath lifestyle, historic Budapest architecture, and low monthly rent costs.",
+                localReg: "Registration Certificate at Aliens Policing office.",
+                taxInfo: "Flat 15% personal income tax rate applies."
+            },
+            finland: {
+                name: "Finland", flag: "🇫🇮", capital: "Helsinki", language: "Finnish", currency: "Euro (€)",
+                tag: "easy_start", costIndex: "High (€2,100 - €3,100/mo)", multiplier: 0.95,
+                image: "https://images.unsplash.com/photo-1538332576228-eb5b4c4de6f5?auto=format&fit=crop&w=800&q=80",
+                description: "Voted world's happiest country, exceptional safety, clean air, and functional design.",
+                localReg: "Henkilötunnus (Identity code) via Digital and Population Agency.",
+                taxInfo: "Progressive tax system with clear Nordic tax guidance."
+            },
+            cyprus: {
+                name: "Cyprus", flag: "🇨🇾", capital: "Nicosia", language: "Greek / English", currency: "Euro (€)",
+                tag: "sun", costIndex: "Moderate (€1,600 - €2,300/mo)", multiplier: 1.3,
+                image: "https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80",
+                description: "Year-round Mediterranean climate, English spoken everywhere, and Non-Dom tax perks.",
+                localReg: "Yellow Slip (MEU1 form) EU registration certificate.",
+                taxInfo: "Non-Domicile scheme grants 0% tax on dividend and interest income for 17 years."
+            },
+            malta: {
+                name: "Malta", flag: "🇲🇹", capital: "Valletta", language: "Maltese / English", currency: "Euro (€)",
+                tag: "easy_start", costIndex: "Moderate (€1,700 - €2,500/mo)", multiplier: 1.2,
+                image: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80",
+                description: "Official English language, Mediterranean sunshine, and compact island lifestyle.",
+                localReg: "e-Residence Card via Identity Malta.",
+                taxInfo: "Remittance-basis tax system available for foreign residents."
+            },
+            estonia: {
+                name: "Estonia", flag: "🇪🇪", capital: "Tallinn", language: "Estonian", currency: "Euro (€)",
+                tag: "cheap", costIndex: "Moderate (€1,500 - €2,200/mo)", multiplier: 1.35,
+                image: "https://images.unsplash.com/photo-1509356843151-3e7d96241e11?auto=format&fit=crop&w=800&q=80",
+                description: "Global pioneer in e-governance, tech startup culture, and digital public services.",
+                localReg: "Isikukood (Personal Code) registration.",
+                taxInfo: "Unique 0% tax rate on reinvested and retained business profits."
+            },
+            slovenia: {
+                name: "Slovenia", flag: "🇸🇮", capital: "Ljubljana", language: "Slovenian", currency: "Euro (€)",
+                tag: "cheap", costIndex: "Moderate (€1,600 - €2,300/mo)", multiplier: 1.3,
+                image: "https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&fit=crop&w=800&q=80",
+                description: "Picturesque Lake Bled, green Eco living, bordered by Italy & Austria.",
+                localReg: "EMŠO registration at administrative unit.",
+                taxInfo: "Standard double tax agreement active with Netherlands."
+            },
+            luxembourg: {
+                name: "Luxembourg", flag: "🇱🇺", capital: "Luxembourg City", language: "French / German", currency: "Euro (€)",
+                tag: "high_salary", costIndex: "Very High (€3,000 - €4,500/mo)", multiplier: 0.75,
+                image: "https://images.unsplash.com/photo-1559113202-c916b8e44373?auto=format&fit=crop&w=800&q=80",
+                description: "Free public transit nationwide, prominent financial center, and high purchasing power.",
+                localReg: "Declaration of Arrival at Biergercenter within 8 days.",
+                taxInfo: "Favorable tax brackets and close cross-border coordination."
+            },
+            romania: {
+                name: "Romania", flag: "🇷🇴", capital: "Bucharest", language: "Romanian", currency: "RON",
+                tag: "cheap", costIndex: "Inexpensive (€1,100 - €1,800/mo)", multiplier: 1.7,
+                image: "https://images.unsplash.com/photo-1519197924294-4ac99111422b?auto=format&fit=crop&w=800&q=80",
+                description: "Ultra-fast fiber internet, vibrant tech hubs, and very affordable living expenses.",
+                localReg: "CNP registration at General Inspectorate for Immigration.",
+                taxInfo: "Low flat micro-enterprise tax options for small tech businesses."
+            },
+            slovakia: {
+                name: "Slovakia", flag: "🇸🇰", capital: "Bratislava", language: "Slovak", currency: "Euro (€)",
+                tag: "cheap", costIndex: "Moderate (€1,400 - €2,100/mo)", multiplier: 1.4,
+                image: "https://images.unsplash.com/photo-1519677100203-a0e668c92439?auto=format&fit=crop&w=800&q=80",
+                description: "Proximity to Vienna (under 1hr), High Tatra mountains, and steady development.",
+                localReg: "Foreign Police Department registration for EU residence card.",
+                taxInfo: "Direct bilateral taxation treaty with NL."
+            }
+        };
 
-      <div class="pref-group">
-        <label class="group-title">Language Skill</label>
-        <div class="options-grid">
-          <div>
-            <input type="radio" name="lang" id="lang-none" value="none" checked>
-            <label for="lang-none">Beginner</label>
-          </div>
-          <div>
-            <input type="radio" name="lang" id="lang-basic" value="basic">
-            <label for="lang-basic">Intermediate</label>
-          </div>
-          <div>
-            <input type="radio" name="lang" id="lang-good" value="fluent">
-            <label for="lang-good">Fluent</label>
-          </div>
-        </div>
-      </div>
+        // State Management
+        let selectedCountryKey = null;
+        let activeTagFilter = 'all';
+        let currentSlide = 0;
+        let checklistState = JSON.parse(localStorage.getItem('nl2eu_checklist') || '{}');
 
-      <button class="btn-submit" id="btnGenerate">Generate Personalised Guide →</button>
-      <button class="btn-back-link" id="btnBackToStart">← Pick a different country</button>
-    </div>
-  </div>
-</div>
+        const sliderData = [
+            { key: 'spain', title: "Spain", badge: " Expat Favorite", desc: "Enjoy Mediterranean weather, high healthcare standards, and Beckham Law tax perks.", img: "https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80" },
+            { key: 'italy', title: "Italy", badge: "Featured Tax Incentive", desc: "Lavoratori Impatriati tax scheme offers major income tax exemptions.", img: "https://images.unsplash.com/photo-1516483638261-f4dbaf036963?auto=format&fit=crop&w=800&q=80" },
+            { key: 'portugal', title: "Portugal", badge: "Tech & Remote Hub", desc: "Booming digital communities in Lisbon, high English fluency, and coastal quality of life.", img: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80" }
+        ];
 
-<!-- ════════════════════════ SCREEN 3: GUIDE ════════════════════════ -->
-<div class="screen" id="screen-guide">
-  <header class="guide-header">
-    <div class="guide-header-inner">
-      <div class="guide-brand">
-        <span id="headerFlag">🇭🇺</span> NL<span>2</span>EU
-      </div>
-      <ul class="guide-tabs-nav" id="guideNav">
-        <li><button class="active" data-target="overview">Overview</button></li>
-        <li><button data-target="registration">Registration</button></li>
-        <li><button data-target="housing">Housing</button></li>
-        <li><button data-target="work">Work & Money</button></li>
-        <li><button data-target="healthcare">Healthcare</button></li>
-        <li><button data-target="daily">Daily Life</button></li>
-      </ul>
-    </div>
-  </header>
+        /* ================= APP INIT ================= */
+        window.onload = function() {
+            lucide.createIcons();
+            renderCountryGrid();
+            startHeroSlider();
+        };
 
-  <div class="guide-hero">
-    <div class="guide-hero-container">
-      <div class="guide-hero-text">
-        <h1>Your New Life in <em id="heroCountryName">Hungary</em></h1>
-        <p id="heroSubtitle">Customized for a young Dutch citizen moving with a €700/mo budget.</p>
-        <div class="hero-tags" id="heroTags"></div>
-      </div>
-      <div class="hero-country-card">
-        <img id="heroCountryImage" src="" alt="Destination preview">
-        <div class="hero-country-card-body">
-          <strong id="heroCountryCap" style="color:#fff;font-size:0.9rem;">Capital City</strong>
-        </div>
-      </div>
-    </div>
-  </div>
+        function handleImageError(img) {
+            img.onerror = null;
+            img.src = "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80";
+        }
 
-  <div class="guide-body">
-    <!-- OVERVIEW TAB -->
-    <div class="guide-tab-panel active" id="panel-overview">
-      <div class="card-block">
-        <h2>🚀 Getting Started Checklist</h2>
-        <p>Essential steps to take before and immediately after landing.</p>
-        <ul class="checklist" id="overviewChecklist"></ul>
-      </div>
+        /* ================= RENDER COUNTRY GRID ================= */
+        function renderCountryGrid(searchTerm = '') {
+            const grid = document.getElementById('country-grid');
+            grid.innerHTML = '';
 
-      <div class="stats-row" id="overviewStats"></div>
-    </div>
+            const keys = Object.keys(countriesData);
+            let matchCount = 0;
 
-    <!-- REGISTRATION TAB -->
-    <div class="guide-tab-panel" id="panel-registration">
-      <div class="card-block" id="regContent"></div>
-    </div>
+            keys.forEach(key => {
+                const c = countriesData[key];
+                
+                if (activeTagFilter !== 'all' && c.tag !== activeTagFilter) return;
 
-    <!-- HOUSING TAB -->
-    <div class="guide-tab-panel" id="panel-housing">
-      <div class="card-block" id="housingContent"></div>
-    </div>
+                if (searchTerm) {
+                    const term = searchTerm.toLowerCase();
+                    const matchesName = c.name.toLowerCase().includes(term);
+                    const matchesCap = c.capital.toLowerCase().includes(term);
+                    if (!matchesName && !matchesCap) return;
+                }
 
-    <!-- WORK TAB -->
-    <div class="guide-tab-panel" id="panel-work">
-      <div class="card-block" id="workContent"></div>
-    </div>
+                matchCount++;
 
-    <!-- HEALTHCARE TAB -->
-    <div class="guide-tab-panel" id="panel-healthcare">
-      <div class="card-block" id="healthcareContent"></div>
-    </div>
+                const card = document.createElement('div');
+                card.className = "glass-card rounded-2xl overflow-hidden cursor-pointer flex flex-col justify-between group border border-stone-800 hover:border-terracotta-500/50";
+                card.onclick = () => selectCountry(key);
 
-    <!-- DAILY TAB -->
-    <div class="guide-tab-panel" id="panel-daily">
-      <div class="card-block" id="dailyContent"></div>
-    </div>
-  </div>
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-44 overflow-hidden">
+                            <img src="${c.image}" alt="${c.name}" onerror="handleImageError(this)" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-950/20 to-transparent"></div>
+                            <div class="absolute top-3 left-3 bg-stone-950/80 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs font-bold border border-stone-700/80 flex items-center space-x-1.5">
+                                <span>${c.flag}</span>
+                                <span class="text-white">${c.capital}</span>
+                            </div>
+                        </div>
 
-  <footer>
-    <p><strong>NL2EU</strong> — Personalised Dutch youth emigration guidance.</p>
-    <button id="btnRestart">Start Fresh</button>
-  </footer>
-</div>
+                        <div class="p-5 space-y-3">
+                            <h3 class="text-xl font-extrabold text-white group-hover:text-terracotta-400 font-serif transition-colors">${c.name}</h3>
+                            <p class="text-xs text-stone-300 line-clamp-2 leading-relaxed">${c.description}</p>
+                            
+                            <div class="pt-2 flex items-center justify-between text-[11px] text-stone-400 border-t border-stone-800">
+                                <span>Est. Budget</span>
+                                <span class="font-semibold text-amber-400">${c.costIndex.split(' ')[0]}</span>
+                            </div>
+                        </div>
+                    </div>
 
-<script>
-/* ════════════════════════ COUNTRY DATA ════════════════════════ */
-const COUNTRIES = [
-  {
-    id: 'hungary', name: 'Hungary', flag: '🇭🇺', note: 'Budapest tech & culture hub', tag: 'cheap', sun: false, popular: true,
-    img: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=800&q=80',
-    minWage: '€830/month gross', avgRent: '€300–450/mo (shared)',
-    overview: 'Budapest is one of the most vibrant and affordable capital cities in Europe for young adults.',
-    reg: 'Apply for your Lakcímkártya (Address Card) at the local OIF office within 93 days.',
-    housing: 'Look on Alberlet.hu or Ingatlan.com for shared flats (albérlet) in Districts 6, 7, or 8.',
-    work: 'High demand for Dutch & English speakers in tech support, Wolt delivery, and recruitment.',
-    health: 'EHIC covers emergency care. Get a TAJ card once employed locally.',
-    daily: 'Public transport pass is HUF 3,450 (€9/mo) for students. Supermarket budget ~€180/mo.'
-  },
-  {
-    id: 'spain', name: 'Spain', flag: '🇪🇸', note: 'Sun, lifestyle & vibrant cities', tag: 'popular', sun: true, popular: true,
-    img: 'https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=800&q=80',
-    minWage: '€1,381/month (prorated)', avgRent: '€350–550/mo (shared)',
-    overview: 'Spain offers unrivaled quality of life, rich culture, and strong expat communities in Valencia, Barcelona, and Madrid.',
-    reg: 'Get your NIE (Número de Identificación de Extranjero) and register on the Padrón at your Ayuntamiento.',
-    housing: 'Use Idealista or Fotocasa for shared piso rooms.',
-    work: 'Hospitality, English tutoring, customer support centres, and seasonal tourism.',
-    health: 'Register with public health (SIP card) after securing a contract or NIE.',
-    daily: 'Menu del día offers full meals for €10–12. Transport passes are heavily subsidized.'
-  },
-  {
-    id: 'germany', name: 'Germany', flag: '🇩🇪', note: 'Strong job market & safety net', tag: 'popular', sun: false, popular: true,
-    img: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80',
-    minWage: '€12.82/hour', avgRent: '€350–600/mo (WG room)',
-    overview: 'High wages and excellent public transit make Germany a top choice for young Dutch workers.',
-    reg: 'Complete your Anmeldung at the local Bürgeramt within 14 days of moving in.',
-    housing: 'WG-Gesucht.de is the absolute standard for finding shared flats (Wohngemeinschaft).',
-    work: 'Mini-jobs (up to €538/mo tax-free), Amazon logistics, delivery, and hospitality.',
-    health: 'Statutory health insurance (TK, AOK) is mandatory for employees.',
-    daily: 'Deutschlandticket gives unlimited regional transit nationwide for €58/mo.'
-  },
-  {
-    id: 'belgium', name: 'Belgium', flag: '🇧🇪', note: 'Closest & easiest transition', tag: 'popular', sun: false, popular: true,
-    img: 'https://images.unsplash.com/photo-1491557345352-5929e343eb89?auto=format&fit=crop&w=800&q=80',
-    minWage: '€2,070/month gross', avgRent: '€300–500/mo (kot)',
-    overview: 'Familiar language (in Flanders) and instant proximity to home make Belgium a smooth first step.',
-    reg: 'Register at the local commune town hall within 3 months (Annex 19).',
-    housing: 'Look for student rooms (koten) or shared apartments on Immoweb.be.',
-    work: 'Logistics, horeca, delivery, and Dutch-speaking customer relations.',
-    health: 'Join a mutualité/ziekenfonds (e.g. CM, Helan) for healthcare coverage.',
-    daily: 'Colruyt is the cheapest supermarket. Train travel is cheap for under-26s.'
-  },
-  {
-    id: 'poland', name: 'Poland', flag: '🇵🇱', note: 'Very affordable & booming', tag: 'cheap', sun: false, popular: true,
-    img: 'https://images.unsplash.com/photo-1519197924294-4ac991a11977?auto=format&fit=crop&w=800&q=80',
-    minWage: '€1,130/month gross', avgRent: '€200–350/mo (room)',
-    overview: 'Rapidly growing tech hub with very low living costs and active youth culture in Kraków, Warsaw, and Wrocław.',
-    reg: 'Obtain a PESEL number and register address at the Urząd Miasta.',
-    housing: 'Check Otodom.pl and OLX.pl for room rentals (pokój).',
-    work: 'BPO corporate hubs love Dutch/English speakers. Under-26 tax exemption applies!',
-    health: 'Register with NFZ public healthcare through your employer.',
-    daily: 'Biedronka supermarkets keep food costs under €150/mo.'
-  },
-  {
-    id: 'portugal', name: 'Portugal', flag: '🇵🇹', note: 'Sun, coast & affordable living', tag: 'cheap', sun: true, popular: false,
-    img: 'https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=800&q=80',
-    minWage: '€870/month gross', avgRent: '€250–450/mo (room)',
-    overview: 'Great weather, surfing, and warm social environment in Lisbon, Porto, and Coimbra.',
-    reg: 'Get your NIF (tax number) at Finanças and CRUE residence certificate at town hall.',
-    housing: 'Idealista.pt and OLX.pt for shared apartments.',
-    work: 'Multilingual customer support hubs (Teleperformance, Concentrix) hire continuously.',
-    health: 'Register with local Centro de Saúde once you have an NIF.',
-    daily: 'Coffee is €1, metro pass is €30–40/mo.'
-  },
-  {
-    id: 'austria', name: 'Austria', flag: '🇦🇹', note: 'High quality of life & nature', tag: 'popular', sun: false, popular: false,
-    img: 'https://images.unsplash.com/photo-1516550893923-42d28e5677af?auto=format&fit=crop&w=800&q=80',
-    minWage: '€1,700/month approx', avgRent: '€350–550/mo (WG)',
-    overview: 'Vienna consistently ranks as one of the world\'s most livable cities with affordable public housing.',
-    reg: 'File your Meldezettel within 3 days of arrival.',
-    housing: 'Search WG-Gesucht.at or Schwarzenberg for shared rooms.',
-    work: 'Seasonal ski resort work, hospitality, and tech support.',
-    health: 'ÖGK provides mandatory health cover.',
-    daily: 'Vienna annual transit pass is only €365/year (€1/day).'
-  },
-  {
-    id: 'croatia', name: 'Croatia', flag: '🇭🇷', note: 'Stunning coastline & low costs', tag: 'cheap', sun: true, popular: false,
-    img: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80',
-    minWage: '€1,050/month gross', avgRent: '€200–350/mo',
-    overview: 'Beautiful Mediterranean lifestyle with low cost of living in Zagreb and coastal cities.',
-    reg: 'Register stay at police station and get your OIB number.',
-    housing: 'Check Njuškalo.hr for long-term flat shares.',
-    work: 'Tourism, seasonal coast work, delivery, and tech.',
-    health: 'HZZO provides public healthcare coverage.',
-    daily: 'Coffee and dining out remain significantly cheaper than Northern Europe.'
-  },
-  {
-    id: 'greece', name: 'Greece', flag: '🇬🇷', note: 'Sunny climate & rich culture', tag: 'cheap', sun: true, popular: false,
-    img: 'https://images.unsplash.com/photo-1533105079780-92b9be482077?auto=format&fit=crop&w=800&q=80',
-    minWage: '€880/month gross', avgRent: '€200–400/mo',
-    overview: 'Warm weather year-round with cheap food and lively island or city vibes.',
-    reg: 'Obtain AFM (tax code) and register at local police.',
-    housing: 'Spitogatos.gr for student/shared housing.',
-    work: 'Seasonal island tourism, call centres, and English teaching.',
-    health: 'EOPYY provides social health insurance.',
-    daily: 'Freddo espresso is €2, public transit passes are €30/mo.'
-  },
-  {
-    id: 'czech', name: 'Czech Republic', flag: '🇨🇿', note: 'Heart of Europe & cheap beer', tag: 'cheap', sun: false, popular: false,
-    img: 'https://images.unsplash.com/photo-1541849546-216549ae216d?auto=format&fit=crop&w=800&q=80',
-    minWage: '€900/month gross', avgRent: '€250–450/mo',
-    overview: 'Prague and Brno offer rich culture, high safety, and low living costs.',
-    reg: 'Register at Foreign Police within 30 days.',
-    housing: 'Sreality.cz and Bezrealitky.cz for flat shares.',
-    work: 'Multilingual corporate hubs, IT, and teaching.',
-    health: 'VZP provides public health coverage.',
-    daily: 'Public transit is cheap and beer is notoriously affordable.'
-  }
-];
+                    <div class="p-4 bg-stone-900/60 border-t border-stone-800 flex items-center justify-between group-hover:bg-terracotta-500/10 transition-colors">
+                        <span class="text-xs font-bold text-stone-300 group-hover:text-terracotta-400">View Canvas Plan</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 text-stone-500 group-hover:text-terracotta-400 group-hover:translate-x-1 transition-all"></i>
+                    </div>
+                `;
 
-/* ════════════════════════ APP STATE & LOGIC ════════════════════════ */
-let state = {
-  selectedCountry: COUNTRIES[0],
-  goal: 'work',
-  budget: 700,
-  lang: 'none'
-};
+                grid.appendChild(card);
+            });
 
-document.addEventListener('DOMContentLoaded', () => {
-  renderCountryGrid(COUNTRIES);
-  setupEventListeners();
-});
+            if (matchCount === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-12 text-center text-stone-400">
+                        <i data-lucide="compass" class="w-12 h-12 mx-auto mb-3 text-stone-600"></i>
+                        <p class="text-base font-bold">No destinations match your search.</p>
+                    </div>
+                `;
+            }
 
-function renderCountryGrid(list) {
-  const grid = document.getElementById('countryGrid');
-  grid.innerHTML = list.map(c => `
-    <div class="country-card" data-id="${c.id}">
-      <div class="card-img-wrapper">
-        <img src="${c.img}" alt="${c.name}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=800&q=80';">
-        <div class="card-img-overlay"></div>
-        <span class="card-flag-badge">${c.flag}</span>
-        <span class="card-tag">${c.tag}</span>
-      </div>
-      <div class="card-body">
-        <div>
-          <div class="card-title-row">
-            <span class="card-country-name">${c.name}</span>
-          </div>
-          <p class="card-note">${c.note}</p>
-        </div>
-        <div class="card-stats">
-          <span>💰 ${c.minWage}</span>
-        </div>
-      </div>
-    </div>
-  `).join('');
+            lucide.createIcons();
+        }
 
-  document.querySelectorAll('.country-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const id = card.dataset.id;
-      state.selectedCountry = COUNTRIES.find(c => c.id === id);
-      openPreferencesScreen();
-    });
-  });
-}
+        /* ================= HERO SLIDER ================= */
+        function startHeroSlider() {
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % sliderData.length;
+                updateSliderUI();
+            }, 5000);
+        }
 
-function setupEventListeners() {
-  // Filter pills
-  document.getElementById('filterPills').addEventListener('click', (e) => {
-    if (!e.target.classList.contains('pill')) return;
-    document.querySelectorAll('.pill').forEach(p => p.classList.remove('active'));
-    e.target.classList.add('active');
-    
-    const filter = e.target.dataset.filter;
-    if (filter === 'all') renderCountryGrid(COUNTRIES);
-    else if (filter === 'cheap') renderCountryGrid(COUNTRIES.filter(c => c.tag === 'cheap'));
-    else if (filter === 'popular') renderCountryGrid(COUNTRIES.filter(c => c.popular));
-    else if (filter === 'sun') renderCountryGrid(COUNTRIES.filter(c => c.sun));
-  });
+        function setSlide(index) {
+            currentSlide = index;
+            updateSliderUI();
+        }
 
-  // Surprise button
-  document.getElementById('btnSurprise').addEventListener('click', () => {
-    const random = COUNTRIES[Math.floor(Math.random() * COUNTRIES.length)];
-    state.selectedCountry = random;
-    openPreferencesScreen();
-  });
+        function updateSliderUI() {
+            const data = sliderData[currentSlide];
+            const img = document.getElementById('slider-img');
+            const title = document.getElementById('slider-title');
+            const desc = document.getElementById('slider-desc');
+            const badge = document.getElementById('slider-badge');
 
-  // Budget range
-  const budgetRange = document.getElementById('budgetRange');
-  budgetRange.addEventListener('input', (e) => {
-    state.budget = e.target.value;
-    document.getElementById('budgetValue').innerText = state.budget;
-    
-    const power = document.getElementById('budgetPower');
-    if (state.budget < 500) { power.innerText = "Tight Budget"; power.style.color = "#DC2626"; }
-    else if (state.budget < 900) { power.innerText = "Comfortable"; power.style.color = "#059669"; }
-    else { power.innerText = "High Purchasing Power"; power.style.color = "#2563EB"; }
-  });
+            if (img && title && desc) {
+                img.src = data.img;
+                title.textContent = data.title;
+                desc.textContent = data.desc;
+                badge.textContent = data.badge;
 
-  // Back button
-  document.getElementById('btnBackToStart').addEventListener('click', () => {
-    switchScreen('screen-start');
-  });
+                const dots = document.getElementById('slider-dots').children;
+                for (let i = 0; i < dots.length; i++) {
+                    if (i === currentSlide) {
+                        dots[i].className = "w-2.5 h-2.5 rounded-full bg-terracotta-500 transition-all";
+                    } else {
+                        dots[i].className = "w-2.5 h-2.5 rounded-full bg-stone-600 hover:bg-stone-400 transition-all";
+                    }
+                }
+            }
+        }
 
-  // Generate guide
-  document.getElementById('btnGenerate').addEventListener('click', () => {
-    state.goal = document.querySelector('input[name="goal"]:checked').value;
-    state.lang = document.querySelector('input[name="lang"]:checked').value;
-    buildGuideScreen();
-    switchScreen('screen-guide');
-  });
+        /* ================= SURPRISE ME GENERATOR ================= */
+        function triggerSurpriseMe() {
+            const keys = Object.keys(countriesData);
+            const randomKey = keys[Math.floor(Math.random() * keys.length)];
+            selectCountry(randomKey);
+            showToast(`Surprise Escape Selected: ${countriesData[randomKey].name}! 🎉`);
+        }
 
-  // Guide nav tabs
-  document.getElementById('guideNav').addEventListener('click', (e) => {
-    if (e.target.tagName !== 'BUTTON') return;
-    document.querySelectorAll('#guideNav button').forEach(b => b.classList.remove('active'));
-    e.target.classList.add('active');
+        /* ================= CATEGORY FILTER ================= */
+        function setTagFilter(tag) {
+            activeTagFilter = tag;
+            const buttons = document.querySelectorAll('.tag-btn');
+            buttons.forEach(btn => {
+                if ((tag === 'all' && btn.textContent.includes('All')) || btn.onclick.toString().includes(tag)) {
+                    btn.className = "tag-btn active px-3.5 py-2 rounded-xl text-xs font-semibold bg-terracotta-600 text-white transition-all";
+                } else {
+                    btn.className = "tag-btn px-3.5 py-2 rounded-xl text-xs font-semibold bg-stone-800 text-stone-300 hover:bg-stone-700 border border-stone-700/60 transition-all";
+                }
+            });
 
-    const target = e.target.dataset.target;
-    document.querySelectorAll('.guide-tab-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById(`panel-${target}`).classList.add('active');
-  });
+            const searchVal = document.getElementById('country-search').value;
+            renderCountryGrid(searchVal);
+        }
 
-  // Restart button
-  document.getElementById('btnRestart').addEventListener('click', () => {
-    switchScreen('screen-start');
-  });
-}
+        function filterCountries() {
+            const searchVal = document.getElementById('country-search').value;
+            renderCountryGrid(searchVal);
+        }
 
-function openPreferencesScreen() {
-  const c = state.selectedCountry;
-  document.getElementById('prefFlag').innerText = c.flag;
-  document.getElementById('prefCountryName').innerText = c.name;
-  document.getElementById('prefNote').innerText = c.note;
-  switchScreen('screen-prefs');
-}
+        /* ================= SCREEN NAVIGATION ================= */
+        function navigateToScreen(screenNum) {
+            const s1 = document.getElementById('screen-1');
+            const s2 = document.getElementById('screen-2');
+            const s3 = document.getElementById('screen-3');
 
-function buildGuideScreen() {
-  const c = state.selectedCountry;
-  document.getElementById('headerFlag').innerText = c.flag;
-  document.getElementById('heroCountryName').innerText = c.name;
-  document.getElementById('heroSubtitle').innerText = `Tailored for a young Dutch move with €${state.budget}/mo budget.`;
-  
-  document.getElementById('heroCountryImage').src = c.img;
-  document.getElementById('heroCountryCap').innerText = `${c.name} • ${c.note}`;
+            const nav1 = document.getElementById('nav-step-1');
+            const nav2 = document.getElementById('nav-step-2');
+            const nav3 = document.getElementById('nav-step-3');
 
-  document.getElementById('heroTags').innerHTML = `
-    <span class="hero-tag">🎯 Goal: ${state.goal}</span>
-    <span class="hero-tag">💶 Budget: €${state.budget}/mo</span>
-    <span class="hero-tag">🗣️ Language: ${state.lang}</span>
-  `;
+            s1.classList.add('hidden', 'opacity-0');
+            s2.classList.add('hidden', 'opacity-0');
+            s3.classList.add('hidden', 'opacity-0');
 
-  // Checklist
-  document.getElementById('overviewChecklist').innerHTML = `
-    <li><input type="checkbox"> <span>Passport / Dutch ID valid for 6+ months</span></li>
-    <li><input type="checkbox"> <span>EHIC card ordered from Dutch health insurer</span></li>
-    <li><input type="checkbox"> <span>Municipal registration & tax setup (${c.name})</span></li>
-    <li><input type="checkbox"> <span>Housing contract / initial room booked</span></li>
-  `;
+            if (screenNum === 1) {
+                s1.classList.remove('hidden');
+                setTimeout(() => s1.classList.remove('opacity-0'), 20);
 
-  // Overview stats
-  document.getElementById('overviewStats').innerHTML = `
-    <div class="stat-card">
-      <div class="value">${c.minWage}</div>
-      <div class="label">Minimum Wage</div>
-    </div>
-    <div class="stat-card">
-      <div class="value">${c.avgRent}</div>
-      <div class="label">Average Rent</div>
-    </div>
-  `;
+                nav1.className = "flex items-center space-x-2 text-terracotta-500 font-semibold transition-colors";
+                nav2.className = "flex items-center space-x-2 hover:text-white transition-colors opacity-50 cursor-not-allowed";
+                nav3.className = "flex items-center space-x-2 hover:text-white transition-colors opacity-50 cursor-not-allowed";
+            } else if (screenNum === 2) {
+                s2.classList.remove('hidden');
+                setTimeout(() => s2.classList.remove('opacity-0'), 20);
 
-  // Tab contents
-  document.getElementById('regContent').innerHTML = `
-    <h2>📋 Registration Steps</h2>
-    <p>${c.reg}</p>
-    <div class="callout-box">
-      <strong>Pro Tip:</strong> Always keep digital copies of your passport, birth certificate, and rental agreements on your phone.
-    </div>
-  `;
+                nav1.className = "flex items-center space-x-2 text-stone-400 hover:text-white transition-colors cursor-pointer";
+                nav2.className = "flex items-center space-x-2 text-terracotta-500 font-semibold transition-colors";
+                nav3.className = "flex items-center space-x-2 hover:text-white transition-colors opacity-50 cursor-not-allowed";
+            } else if (screenNum === 3) {
+                s3.classList.remove('hidden');
+                setTimeout(() => s3.classList.remove('opacity-0'), 20);
 
-  document.getElementById('housingContent').innerHTML = `
-    <h2>🏠 Housing Strategy</h2>
-    <p>${c.housing}</p>
-  `;
+                nav1.className = "flex items-center space-x-2 text-stone-400 hover:text-white transition-colors cursor-pointer";
+                nav2.className = "flex items-center space-x-2 text-stone-400 hover:text-white transition-colors cursor-pointer";
+                nav3.className = "flex items-center space-x-2 text-terracotta-500 font-semibold transition-colors";
+            }
 
-  document.getElementById('workContent').innerHTML = `
-    <h2>💼 Jobs & Income</h2>
-    <p>${c.work}</p>
-  `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-  document.getElementById('healthcareContent').innerHTML = `
-    <h2>🏥 Healthcare Setup</h2>
-    <p>${c.health}</p>
-  `;
+        /* ================= SELECT COUNTRY ================= */
+        function selectCountry(key) {
+            selectedCountryKey = key;
+            const c = countriesData[key];
 
-  document.getElementById('dailyContent').innerHTML = `
-    <h2>🛒 Daily Living & Costs</h2>
-    <p>${c.daily}</p>
-  `;
-}
+            const headerContainer = document.getElementById('selected-country-header');
+            headerContainer.innerHTML = `
+                <div class="flex items-center space-x-4">
+                    <img src="${c.image}" alt="${c.name}" onerror="handleImageError(this)" class="w-16 h-16 rounded-xl object-cover shadow-lg border border-stone-700">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-2xl">${c.flag}</span>
+                            <h3 class="text-2xl font-extrabold text-white font-serif">${c.name}</h3>
+                        </div>
+                        <p class="text-xs text-stone-400 mt-0.5">Capital: ${c.capital} • ${c.costIndex}</p>
+                    </div>
+                </div>
+                <button onclick="navigateToScreen(1)" class="text-xs text-terracotta-400 hover:underline font-bold">
+                    Change
+                </button>
+            `;
 
-function switchScreen(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(screenId).classList.add('active');
-  window.scrollTo(0, 0);
-}
-</script>
+            updateBudgetDisplay(2500);
+            navigateToScreen(2);
+        }
+
+        /* ================= DYNAMIC BUDGET CALCULATOR ================= */
+        function updateBudgetDisplay(val) {
+            const formatted = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(val);
+            document.getElementById('budget-value-display').textContent = `${formatted} / month`;
+
+            if (selectedCountryKey) {
+                const mult = countriesData[selectedCountryKey].multiplier || 1.0;
+                const nlEquivalent = Math.round(val * mult);
+                document.getElementById('nl-equivalent-power').textContent = `~ €${nlEquivalent.toLocaleString()} / mo Randstad value`;
+            }
+        }
+
+        /* ================= GENERATE GUIDE ================= */
+        function generateGuide() {
+            if (!selectedCountryKey) return;
+
+            const c = countriesData[selectedCountryKey];
+            const budgetVal = parseInt(document.getElementById('budget-slider').value);
+
+            document.getElementById('guide-country-title').textContent = `Your Plan to ${c.name}`;
+            document.getElementById('guide-subtitle').textContent = `Tailored relocation plan designed for Dutch residents moving to ${c.name}`;
+
+            // Facts
+            document.getElementById('fact-capital').textContent = c.capital;
+            document.getElementById('fact-language').textContent = c.language;
+            document.getElementById('fact-currency').textContent = c.currency;
+
+            // Budget Split
+            document.getElementById('guide-budget-total').innerHTML = `€${budgetVal.toLocaleString()} <span class="text-xs font-normal text-stone-400">/ mo</span>`;
+            const rent = Math.round(budgetVal * 0.45);
+            const living = Math.round(budgetVal * 0.35);
+            const savings = Math.round(budgetVal * 0.20);
+
+            document.getElementById('guide-rent-val').textContent = `€${rent.toLocaleString()}`;
+            document.getElementById('guide-living-val').textContent = `€${living.toLocaleString()}`;
+            document.getElementById('guide-savings-val').textContent = `€${savings.toLocaleString()}`;
+            document.getElementById('tab-rent-estimate').textContent = `€${rent.toLocaleString()} / mo`;
+
+            // Onboarding Steps
+            document.getElementById('destination-onboarding-steps').innerHTML = `
+                <div class="p-4 rounded-xl bg-stone-900/80 border border-stone-800 space-y-2">
+                    <span class="text-xs font-bold text-amber-400 uppercase">Primary Local Registration</span>
+                    <p class="text-xs text-stone-300 leading-relaxed">${c.localReg}</p>
+                </div>
+                <div class="p-4 rounded-xl bg-stone-900/80 border border-stone-800 space-y-2">
+                    <span class="text-xs font-bold text-terracotta-400 uppercase">Tax Office & Treaty Setup</span>
+                    <p class="text-xs text-stone-300 leading-relaxed">${c.taxInfo}</p>
+                </div>
+            `;
+
+            // Tab Text Details
+            document.getElementById('housing-strategy-text').textContent = `With your target rent allowance of €${rent.toLocaleString()}/mo in ${c.name}, focus searches on verified local rental platforms. Standard requirements include proof of income or Dutch bank statements.`;
+            document.getElementById('tax-treaty-text').textContent = `${c.taxInfo} When relocating, file an M-form with the Belastingdienst for your transition year.`;
+
+            // Load Checklist State
+            loadChecklistUI();
+
+            navigateToScreen(3);
+            showToast("Canvas guide generated!");
+        }
+
+        /* ================= GUIDE TAB SWITCHER ================= */
+        function switchGuideTab(tab) {
+            const tabs = ['overview', 'housing', 'taxes'];
+            tabs.forEach(t => {
+                document.getElementById(`tab-content-${t}`).classList.add('hidden');
+                document.getElementById(`tab-btn-${t}`).className = "tab-btn px-4 py-2 rounded-xl text-xs font-semibold text-stone-400 hover:text-white transition-all flex items-center space-x-2";
+            });
+
+            document.getElementById(`tab-content-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-btn-${tab}`).className = "tab-btn tab-active px-4 py-2 rounded-xl text-xs font-bold transition-all flex items-center space-x-2";
+        }
+
+        /* ================= CHECKLIST PERSISTENCE ================= */
+        function toggleChecklist(key) {
+            const chk = document.getElementById(`chk-${key}`);
+            checklistState[key] = chk.checked;
+            localStorage.setItem('nl2eu_checklist', JSON.stringify(checklistState));
+            updateChecklistProgress();
+        }
+
+        function loadChecklistUI() {
+            ['gemeente', 'digid', 'zorg'].forEach(k => {
+                const el = document.getElementById(`chk-${k}`);
+                if (el) {
+                    el.checked = !!checklistState[k];
+                }
+            });
+            updateChecklistProgress();
+        }
+
+        function updateChecklistProgress() {
+            const count = ['gemeente', 'digid', 'zorg'].filter(k => checklistState[k]).length;
+            document.getElementById('nl-checklist-progress').textContent = `${count}/3 Done`;
+        }
+
+        /* ================= UTILITY ACTIONS ================= */
+        function resetApp() {
+            selectedCountryKey = null;
+            checklistState = {};
+            localStorage.removeItem('nl2eu_checklist');
+            document.getElementById('preferences-form').reset();
+            navigateToScreen(1);
+            showToast("Application reset!");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function copyGuideLink() {
+            if (!selectedCountryKey) return;
+            const c = countriesData[selectedCountryKey];
+            const text = `NL2EU Relocation Summary for ${c.name}:\nCapital: ${c.capital}\nLocal Registration: ${c.localReg}\nTax Info: ${c.taxInfo}`;
+            
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = text;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+
+            showToast("Summary copied to clipboard!");
+        }
+
+        function exportGuideFile() {
+            if (!selectedCountryKey) return;
+            const c = countriesData[selectedCountryKey];
+            const content = `=======================================\nNL2EU RELOCATION CANVAS — ${c.name.toUpperCase()}\n=======================================\nCapital: ${c.capital}\n\nLOCAL REGISTRATION:\n${c.localReg}\n\nTAXES & TREATY:\n${c.taxInfo}\n\nGenerated by NL2EU Navigator\n=======================================`;
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `NL2EU_Guide_${c.name}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast("Canvas text file downloaded!");
+        }
+    </script>
 </body>
 </html>
